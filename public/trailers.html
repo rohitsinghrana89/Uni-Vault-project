@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trailer Discovery Hub — Watch Official 4K Trailers & Sneak Peeks — UniVault</title>
+  <meta name="description" content="Discover and stream official 4K trailers, teasers, and sneak peeks for movies, TV series, anime, and upcoming blockbusters powered by TMDB.">
+  
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/cards.css">
+  <link rel="stylesheet" href="css/hero.css">
+  <link rel="stylesheet" href="css/trailers.css">
+</head>
+<body>
+  <!-- Skip to Main Content Accessibility Link -->
+  <a href="#mainContent" class="skip-to-main">Skip to main content</a>
+
+  <!-- ══════════════════════════════════════════════════════ NAVBAR ══ -->
+  <header class="navbar" id="navbar" role="banner">
+    <div class="nav-inner">
+
+      <!-- Brand -->
+      <a href="index.html" class="nav-brand" aria-label="UniVault – Go to homepage">
+        <span class="nav-logo-badge" aria-hidden="true">U</span>
+        <span class="nav-brand-name">UniVault</span>
+      </a>
+
+      <!-- Desktop Links -->
+      <ul class="nav-links-desktop" role="list" aria-label="Main navigation">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="trailers.html" class="active">Trailers</a></li>
+        <li><a href="movies.html">Movies</a></li>
+        <li><a href="tv-shows.html">TV Shows</a></li>
+        <li><a href="anime.html">Anime</a></li>
+        <li class="nav-dropdown" id="genreNav">
+          <a href="#" class="nav-dropdown-toggle" id="genreToggle" aria-haspopup="true" aria-expanded="false">
+            Genres <span class="dropdown-arrow" aria-hidden="true">▾</span>
+          </a>
+          <ul class="nav-dropdown-menu" id="genreDropdown" role="menu">
+            <li role="menuitem"><a href="movies.html?genre=28"><span class="genre-icon">🎬</span>Action</a></li>
+            <li role="menuitem"><a href="movies.html?genre=878"><span class="genre-icon">🚀</span>Sci-Fi</a></li>
+            <li role="menuitem"><a href="movies.html?genre=27"><span class="genre-icon">💀</span>Horror</a></li>
+            <li role="menuitem"><a href="movies.html?genre=35"><span class="genre-icon">😂</span>Comedy</a></li>
+            <li class="dropdown-divider" role="separator"></li>
+            <li role="menuitem"><a href="anime.html"><span class="genre-icon">⛩️</span>Anime</a></li>
+            <li role="menuitem"><a href="movies.html?genre=18"><span class="genre-icon">📺</span>Drama</a></li>
+            <li role="menuitem"><a href="movies.html?genre=80"><span class="genre-icon">🔍</span>Crime</a></li>
+          </ul>
+        </li>
+        <li><a href="watchlist.html">Watchlist</a></li>
+        <li><a href="subscription.html">Subscription</a></li>
+      </ul>
+
+      <!-- Desktop Right Actions -->
+      <div class="nav-actions-right">
+        <a href="search.html" class="nav-search-btn" aria-label="Search">
+          <span aria-hidden="true">🔍</span>
+          <span class="nav-search-label">Search</span>
+        </a>
+        <a href="login.html" class="nav-signin-btn">Sign In</a>
+        <a href="profile.html" class="nav-profile-btn" aria-label="Your profile">A</a>
+
+        <button class="hamburger" id="hamburger"
+                aria-label="Open navigation menu"
+                aria-expanded="false"
+                aria-controls="navDrawer">
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <nav class="nav-drawer" id="navDrawer" aria-label="Mobile navigation" aria-hidden="true">
+    <p class="nav-drawer-label">Browse</p>
+    <ul class="nav-drawer-links" role="list">
+      <li><a href="index.html"><span class="link-icon" aria-hidden="true">🏠</span>Home</a></li>
+      <li><a href="trailers.html" class="active"><span class="link-icon" aria-hidden="true">🎬</span>Trailers</a></li>
+      <li><a href="movies.html"><span class="link-icon" aria-hidden="true">🎬</span>Movies</a></li>
+      <li><a href="tv-shows.html"><span class="link-icon" aria-hidden="true">📺</span>TV Shows</a></li>
+      <li><a href="anime.html"><span class="link-icon" aria-hidden="true">⛩️</span>Anime</a></li>
+      <li><a href="watchlist.html"><span class="link-icon" aria-hidden="true">🔖</span>Watchlist</a></li>
+      <li><a href="subscription.html"><span class="link-icon" aria-hidden="true">💎</span>Subscription</a></li>
+    </ul>
+
+    <div class="drawer-divider"></div>
+
+    <div class="drawer-footer-actions">
+      <a href="login.html" class="btn btn-primary" style="width: 100%; justify-content: center;">Sign In</a>
+      <a href="profile.html" class="btn btn-secondary" style="width: 100%; justify-content: center;">My Profile</a>
+    </div>
+  </nav>
+
+  <div class="nav-overlay" id="navOverlay" aria-hidden="true"></div>
+
+  <!-- ══════════════════════════════════════════════════════ MAIN CONTENT ══ -->
+  <main class="main-content" id="mainContent" style="padding-top: 80px;">
+
+    <section class="trailers-hub-section" id="trailersHub" aria-label="Premium Trailer Discovery Hub">
+      <div class="container">
+        
+        <!-- Hub Main Header -->
+        <div class="trailers-hub-header">
+          <span class="trailers-badge-hub">🎬 TMDB Powered Cinema Portal</span>
+          <h1 class="trailers-main-title">Trailer Discovery Hub</h1>
+          <p class="trailers-main-subtitle">Experience high-definition trailers, teasers, and sneak peeks across movies, TV series, anime, and upcoming theatrical releases.</p>
+        </div>
+
+        <!-- 1. Featured Trailers Showcase (Cinematic Card) -->
+        <div class="featured-trailers-showcase" id="featuredTrailersShowcase">
+          <!-- Populated dynamically by trailers.js -->
+        </div>
+
+        <!-- 2. Latest Movie Trailers -->
+        <div class="trailer-row-block" id="sectionLatestMovieTrailers">
+          <div class="trailer-row-header">
+            <div class="trailer-row-title-wrap">
+              <span class="trailer-row-badge">🍿 Fresh In Theaters</span>
+              <h2 class="trailer-row-title">Latest Movie Trailers</h2>
+              <p class="trailer-row-desc">Official trailers for newly released and now-playing theatrical hits</p>
+            </div>
+            <div class="trailer-carousel-nav">
+              <button class="trailer-nav-btn" data-target="trackLatestMovieTrailers" data-dir="prev" aria-label="Previous movie trailers">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+              </button>
+              <button class="trailer-nav-btn" data-target="trackLatestMovieTrailers" data-dir="next" aria-label="Next movie trailers">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="trailer-track-container">
+            <div class="trailer-cards-track" id="trackLatestMovieTrailers">
+              <!-- Populated dynamically by trailers.js -->
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. TV Show Trailers -->
+        <div class="trailer-row-block" id="sectionTVTrailers">
+          <div class="trailer-row-header">
+            <div class="trailer-row-title-wrap">
+              <span class="trailer-row-badge">📺 Binge Worthy</span>
+              <h2 class="trailer-row-title">TV Show Trailers & Previews</h2>
+              <p class="trailer-row-desc">Sneak peeks and new season trailers for prestige television series</p>
+            </div>
+            <div class="trailer-carousel-nav">
+              <button class="trailer-nav-btn" data-target="trackTVTrailers" data-dir="prev" aria-label="Previous TV trailers">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+              </button>
+              <button class="trailer-nav-btn" data-target="trackTVTrailers" data-dir="next" aria-label="Next TV trailers">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="trailer-track-container">
+            <div class="trailer-cards-track" id="trackTVTrailers">
+              <!-- Populated dynamically by trailers.js -->
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Anime Trailers -->
+        <div class="trailer-row-block" id="sectionAnimeTrailers">
+          <div class="trailer-row-header">
+            <div class="trailer-row-title-wrap">
+              <span class="trailer-row-badge">⛩️ Anime Universe</span>
+              <h2 class="trailer-row-title">Anime Trailers & Teasers</h2>
+              <p class="trailer-row-desc">High-octane animation trailers and upcoming seasonal anime previews</p>
+            </div>
+            <div class="trailer-carousel-nav">
+              <button class="trailer-nav-btn" data-target="trackAnimeTrailers" data-dir="prev" aria-label="Previous anime trailers">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+              </button>
+              <button class="trailer-nav-btn" data-target="trackAnimeTrailers" data-dir="next" aria-label="Next anime trailers">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="trailer-track-container">
+            <div class="trailer-cards-track" id="trackAnimeTrailers">
+              <!-- Populated dynamically by trailers.js -->
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. Popular Trailers (Verified YouTube Only) -->
+        <div class="trailer-row-block" id="sectionPopularTrailers">
+          <div class="trailer-row-header">
+            <div class="trailer-row-title-wrap">
+              <span class="trailer-row-badge">🔥 Verified YouTube Streams</span>
+              <h2 class="trailer-row-title">Popular Trailers</h2>
+              <p class="trailer-row-desc">Most watched trailers and viral previews with verified YouTube streams</p>
+            </div>
+            <div class="trailer-carousel-nav">
+              <button class="trailer-nav-btn" data-target="trackPopularTrailers" data-dir="prev" aria-label="Previous popular trailers">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+              </button>
+              <button class="trailer-nav-btn" data-target="trackPopularTrailers" data-dir="next" aria-label="Next popular trailers">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="trailer-track-container">
+            <div class="trailer-cards-track" id="trackPopularTrailers">
+              <!-- Populated dynamically by trailers.js -->
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. Upcoming Trailers -->
+        <div class="trailer-row-block" id="sectionUpcomingTrailers">
+          <div class="trailer-row-header">
+            <div class="trailer-row-title-wrap">
+              <span class="trailer-row-badge">🚀 Coming Soon</span>
+              <h2 class="trailer-row-title">Upcoming Blockbuster Trailers</h2>
+              <p class="trailer-row-desc">First looks and teaser drops for highly anticipated upcoming premieres</p>
+            </div>
+            <div class="trailer-carousel-nav">
+              <button class="trailer-nav-btn" data-target="trackUpcomingTrailers" data-dir="prev" aria-label="Previous upcoming trailers">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+              </button>
+              <button class="trailer-nav-btn" data-target="trackUpcomingTrailers" data-dir="next" aria-label="Next upcoming trailers">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="trailer-track-container">
+            <div class="trailer-cards-track" id="trackUpcomingTrailers">
+              <!-- Populated dynamically by trailers.js -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── Universal Trailer Player Modal ── -->
+  <div class="hero-modal-backdrop univault-trailer-modal" id="heroTrailerModal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Trailer Video Player">
+    <div class="hero-modal-content univault-trailer-content">
+      <div class="hero-modal-header">
+        <div class="hero-modal-title">
+          <span>🎬</span>
+          <span class="hero-modal-title-text" id="heroTrailerTitle">Watch Trailer</span>
+          <span class="hero-modal-badge" id="heroTrailerBadge">Official Trailer</span>
+        </div>
+        <button class="hero-modal-close univault-trailer-close" id="closeHeroTrailerModal" aria-label="Close trailer player">&times;</button>
+      </div>
+      <div class="hero-video-ratio" id="heroTrailerRatioWrap">
+        <div class="hero-modal-loading" id="heroTrailerLoading" style="display: none;">
+          <div class="hero-modal-spinner"></div>
+          <p class="hero-modal-loading-text" id="heroTrailerLoadingText">Loading trailer...</p>
+        </div>
+        <div class="hero-modal-error" id="heroTrailerError" style="display: none;">
+          <div class="hero-modal-error-icon">🎬</div>
+          <h3 class="hero-modal-error-title" id="heroTrailerErrorTitle">Trailer unavailable</h3>
+          <p class="hero-modal-error-desc" id="heroTrailerErrorDesc">Sorry, no official YouTube trailer is currently available for this title in the TMDB catalog.</p>
+          <div class="hero-modal-error-actions">
+            <a id="heroTrailerFallbackBtn" href="#" target="_blank" rel="noopener noreferrer" class="hero-modal-fallback-btn">
+              <span>▶</span> Watch on YouTube
+            </a>
+            <button type="button" class="hero-modal-fallback-close" id="heroTrailerErrorCloseBtn">Close</button>
+          </div>
+        </div>
+      </div>
+      <div class="hero-modal-footer" id="heroTrailerFooter">
+        <span style="color: #71717a; font-size: 0.8rem;">Powered by TMDB & YouTube Player API</span>
+        <a id="heroTrailerDirectYtLink" href="#" target="_blank" rel="noopener noreferrer" class="hero-modal-yt-link" style="display: none;">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" style="vertical-align: middle;"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          <span>Watch on YouTube ↗</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ FOOTER ══ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <span>© 2026 UniVault Inc. All rights reserved. Powered by TMDB API & YouTube.</span>
+        <div class="footer-legal">
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+          <a href="#">Security</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/auth.js"></script>
+  <script src="js/script.js"></script>
+  <script src="js/cards.js"></script>
+  <script src="js/trailers.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/navbar.js"></script>
+</body>
+</html>

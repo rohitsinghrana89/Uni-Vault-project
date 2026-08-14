@@ -1,0 +1,763 @@
+/* ══════════════════════════════════════════════════════════════════════════════
+   UNIVAULT — PREMIUM TRAILER DISCOVERY HUB STYLES (trailers.css)
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Section Container & Heading ─────────────────────────────────────────── */
+.trailers-hub-section {
+  position: relative;
+  padding: 4rem 0 5rem;
+  background: radial-gradient(circle at 50% 0%, rgba(139, 92, 246, 0.08) 0%, rgba(10, 10, 15, 0) 70%),
+              linear-gradient(180deg, #09090d 0%, #0d0c14 50%, #0a0a0f 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+}
+
+.trailers-hub-section::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(229, 9, 20, 0.08) 0%, rgba(229, 9, 20, 0) 70%);
+  pointer-events: none;
+  filter: blur(50px);
+}
+
+.trailers-hub-header {
+  margin-bottom: 2.5rem;
+}
+
+.trailers-badge-hub {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  background: linear-gradient(135deg, rgba(229, 9, 20, 0.18) 0%, rgba(139, 92, 246, 0.22) 100%);
+  border: 1px solid rgba(229, 9, 20, 0.35);
+  border-radius: 9999px;
+  color: #ff4d5a;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+  box-shadow: 0 0 15px rgba(229, 9, 20, 0.15);
+}
+
+.trailers-main-title {
+  font-size: 2.5rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #ffffff 30%, #c4b5fd 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.trailers-main-subtitle {
+  color: #94a3b8;
+  font-size: 1.05rem;
+  max-width: 650px;
+  line-height: 1.5;
+}
+
+/* ── Tab Filter Bar (on dedicated trailers page or hub) ────────────────────── */
+.trailers-filter-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  overflow-x: auto;
+  padding-bottom: 0.75rem;
+  margin-bottom: 2.5rem;
+  scrollbar-width: none;
+}
+.trailers-filter-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.trailers-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.25rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  color: #94a3b8;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+}
+
+.trailers-tab-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.18);
+  transform: translateY(-1px);
+}
+
+.trailers-tab-btn.active {
+  color: #ffffff;
+  background: linear-gradient(135deg, #e50914 0%, #8b5cf6 100%);
+  border-color: transparent;
+  box-shadow: 0 4px 20px rgba(229, 9, 20, 0.35);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   1. FEATURED TRAILERS SHOWCASE (Cinematic Hero Grade)
+   ═══════════════════════════════════════════════════════════════════════════ */
+.featured-trailers-showcase {
+  position: relative;
+  margin-bottom: 3.5rem;
+}
+
+.featured-trailer-card {
+  position: relative;
+  width: 100%;
+  min-height: 480px;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #111018;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(139, 92, 246, 0.1);
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  align-items: center;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.featured-trailer-backdrop {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center top;
+  filter: brightness(0.65) saturate(1.1);
+  transition: transform 0.8s ease, filter 0.8s ease;
+  z-index: 1;
+}
+
+.featured-trailer-card:hover .featured-trailer-backdrop {
+  transform: scale(1.03);
+  filter: brightness(0.75) saturate(1.15);
+}
+
+.featured-trailer-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #09080e 0%, rgba(9, 8, 14, 0.85) 45%, rgba(9, 8, 14, 0.25) 100%),
+              linear-gradient(0deg, #09080e 0%, transparent 40%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.featured-trailer-info {
+  position: relative;
+  z-index: 3;
+  padding: 3.5rem 3rem;
+  max-width: 680px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.featured-trailer-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.featured-type-chip {
+  padding: 0.3rem 0.75rem;
+  background: rgba(229, 9, 20, 0.85);
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  border-radius: 6px;
+  letter-spacing: 0.05em;
+  box-shadow: 0 2px 10px rgba(229, 9, 20, 0.4);
+}
+
+.featured-rating-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.3rem 0.65rem;
+  background: rgba(234, 179, 8, 0.15);
+  border: 1px solid rgba(234, 179, 8, 0.4);
+  color: #facc15;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 6px;
+}
+
+.featured-year-chip {
+  padding: 0.3rem 0.65rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #e2e8f0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 6px;
+}
+
+.featured-genre-chip {
+  padding: 0.3rem 0.65rem;
+  background: rgba(139, 92, 246, 0.15);
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  color: #c4b5fd;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 6px;
+}
+
+.featured-trailer-title {
+  font-size: 2.6rem;
+  font-weight: 900;
+  line-height: 1.15;
+  color: #ffffff;
+  text-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
+  letter-spacing: -0.02em;
+}
+
+.featured-trailer-synopsis {
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+}
+
+.featured-trailer-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.btn-watch-trailer-main {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1.85rem;
+  background: linear-gradient(135deg, #e50914 0%, #dc2626 100%);
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 6px 25px rgba(229, 9, 20, 0.45);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+}
+
+.btn-watch-trailer-main:hover {
+  background: linear-gradient(135deg, #ff1a26 0%, #ef4444 100%);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 10px 30px rgba(229, 9, 20, 0.6);
+}
+
+.btn-watch-trailer-main .play-icon-pulse {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  animation: trailerPlayPulse 2s infinite ease-in-out;
+}
+
+@keyframes trailerPlayPulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); }
+  50% { transform: scale(1.1); box-shadow: 0 0 0 8px rgba(255, 255, 255, 0); }
+}
+
+.btn-trailer-details {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.4rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-decoration: none;
+  backdrop-filter: blur(10px);
+}
+
+.btn-trailer-details:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Featured Carousel Switcher Dots */
+.featured-trailers-dots {
+  position: absolute;
+  bottom: 1.5rem;
+  right: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  z-index: 4;
+}
+
+.featured-dot-btn {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.featured-dot-btn.active {
+  width: 28px;
+  border-radius: 8px;
+  background: #e50914;
+  border-color: #e50914;
+  box-shadow: 0 0 12px rgba(229, 9, 20, 0.6);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   2. HORIZONTAL TRAILER CAROUSEL ROWS (Movies, TV, Anime, Popular, Upcoming)
+   ═══════════════════════════════════════════════════════════════════════════ */
+.trailer-row-block {
+  position: relative;
+  margin-bottom: 3.5rem;
+}
+
+.trailer-row-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  gap: 1rem;
+}
+
+.trailer-row-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.trailer-row-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #a78bfa;
+}
+
+.trailer-row-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+}
+
+.trailer-row-desc {
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+/* Carousel Controls */
+.trailer-carousel-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.trailer-nav-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(8px);
+}
+
+.trailer-nav-btn:hover:not(:disabled) {
+  background: rgba(229, 9, 20, 0.85);
+  border-color: transparent;
+  transform: scale(1.08);
+  box-shadow: 0 0 15px rgba(229, 9, 20, 0.4);
+}
+
+.trailer-nav-btn:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
+/* Scroll Track */
+.trailer-track-container {
+  position: relative;
+  margin: 0 -0.5rem;
+  padding: 0.5rem;
+}
+
+.trailer-cards-track {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  padding: 0.5rem 0 1.25rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+.trailer-cards-track::-webkit-scrollbar {
+  display: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   3. LANDSCAPE TRAILER CARD (16:9 Cinema Aspect Ratio)
+   ═══════════════════════════════════════════════════════════════════════════ */
+.trailer-card {
+  flex: 0 0 calc(33.333% - 0.85rem);
+  min-width: 290px;
+  max-width: 380px;
+  background: rgba(18, 17, 26, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.trailer-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  border-color: rgba(139, 92, 246, 0.4);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), 0 0 25px rgba(139, 92, 246, 0.2);
+  background: rgba(24, 22, 34, 0.95);
+}
+
+/* 16:9 Media Preview Box */
+.trailer-card-preview {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #0d0c14;
+  overflow: hidden;
+}
+
+.trailer-card-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease, filter 0.5s ease;
+}
+
+.trailer-card:hover .trailer-card-thumb {
+  transform: scale(1.06);
+  filter: brightness(0.85);
+}
+
+.trailer-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(14, 13, 20, 0.9) 0%, rgba(14, 13, 20, 0.1) 60%, transparent 100%);
+  pointer-events: none;
+}
+
+/* Play Badge with Glowing Pulse */
+.trailer-play-badge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(229, 9, 20, 0.9);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(229, 9, 20, 0.5);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 2;
+}
+
+.trailer-play-badge svg {
+  margin-left: 2px;
+  fill: currentColor;
+  width: 20px;
+  height: 20px;
+}
+
+.trailer-card:hover .trailer-play-badge {
+  transform: translate(-50%, -50%) scale(1.18);
+  background: #ff1a26;
+  box-shadow: 0 0 25px rgba(229, 9, 20, 0.8), 0 0 10px #ffffff;
+}
+
+/* Duration / Status Tag on Preview */
+.trailer-chip-status {
+  position: absolute;
+  bottom: 0.6rem;
+  left: 0.6rem;
+  padding: 0.25rem 0.55rem;
+  background: rgba(0, 0, 0, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  backdrop-filter: blur(6px);
+  z-index: 2;
+}
+
+.trailer-chip-hd {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  padding: 0.2rem 0.45rem;
+  background: rgba(229, 9, 20, 0.85);
+  border-radius: 4px;
+  color: #ffffff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  z-index: 2;
+}
+
+/* Card Body Details */
+.trailer-card-body {
+  padding: 1rem 1.15rem 1.15rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 0.5rem;
+}
+
+.trailer-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.trailer-card-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: #facc15;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.trailer-card-year {
+  color: #94a3b8;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.trailer-card-season-info {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.5rem;
+  background: rgba(139, 92, 246, 0.15);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  color: #c4b5fd;
+  font-size: 0.7rem;
+  font-weight: 600;
+  border-radius: 4px;
+}
+
+.trailer-card-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.trailer-card:hover .trailer-card-title {
+  color: #c4b5fd;
+}
+
+/* Card Footer with Watch Button */
+.trailer-card-footer {
+  margin-top: auto;
+  padding-top: 0.6rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.trailer-btn-play-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #ff4d5a;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  transition: color 0.2s ease;
+}
+
+.trailer-card:hover .trailer-btn-play-text {
+  color: #ff1a26;
+  text-decoration: underline;
+}
+
+.trailer-btn-info-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.trailer-btn-info-icon:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  transform: scale(1.1);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   4. SKELETON LOADERS
+   ═══════════════════════════════════════════════════════════════════════════ */
+.trailer-skeleton-card {
+  flex: 0 0 calc(33.333% - 0.85rem);
+  min-width: 290px;
+  max-width: 380px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.trailer-skeleton-thumb {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: linear-gradient(90deg, #161520 25%, #232034 50%, #161520 75%);
+  background-size: 200% 100%;
+  animation: trailerShimmer 1.5s infinite;
+}
+
+.trailer-skeleton-body {
+  padding: 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.trailer-skeleton-line {
+  height: 14px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #161520 25%, #232034 50%, #161520 75%);
+  background-size: 200% 100%;
+  animation: trailerShimmer 1.5s infinite;
+}
+
+.trailer-skeleton-line.short { width: 45%; }
+.trailer-skeleton-line.medium { width: 75%; height: 18px; }
+.trailer-skeleton-line.long { width: 90%; }
+
+@keyframes trailerShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   5. RESPONSIVE MEDIA QUERIES
+   ═══════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .featured-trailer-card {
+    grid-template-columns: 1fr;
+    min-height: 420px;
+  }
+  .featured-trailer-info {
+    padding: 2.5rem 2rem;
+    max-width: 100%;
+  }
+  .featured-trailer-title {
+    font-size: 2.2rem;
+  }
+  .trailer-card, .trailer-skeleton-card {
+    flex: 0 0 calc(50% - 0.75rem);
+    min-width: 260px;
+  }
+}
+
+@media (max-width: 768px) {
+  .trailers-hub-section {
+    padding: 2.5rem 0 3.5rem;
+  }
+  .trailers-main-title {
+    font-size: 1.85rem;
+  }
+  .featured-trailer-card {
+    min-height: 380px;
+    border-radius: 16px;
+  }
+  .featured-trailer-info {
+    padding: 2rem 1.5rem;
+  }
+  .featured-trailer-title {
+    font-size: 1.7rem;
+  }
+  .featured-trailer-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .btn-watch-trailer-main, .btn-trailer-details {
+    justify-content: center;
+    width: 100%;
+  }
+  .trailer-card, .trailer-skeleton-card {
+    flex: 0 0 82vw;
+    min-width: 250px;
+    max-width: 320px;
+  }
+  .trailer-row-title {
+    font-size: 1.35rem;
+  }
+}

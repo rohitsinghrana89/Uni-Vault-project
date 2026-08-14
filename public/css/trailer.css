@@ -1,0 +1,664 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+ * UniVault — Dedicated Cinema Trailer Experience Stylesheet (trailer.css)
+ * ═══════════════════════════════════════════════════════════════════════════
+ * Ultra-clean, 100vh cinema-style layout with zero desktop scrolling.
+ * Dynamic ambient backdrop lighting, 16:9 responsive YouTube player,
+ * compact glassmorphic top bar, and streamlined essential metadata.
+ */
+
+:root {
+  --cinema-bg: #07090e;
+  --cinema-surface: rgba(16, 22, 34, 0.85);
+  --cinema-surface-solid: #0d121d;
+  --cinema-border: rgba(255, 255, 255, 0.08);
+  --cinema-border-hover: rgba(255, 255, 255, 0.2);
+  --cinema-accent: #6366f1;
+  --cinema-accent-glow: rgba(99, 102, 241, 0.35);
+  --cinema-accent-hover: #4f46e5;
+  --cinema-text-primary: #f8fafc;
+  --cinema-text-secondary: #94a3b8;
+  --cinema-text-muted: #64748b;
+  --cinema-gold: #fbbf24;
+  --cinema-red: #ef4444;
+  --cinema-badge-bg: rgba(255, 255, 255, 0.1);
+  --cinema-radius: 12px;
+  --topbar-height: 56px;
+  --meta-height: 72px;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background-color: var(--cinema-bg);
+  color: var(--cinema-text-primary);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── 1. Atmospheric Ambient Background ────────────────────────────────────── */
+.cinema-backdrop-layer {
+  position: fixed;
+  inset: -20px;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.cinema-backdrop-img {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center 25%;
+  background-repeat: no-repeat;
+  filter: blur(50px) brightness(0.22) saturate(1.4);
+  transform: scale(1.15);
+  transition: opacity 0.8s ease;
+  opacity: 0;
+}
+
+.cinema-backdrop-img.loaded {
+  opacity: 1;
+}
+
+.cinema-backdrop-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(7, 9, 14, 0.4) 0%, rgba(7, 9, 14, 0.85) 65%, var(--cinema-bg) 100%),
+              linear-gradient(to bottom, rgba(7, 9, 14, 0.7) 0%, rgba(7, 9, 14, 0.3) 50%, var(--cinema-bg) 100%);
+}
+
+/* ── 2. Page Viewport Shell ─────────────────────────────────────────────────── */
+.cinema-app {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* ── 3. Ultra-Compact Top Bar ──────────────────────────────────────────────── */
+.cinema-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--topbar-height);
+  padding: 0 1.25rem;
+  background: rgba(7, 9, 14, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--cinema-border);
+  flex-shrink: 0;
+  z-index: 20;
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  min-width: 0;
+}
+
+.cinema-btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--cinema-border);
+  color: var(--cinema-text-primary);
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.cinema-btn-back:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: var(--cinema-border-hover);
+  transform: translateX(-2px);
+}
+
+.topbar-brand-divider {
+  width: 1px;
+  height: 18px;
+  background: var(--cinema-border);
+}
+
+.topbar-title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.topbar-media-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  background: var(--cinema-accent);
+  color: #fff;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.topbar-media-badge.badge-tv {
+  background: #3b82f6;
+}
+
+.topbar-media-badge.badge-anime {
+  background: #ec4899;
+}
+
+.topbar-media-badge.badge-teaser {
+  background: #f59e0b;
+}
+
+.topbar-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--cinema-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 420px;
+}
+
+.topbar-year {
+  font-size: 0.82rem;
+  color: var(--cinema-text-muted);
+  flex-shrink: 0;
+}
+
+.topbar-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--cinema-gold);
+  background: rgba(251, 191, 36, 0.12);
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  border: 1px solid rgba(251, 191, 36, 0.25);
+  flex-shrink: 0;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.cinema-btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--cinema-border);
+  color: var(--cinema-text-primary);
+  font-size: 0.82rem;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cinema-btn-icon:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: var(--cinema-border-hover);
+}
+
+.cinema-btn-icon.active {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: var(--cinema-accent);
+  color: #a5b4fc;
+}
+
+.cinema-btn-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--cinema-border);
+  color: var(--cinema-text-secondary);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cinema-btn-close:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+}
+
+/* ── 4. Main Cinema Stage ──────────────────────────────────────────────────── */
+.cinema-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0.75rem 1.25rem 0.5rem;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.cinema-stage-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 1240px;
+  height: 100%;
+  max-height: calc(100vh - var(--topbar-height) - var(--meta-height) - 1.5rem);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ── 16:9 Dynamic Player Container ────────────────────────────────────────── */
+.cinema-player-box {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 16 / 9;
+  max-width: calc((100vh - var(--topbar-height) - var(--meta-height) - 1.5rem) * (16 / 9));
+  background: #000;
+  border-radius: var(--cinema-radius);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.9),
+              0 20px 50px rgba(0, 0, 0, 0.8),
+              0 0 40px var(--cinema-accent-glow);
+  transition: box-shadow 0.4s ease;
+}
+
+.cinema-player-box iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+/* ── 5. Cinema Skeletons & Loading State ────────────────────────────────────── */
+.cinema-loader-overlay {
+  position: absolute;
+  inset: 0;
+  background: #07090e;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  z-index: 5;
+  transition: opacity 0.4s ease;
+}
+
+.cinema-loader-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.cinema-spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid rgba(99, 102, 241, 0.2);
+  border-top-color: var(--cinema-accent);
+  border-radius: 50%;
+  animation: cinemaSpin 0.9s linear infinite;
+}
+
+@keyframes cinemaSpin {
+  to { transform: rotate(360deg); }
+}
+
+.cinema-loader-text {
+  font-size: 0.9rem;
+  color: var(--cinema-text-secondary);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+/* ── 6. Fallback / Error State Card ────────────────────────────────────────── */
+.cinema-error-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(13, 18, 29, 0.96);
+  backdrop-filter: blur(24px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  z-index: 6;
+  border-radius: var(--cinema-radius);
+}
+
+.cinema-error-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.75rem;
+  opacity: 0.9;
+}
+
+.cinema-error-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--cinema-text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.cinema-error-desc {
+  font-size: 0.88rem;
+  color: var(--cinema-text-secondary);
+  max-width: 460px;
+  line-height: 1.5;
+  margin-bottom: 1.25rem;
+}
+
+.cinema-error-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.cinema-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1.15rem;
+  border-radius: 8px;
+  background: var(--cinema-accent);
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px var(--cinema-accent-glow);
+}
+
+.cinema-btn-primary:hover {
+  background: var(--cinema-accent-hover);
+  transform: translateY(-1px);
+}
+
+.cinema-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1.15rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--cinema-border);
+  color: var(--cinema-text-primary);
+  font-size: 0.88rem;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cinema-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+/* ── 7. Compact Essential Metadata Strip ──────────────────────────────────── */
+.cinema-metabar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--meta-height);
+  padding: 0 1.5rem;
+  background: rgba(7, 9, 14, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--cinema-border);
+  flex-shrink: 0;
+  z-index: 20;
+  gap: 1.5rem;
+}
+
+.meta-info-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.meta-tags-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+.meta-pill {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--cinema-text-secondary);
+  background: rgba(255, 255, 255, 0.06);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid var(--cinema-border);
+  white-space: nowrap;
+}
+
+.meta-genre-tags {
+  display: flex;
+  gap: 0.35rem;
+  overflow: hidden;
+}
+
+.meta-genre-pill {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: #a5b4fc;
+  background: rgba(99, 102, 241, 0.12);
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  white-space: nowrap;
+}
+
+.meta-overview-text {
+  font-size: 0.82rem;
+  color: var(--cinema-text-secondary);
+  line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 750px;
+}
+
+.meta-actions-right {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-shrink: 0;
+}
+
+.cinema-link-yt {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 8px;
+  background: rgba(255, 0, 0, 0.12);
+  border: 1px solid rgba(255, 0, 0, 0.25);
+  color: #fca5a5;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.cinema-link-yt:hover {
+  background: rgba(255, 0, 0, 0.22);
+  border-color: rgba(255, 0, 0, 0.4);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.cinema-keyboard-tip {
+  font-size: 0.72rem;
+  color: var(--cinema-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  white-space: nowrap;
+}
+
+.cinema-kbd {
+  font-size: 0.68rem;
+  font-family: inherit;
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--cinema-text-secondary);
+}
+
+/* ── 8. Responsive Design & Screen Size Adjustments ────────────────────────── */
+
+/* 1366x768 / Small Laptops */
+@media (max-height: 800px) {
+  :root {
+    --topbar-height: 48px;
+    --meta-height: 60px;
+  }
+
+  .topbar-title {
+    font-size: 0.88rem;
+    max-width: 300px;
+  }
+
+  .meta-overview-text {
+    font-size: 0.78rem;
+    max-width: 500px;
+  }
+
+  .cinema-stage-wrapper {
+    max-height: calc(100vh - 120px);
+  }
+}
+
+/* 1280x720 / Compact Displays */
+@media (max-height: 720px) {
+  :root {
+    --topbar-height: 44px;
+    --meta-height: 52px;
+  }
+
+  .cinema-stage-wrapper {
+    max-height: calc(100vh - 105px);
+  }
+
+  .meta-overview-text {
+    display: none;
+  }
+}
+
+/* Tablet & Mobile Screens (<= 768px) */
+@media (max-width: 768px) {
+  html, body {
+    overflow-y: auto;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .cinema-app {
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
+  }
+
+  .cinema-topbar {
+    padding: 0 0.75rem;
+  }
+
+  .topbar-brand-divider,
+  .topbar-year,
+  .topbar-rating,
+  .cinema-keyboard-tip {
+    display: none;
+  }
+
+  .topbar-title {
+    font-size: 0.85rem;
+    max-width: 180px;
+  }
+
+  .cinema-main {
+    padding: 0.5rem 0.5rem 1rem;
+    height: auto;
+    justify-content: flex-start;
+  }
+
+  .cinema-stage-wrapper {
+    max-height: none;
+    height: auto;
+  }
+
+  .cinema-player-box {
+    max-width: 100%;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 8px;
+  }
+
+  .cinema-metabar {
+    height: auto;
+    padding: 1rem 0.75rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .meta-overview-text {
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    max-width: 100%;
+  }
+
+  .meta-actions-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

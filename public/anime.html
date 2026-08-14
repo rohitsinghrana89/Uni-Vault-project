@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anime Portal — Stream Japanese Anime in 4K — UniVault</title>
+  <meta name="description" content="Watch authentic Japanese anime, movies, simulcasts, and legendary classics in 4K Ultra HD on UniVault.">
+  
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⛩️</text></svg>">
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/cards.css">
+</head>
+<body>
+  <!-- Skip to Main Content Accessibility Link -->
+  <a href="#mainContent" class="skip-to-main">Skip to main content</a>
+
+  <!-- ══════════════════════════════════════════════════════ NAVBAR ══ -->
+  <header class="navbar" id="navbar" role="banner">
+    <div class="nav-inner">
+
+      <!-- Brand -->
+      <a href="index.html" class="nav-brand" aria-label="UniVault – Go to homepage">
+        <span class="nav-logo-badge" aria-hidden="true">U</span>
+        <span class="nav-brand-name">UniVault</span>
+      </a>
+
+      <!-- Desktop Links -->
+      <ul class="nav-links-desktop" role="list" aria-label="Main navigation">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="trailers.html">Trailers</a></li>
+        <li><a href="movies.html">Movies</a></li>
+        <li><a href="tv-shows.html">TV Shows</a></li>
+        <li><a href="anime.html" class="active">Anime</a></li>
+        <li class="nav-dropdown" id="genreNav">
+          <a href="#" class="nav-dropdown-toggle" id="genreToggle" aria-haspopup="true" aria-expanded="false">
+            Genres <span class="dropdown-arrow" aria-hidden="true">▾</span>
+          </a>
+          <ul class="nav-dropdown-menu" id="genreDropdown" role="menu">
+            <li role="menuitem"><a href="anime.html?section=trending"><span class="genre-icon">🔥</span>Trending Anime</a></li>
+            <li role="menuitem"><a href="trailers.html"><span class="genre-icon">🎬</span>Anime Trailers</a></li>
+            <li role="menuitem"><a href="anime.html?section=movies"><span class="genre-icon">🎬</span>Anime Movies</a></li>
+            <li role="menuitem"><a href="anime.html?section=tv"><span class="genre-icon">📺</span>Anime TV Series</a></li>
+            <li role="menuitem"><a href="anime.html?genre=action"><span class="genre-icon">⚡</span>Shonen / Action</a></li>
+            <li class="dropdown-divider" role="separator"></li>
+            <li role="menuitem"><a href="anime.html?genre=fantasy"><span class="genre-icon">🔮</span>Fantasy / Isekai</a></li>
+            <li role="menuitem"><a href="anime.html?genre=scifi"><span class="genre-icon">🚀</span>Sci-Fi & Mecha</a></li>
+            <li role="menuitem"><a href="anime.html?genre=romance"><span class="genre-icon">💖</span>Romance & Slice of Life</a></li>
+          </ul>
+        </li>
+      </ul>
+
+      <!-- Desktop Right Actions -->
+      <div class="nav-actions-right">
+        <a href="search.html" class="nav-search-btn" aria-label="Search">
+          <span aria-hidden="true">🔍</span>
+          <span class="nav-search-label">Search</span>
+        </a>
+        <a href="login.html" class="nav-signin-btn">Sign In</a>
+        <a href="profile.html" class="nav-profile-btn" aria-label="Your profile">A</a>
+
+        <button class="hamburger" id="hamburger"
+                aria-label="Open navigation menu"
+                aria-expanded="false"
+                aria-controls="navDrawer">
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <nav class="nav-drawer" id="navDrawer" aria-label="Mobile navigation" aria-hidden="true">
+    <p class="nav-drawer-label">Browse</p>
+    <ul class="nav-drawer-links" role="list">
+      <li><a href="index.html"><span class="link-icon" aria-hidden="true">🏠</span>Home</a></li>
+      <li><a href="trailers.html"><span class="link-icon" aria-hidden="true">🎬</span>Trailers</a></li>
+      <li><a href="movies.html"><span class="link-icon" aria-hidden="true">🎬</span>Movies</a></li>
+      <li><a href="tv-shows.html"><span class="link-icon" aria-hidden="true">📺</span>TV Shows</a></li>
+      <li><a href="anime.html" class="active"><span class="link-icon" aria-hidden="true">⛩️</span>Anime</a></li>
+      <li><a href="watchlist.html"><span class="link-icon" aria-hidden="true">🔖</span>Watchlist</a></li>
+    </ul>
+    <p class="nav-drawer-label">Anime Categories</p>
+    <ul class="nav-drawer-links" role="list">
+      <li><a href="anime.html?section=trending"><span class="link-icon" aria-hidden="true">🔥</span>Trending Anime</a></li>
+      <li><a href="anime.html?section=movies"><span class="link-icon" aria-hidden="true">🎬</span>Anime Movies</a></li>
+      <li><a href="anime.html?section=tv"><span class="link-icon" aria-hidden="true">📺</span>Anime Series</a></li>
+      <li><a href="anime.html?section=top_rated"><span class="link-icon" aria-hidden="true">🏆</span>Top Rated</a></li>
+    </ul>
+    <div class="nav-drawer-divider"></div>
+    <div class="nav-drawer-auth">
+      <a href="login.html" class="signin-link">Sign In</a>
+      <a href="signup.html" class="signup-link">Get Started</a>
+    </div>
+  </nav>
+
+  <!-- Backdrop Overlay -->
+  <div class="nav-overlay" id="navOverlay" aria-hidden="true"></div>
+
+  <!-- ═══════════════════════════════════════════ MAIN CONTENT ══ -->
+  <main class="main-content" id="mainContent">
+    <div class="container">
+
+      <!-- Page Header -->
+      <div class="page-hero anim-fade-up" style="margin-bottom: var(--sp-xl);">
+        <div class="status-pill" style="margin-bottom: 1.25rem;">
+          <span class="dot-indicator"></span> Japanese Animation Vault
+        </div>
+        <h1 class="page-hero-title">Japanese <span class="text-gradient">Anime</span> Portal</h1>
+        <p class="text-muted" style="max-width: 620px; margin: 0.75rem auto 0;">
+          Strictly Japanese anime simulcasts, legendary Studio Ghibli films, Shonen epics, and new broadcast seasons in 4K Ultra HD.
+        </p>
+      </div>
+
+      <!-- 1. Anime Category Section Tabs -->
+      <div class="category-tab-bar" role="tablist" aria-label="Anime Category Selection">
+        <button class="category-tab active" data-section="trending" role="tab" aria-selected="true">
+          <span class="category-tab-icon">🔥</span>
+          <span>Trending Anime</span>
+        </button>
+        <button class="category-tab" data-section="popular" role="tab" aria-selected="false">
+          <span class="category-tab-icon">⛩️</span>
+          <span>Popular Anime</span>
+        </button>
+        <button class="category-tab" data-section="top_rated" role="tab" aria-selected="false">
+          <span class="category-tab-icon">🏆</span>
+          <span>Top Rated Anime</span>
+        </button>
+        <button class="category-tab" data-section="movies" role="tab" aria-selected="false">
+          <span class="category-tab-icon">🎬</span>
+          <span>Anime Movies</span>
+        </button>
+        <button class="category-tab" data-section="tv" role="tab" aria-selected="false">
+          <span class="category-tab-icon">📺</span>
+          <span>Anime TV Series</span>
+        </button>
+        <button class="category-tab" data-section="japanese_animation" role="tab" aria-selected="false">
+          <span class="category-tab-icon">🌸</span>
+          <span>Japanese Animation</span>
+        </button>
+      </div>
+
+      <!-- 2. Anime Genre / Theme Filter Bar -->
+      <div class="genre-filter-wrapper">
+        <div class="genre-filter-header">
+          <span class="genre-filter-title">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+            Filter by Anime Theme & Genre
+          </span>
+          <button class="btn-clear-genre" id="clearAnimeGenreBtn" style="display: none; background: transparent; border: none; color: #FF3D6B; font-size: 0.78rem; font-weight: 700; cursor: pointer;">
+            Clear Filter ✕
+          </button>
+        </div>
+        <div class="genre-pill-bar" id="animeGenrePillBar" role="radiogroup" aria-label="Anime Genre Filters">
+          <button class="genre-pill active" data-genre="" role="radio" aria-checked="true">All Anime</button>
+          <button class="genre-pill" data-genre="action" role="radio" aria-checked="false">⚡ Shonen / Action</button>
+          <button class="genre-pill" data-genre="fantasy" role="radio" aria-checked="false">🔮 Fantasy / Isekai</button>
+          <button class="genre-pill" data-genre="scifi" role="radio" aria-checked="false">🚀 Sci-Fi & Mecha</button>
+          <button class="genre-pill" data-genre="drama" role="radio" aria-checked="false">🎭 Drama & Slice of Life</button>
+          <button class="genre-pill" data-genre="comedy" role="radio" aria-checked="false">😂 Comedy</button>
+          <button class="genre-pill" data-genre="romance" role="radio" aria-checked="false">💖 Romance</button>
+          <button class="genre-pill" data-genre="mystery" role="radio" aria-checked="false">🕵️ Mystery / Psychological</button>
+          <button class="genre-pill" data-genre="horror" role="radio" aria-checked="false">💀 Horror / Dark Fantasy</button>
+          <button class="genre-pill" data-genre="adventure" role="radio" aria-checked="false">🗺️ Adventure</button>
+        </div>
+      </div>
+
+      <!-- 3. Section Title & Results Counter -->
+      <div class="catalog-bar-row">
+        <div class="section-heading">
+          <h2 class="section-title" id="animeHeadingTitle">Trending Anime</h2>
+          <p class="section-subtitle" id="animeHeadingSubtitle">Top Japanese animated shows and films worldwide</p>
+        </div>
+        <div class="catalog-count-badge" id="animeResultsCount">
+          Loading catalog…
+        </div>
+      </div>
+
+      <!-- 4. Anime Cards Grid (Responsive Grid) -->
+      <div class="catalog-grid" id="animeGrid" aria-live="polite">
+        <!-- Populated dynamically with Skeletons or Cards -->
+      </div>
+
+      <!-- 5. Interactive Pagination Controls -->
+      <div class="pagination-container" id="animePaginationContainer" style="display: none;">
+        <button class="pagination-btn" id="prevAnimePageBtn" aria-label="Previous page">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          <span>Previous</span>
+        </button>
+        <div class="pagination-pages" id="animePaginationPages">
+          <!-- Page number buttons generated dynamically -->
+        </div>
+        <button class="pagination-btn" id="nextAnimePageBtn" aria-label="Next page">
+          <span>Next</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ── Universal Trailer Player Modal ── -->
+  <div class="hero-modal-backdrop univault-trailer-modal" id="heroTrailerModal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Trailer Video Player">
+    <div class="hero-modal-content univault-trailer-content">
+      <div class="hero-modal-header">
+        <div class="hero-modal-title">
+          <span>🎬</span>
+          <span class="hero-modal-title-text" id="heroTrailerTitle">Watch Trailer</span>
+          <span class="hero-modal-badge" id="heroTrailerBadge">Official Trailer</span>
+        </div>
+        <button class="hero-modal-close univault-trailer-close" id="closeHeroTrailerModal" aria-label="Close trailer player">&times;</button>
+      </div>
+      <div class="hero-video-ratio" id="heroTrailerRatioWrap">
+        <div class="hero-modal-loading" id="heroTrailerLoading" style="display: none;">
+          <div class="hero-modal-spinner"></div>
+          <p class="hero-modal-loading-text" id="heroTrailerLoadingText">Loading trailer...</p>
+        </div>
+        <div class="hero-modal-error" id="heroTrailerError" style="display: none;">
+          <div class="hero-modal-error-icon">🎬</div>
+          <h3 class="hero-modal-error-title" id="heroTrailerErrorTitle">Trailer unavailable</h3>
+          <p class="hero-modal-error-desc" id="heroTrailerErrorDesc">Sorry, no official YouTube trailer is currently available for this title in the TMDB catalog.</p>
+          <div class="hero-modal-error-actions">
+            <a id="heroTrailerFallbackBtn" href="#" target="_blank" rel="noopener noreferrer" class="hero-modal-fallback-btn">
+              <span>▶</span> Watch on YouTube
+            </a>
+            <button type="button" class="hero-modal-fallback-close" id="heroTrailerErrorCloseBtn">Close</button>
+          </div>
+        </div>
+      </div>
+      <div class="hero-modal-footer" id="heroTrailerFooter">
+        <span style="color: #71717a; font-size: 0.8rem;">Powered by TMDB & YouTube Player API</span>
+        <a id="heroTrailerDirectYtLink" href="#" target="_blank" rel="noopener noreferrer" class="hero-modal-yt-link" style="display: none;">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" style="vertical-align: middle;"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          <span>Watch on YouTube ↗</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ FOOTER ══ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <span>© 2026 UniVault Inc. All rights reserved. Powered by TMDB API.</span>
+        <div class="footer-legal">
+          <a href="#">Privacy</a><a href="#">Terms</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/auth.js"></script>
+  <script src="js/script.js"></script>
+  <script src="js/cards.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/navbar.js"></script>
+</body>
+</html>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TV Shows Catalog — Stream Prestige Series in 4K — UniVault</title>
+  <meta name="description" content="Explore thousands of binge-worthy TV shows, top rated drama, airing today episodes, and acclaimed series in stunning 4K Ultra HD on UniVault.">
+  
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📺</text></svg>">
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/cards.css">
+</head>
+<body>
+  <!-- Skip to Main Content Accessibility Link -->
+  <a href="#mainContent" class="skip-to-main">Skip to main content</a>
+
+  <!-- ══════════════════════════════════════════════════════ NAVBAR ══ -->
+  <header class="navbar" id="navbar" role="banner">
+    <div class="nav-inner">
+
+      <!-- Brand -->
+      <a href="index.html" class="nav-brand" aria-label="UniVault – Go to homepage">
+        <span class="nav-logo-badge" aria-hidden="true">U</span>
+        <span class="nav-brand-name">UniVault</span>
+      </a>
+
+      <!-- Desktop Links -->
+      <ul class="nav-links-desktop" role="list" aria-label="Main navigation">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="trailers.html">Trailers</a></li>
+        <li><a href="movies.html">Movies</a></li>
+        <li><a href="tv-shows.html" class="active">TV Shows</a></li>
+        <li><a href="anime.html">Anime</a></li>
+        <li class="nav-dropdown" id="genreNav">
+          <a href="#" class="nav-dropdown-toggle" id="genreToggle" aria-haspopup="true" aria-expanded="false">
+            Genres <span class="dropdown-arrow" aria-hidden="true">▾</span>
+          </a>
+          <ul class="nav-dropdown-menu" id="genreDropdown" role="menu">
+            <li role="menuitem"><a href="tv-shows.html?genre=18"><span class="genre-icon">📺</span>Drama</a></li>
+            <li role="menuitem"><a href="tv-shows.html?genre=35"><span class="genre-icon">😂</span>Comedy</a></li>
+            <li role="menuitem"><a href="tv-shows.html?genre=10765"><span class="genre-icon">🚀</span>Sci-Fi & Fantasy</a></li>
+            <li role="menuitem"><a href="tv-shows.html?genre=80"><span class="genre-icon">🔍</span>Crime</a></li>
+            <li class="dropdown-divider" role="separator"></li>
+            <li role="menuitem"><a href="trailers.html"><span class="genre-icon">🎬</span>Trailers</a></li>
+            <li role="menuitem"><a href="anime.html"><span class="genre-icon">⛩️</span>Anime</a></li>
+            <li role="menuitem"><a href="tv-shows.html?genre=10759"><span class="genre-icon">🎬</span>Action & Adventure</a></li>
+            <li role="menuitem"><a href="tv-shows.html?genre=99"><span class="genre-icon">🏆</span>Documentary</a></li>
+            <li role="menuitem"><a href="tv-shows.html?genre=9648"><span class="genre-icon">🕵️</span>Mystery</a></li>
+          </ul>
+        </li>
+      </ul>
+
+      <!-- Desktop Right Actions -->
+      <div class="nav-actions-right">
+        <a href="search.html" class="nav-search-btn" aria-label="Search">
+          <span aria-hidden="true">🔍</span>
+          <span class="nav-search-label">Search</span>
+        </a>
+        <a href="login.html" class="nav-signin-btn">Sign In</a>
+        <a href="profile.html" class="nav-profile-btn" aria-label="Your profile">A</a>
+
+        <button class="hamburger" id="hamburger"
+                aria-label="Open navigation menu"
+                aria-expanded="false"
+                aria-controls="navDrawer">
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <nav class="nav-drawer" id="navDrawer" aria-label="Mobile navigation" aria-hidden="true">
+    <p class="nav-drawer-label">Browse</p>
+    <ul class="nav-drawer-links" role="list">
+      <li><a href="index.html"><span class="link-icon" aria-hidden="true">🏠</span>Home</a></li>
+      <li><a href="trailers.html"><span class="link-icon" aria-hidden="true">🎬</span>Trailers</a></li>
+      <li><a href="movies.html"><span class="link-icon" aria-hidden="true">🎬</span>Movies</a></li>
+      <li><a href="tv-shows.html" class="active"><span class="link-icon" aria-hidden="true">📺</span>TV Shows</a></li>
+      <li><a href="anime.html"><span class="link-icon" aria-hidden="true">⛩️</span>Anime</a></li>
+      <li><a href="watchlist.html"><span class="link-icon" aria-hidden="true">🔖</span>Watchlist</a></li>
+    </ul>
+    <p class="nav-drawer-label">Popular TV Genres</p>
+    <ul class="nav-drawer-links" role="list">
+      <li><a href="tv-shows.html?genre=18"><span class="link-icon" aria-hidden="true">📺</span>Drama</a></li>
+      <li><a href="tv-shows.html?genre=35"><span class="link-icon" aria-hidden="true">😂</span>Comedy</a></li>
+      <li><a href="tv-shows.html?genre=10765"><span class="link-icon" aria-hidden="true">🚀</span>Sci-Fi & Fantasy</a></li>
+      <li><a href="tv-shows.html?genre=80"><span class="link-icon" aria-hidden="true">🔍</span>Crime</a></li>
+    </ul>
+    <div class="nav-drawer-divider"></div>
+    <div class="nav-drawer-auth">
+      <a href="login.html" class="signin-link">Sign In</a>
+      <a href="signup.html" class="signup-link">Get Started</a>
+    </div>
+  </nav>
+
+  <!-- Backdrop Overlay -->
+  <div class="nav-overlay" id="navOverlay" aria-hidden="true"></div>
+
+  <!-- ═══════════════════════════════════════════ MAIN CONTENT ══ -->
+  <main class="main-content" id="mainContent">
+    <div class="container">
+
+      <!-- Page Header -->
+      <div class="page-hero anim-fade-up" style="margin-bottom: var(--sp-xl);">
+        <div class="status-pill" style="margin-bottom: 1.25rem;">
+          <span class="dot-indicator"></span> Prestige Television Hub
+        </div>
+        <h1 class="page-hero-title">Binge <span class="text-gradient">TV Shows</span></h1>
+        <p class="text-muted" style="max-width: 600px; margin: 0.75rem auto 0;">
+          Explore multi-season dramas, hilarious sitcoms, acclaimed sci-fi epics, and new episodes broadcasting worldwide.
+        </p>
+      </div>
+
+      <!-- 1. Category Section Tabs (Popular, Trending, Top Rated, Airing Today, On The Air) -->
+      <div class="category-tab-bar" role="tablist" aria-label="TV Shows Category Selection">
+        <button class="category-tab active" data-section="popular" role="tab" aria-selected="true">
+          <span class="category-tab-icon">📺</span>
+          <span>Popular TV Shows</span>
+        </button>
+        <button class="category-tab" data-section="trending" role="tab" aria-selected="false">
+          <span class="category-tab-icon">🔥</span>
+          <span>Trending Today</span>
+        </button>
+        <button class="category-tab" data-section="top_rated" role="tab" aria-selected="false">
+          <span class="category-tab-icon">🏆</span>
+          <span>Top Rated</span>
+        </button>
+        <button class="category-tab" data-section="airing_today" role="tab" aria-selected="false">
+          <span class="category-tab-icon">📡</span>
+          <span>Airing Today</span>
+        </button>
+        <button class="category-tab" data-section="on_the_air" role="tab" aria-selected="false">
+          <span class="category-tab-icon">⚡</span>
+          <span>On The Air</span>
+        </button>
+      </div>
+
+      <!-- 2. TV Genre Filter Bar (All 14 Requested TV Genres) -->
+      <div class="genre-filter-wrapper">
+        <div class="genre-filter-header">
+          <span class="genre-filter-title">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+            Filter by TV Genre
+          </span>
+          <button class="btn-clear-genre" id="clearTvGenreBtn" style="display: none; background: transparent; border: none; color: #FF3D6B; font-size: 0.78rem; font-weight: 700; cursor: pointer;">
+            Clear Filter ✕
+          </button>
+        </div>
+        <div class="genre-pill-bar" id="tvGenrePillBar" role="radiogroup" aria-label="TV Genre Filters">
+          <button class="genre-pill active" data-genre="" role="radio" aria-checked="true">All Genres</button>
+          <button class="genre-pill" data-genre="18" role="radio" aria-checked="false">📺 Drama</button>
+          <button class="genre-pill" data-genre="35" role="radio" aria-checked="false">😂 Comedy</button>
+          <button class="genre-pill" data-genre="10759" role="radio" aria-checked="false">🎬 Action & Adventure</button>
+          <button class="genre-pill" data-genre="16" role="radio" aria-checked="false">🎨 Animation</button>
+          <button class="genre-pill" data-genre="80" role="radio" aria-checked="false">🔍 Crime</button>
+          <button class="genre-pill" data-genre="99" role="radio" aria-checked="false">🏆 Documentary</button>
+          <button class="genre-pill" data-genre="10751" role="radio" aria-checked="false">👨‍👩‍👧 Family</button>
+          <button class="genre-pill" data-genre="9648" role="radio" aria-checked="false">🕵️ Mystery</button>
+          <button class="genre-pill" data-genre="10765" role="radio" aria-checked="false">🚀 Sci-Fi & Fantasy</button>
+          <button class="genre-pill" data-genre="10762" role="radio" aria-checked="false">🎈 Kids</button>
+          <button class="genre-pill" data-genre="10764" role="radio" aria-checked="false">🌟 Reality</button>
+          <button class="genre-pill" data-genre="10767" role="radio" aria-checked="false">🎙️ Talk</button>
+          <button class="genre-pill" data-genre="10768" role="radio" aria-checked="false">🏛️ War & Politics</button>
+          <button class="genre-pill" data-genre="37" role="radio" aria-checked="false">🤠 Western</button>
+        </div>
+      </div>
+
+      <!-- 3. Section Title & Results Counter -->
+      <div class="catalog-bar-row">
+        <div class="section-heading">
+          <h2 class="section-title" id="tvHeadingTitle">Popular TV Shows</h2>
+          <p class="section-subtitle" id="tvHeadingSubtitle">Showing the most popular series worldwide</p>
+        </div>
+        <div class="catalog-count-badge" id="tvResultsCount">
+          Loading catalog…
+        </div>
+      </div>
+
+      <!-- 4. TV Cards Grid (Responsive Grid) -->
+      <div class="catalog-grid" id="tvGrid" aria-live="polite">
+        <!-- Populated dynamically with Skeletons or Cards -->
+      </div>
+
+      <!-- 5. Interactive Pagination Controls -->
+      <div class="pagination-container" id="tvPaginationContainer" style="display: none;">
+        <button class="pagination-btn" id="prevTvPageBtn" aria-label="Previous page">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          <span>Previous</span>
+        </button>
+        <div class="pagination-pages" id="tvPaginationPages">
+          <!-- Page number buttons generated dynamically -->
+        </div>
+        <button class="pagination-btn" id="nextTvPageBtn" aria-label="Next page">
+          <span>Next</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ── Universal Trailer Player Modal ── -->
+  <div class="hero-modal-backdrop univault-trailer-modal" id="heroTrailerModal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Trailer Video Player">
+    <div class="hero-modal-content univault-trailer-content">
+      <div class="hero-modal-header">
+        <div class="hero-modal-title">
+          <span>🎬</span>
+          <span class="hero-modal-title-text" id="heroTrailerTitle">Watch Trailer</span>
+          <span class="hero-modal-badge" id="heroTrailerBadge">Official Trailer</span>
+        </div>
+        <button class="hero-modal-close univault-trailer-close" id="closeHeroTrailerModal" aria-label="Close trailer player">&times;</button>
+      </div>
+      <div class="hero-video-ratio" id="heroTrailerRatioWrap">
+        <div class="hero-modal-loading" id="heroTrailerLoading" style="display: none;">
+          <div class="hero-modal-spinner"></div>
+          <p class="hero-modal-loading-text" id="heroTrailerLoadingText">Loading trailer...</p>
+        </div>
+        <div class="hero-modal-error" id="heroTrailerError" style="display: none;">
+          <div class="hero-modal-error-icon">🎬</div>
+          <h3 class="hero-modal-error-title" id="heroTrailerErrorTitle">Trailer unavailable</h3>
+          <p class="hero-modal-error-desc" id="heroTrailerErrorDesc">Sorry, no official YouTube trailer is currently available for this title in the TMDB catalog.</p>
+          <div class="hero-modal-error-actions">
+            <a id="heroTrailerFallbackBtn" href="#" target="_blank" rel="noopener noreferrer" class="hero-modal-fallback-btn">
+              <span>▶</span> Watch on YouTube
+            </a>
+            <button type="button" class="hero-modal-fallback-close" id="heroTrailerErrorCloseBtn">Close</button>
+          </div>
+        </div>
+      </div>
+      <div class="hero-modal-footer" id="heroTrailerFooter">
+        <span style="color: #71717a; font-size: 0.8rem;">Powered by TMDB & YouTube Player API</span>
+        <a id="heroTrailerDirectYtLink" href="#" target="_blank" rel="noopener noreferrer" class="hero-modal-yt-link" style="display: none;">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" style="vertical-align: middle;"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          <span>Watch on YouTube ↗</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ FOOTER ══ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <span>© 2026 UniVault Inc. All rights reserved. Powered by TMDB API.</span>
+        <div class="footer-legal">
+          <a href="#">Privacy</a><a href="#">Terms</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/auth.js"></script>
+  <script src="js/script.js"></script>
+  <script src="js/cards.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/navbar.js"></script>
+</body>
+</html>

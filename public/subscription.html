@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subscription Plans — UniVault 4K</title>
+  <meta name="description" content="Choose your UniVault streaming tier — Basic (₹99), Premium (₹199), or Ultimate (₹299). 4K Ultra HD, Dolby Atmos, and multi-device streaming.">
+  
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👑</text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/cards.css">
+
+  <style>
+    /* ── Subscription Page Styles ── */
+    .pricing-hero {
+      text-align: center;
+      padding: clamp(2rem, 5vw, 4rem) 1rem 2rem;
+    }
+    .pricing-toggle-wrapper {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.85rem;
+      background: rgba(18, 19, 26, 0.85);
+      padding: 0.35rem 0.5rem 0.35rem 1rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      margin-top: 1.5rem;
+      margin-bottom: 3rem;
+    }
+    .toggle-label {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #9CA3AF;
+      cursor: pointer;
+      user-select: none;
+      transition: color 0.2s;
+    }
+    .toggle-label.active {
+      color: #FFFFFF;
+    }
+    .toggle-switch {
+      position: relative;
+      width: 48px;
+      height: 26px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .toggle-switch.annual {
+      background: linear-gradient(135deg, #FF3D6B 0%, #FF8C42 100%);
+    }
+    .toggle-knob {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      background: #FFFFFF;
+      border-radius: 50%;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+    .toggle-switch.annual .toggle-knob {
+      transform: translateX(22px);
+    }
+    .discount-badge {
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+      color: #FFFFFF;
+      box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3);
+    }
+
+    /* ── Pricing Cards Grid ── */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      max-width: 1160px;
+      margin: 0 auto 4.5rem;
+      align-items: stretch;
+    }
+    .pricing-card {
+      position: relative;
+      background: rgba(18, 19, 26, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      padding: 2.5rem 2rem;
+      backdrop-filter: blur(16px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .pricing-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+    .pricing-card.featured {
+      background: linear-gradient(180deg, rgba(30, 24, 38, 0.9) 0%, rgba(18, 19, 26, 0.95) 100%);
+      border: 2px solid rgba(255, 61, 107, 0.6);
+      box-shadow: 0 20px 50px rgba(255, 61, 107, 0.25);
+      transform: scale(1.03);
+    }
+    .pricing-card.featured:hover {
+      transform: scale(1.03) translateY(-6px);
+      border-color: rgba(255, 61, 107, 0.9);
+      box-shadow: 0 25px 60px rgba(255, 61, 107, 0.35);
+    }
+
+    @media (max-width: 768px) {
+      .pricing-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      .pricing-card.featured {
+        transform: none !important;
+      }
+      .pricing-card {
+        padding: 2rem 1.5rem;
+        border-radius: 20px;
+      }
+      .pricing-toggle-wrapper {
+        gap: 0.5rem;
+        padding: 0.35rem 0.5rem;
+      }
+    }
+
+    @media (max-width: 374px) {
+      .pricing-card {
+        padding: 1.5rem 1rem;
+      }
+      .plan-amount {
+        font-size: 2.4rem;
+      }
+      .pricing-toggle-wrapper {
+        flex-direction: column;
+        border-radius: 18px;
+        padding: 0.75rem 1rem;
+        gap: 0.75rem;
+      }
+    }
+    .popular-float-badge {
+      position: absolute;
+      top: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #FF3D6B 0%, #FF8C42 100%);
+      color: #FFFFFF;
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.35rem 1.1rem;
+      border-radius: 999px;
+      box-shadow: 0 4px 15px rgba(255, 61, 107, 0.5);
+      white-space: nowrap;
+    }
+
+    .plan-header {
+      margin-bottom: 1.75rem;
+    }
+    .plan-name {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #FFFFFF;
+      margin-bottom: 0.35rem;
+    }
+    .plan-tagline {
+      font-size: 0.85rem;
+      color: #9CA3AF;
+      min-height: 2.5rem;
+    }
+    .plan-price-wrap {
+      display: flex;
+      align-items: baseline;
+      gap: 0.25rem;
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    .plan-currency {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #FFFFFF;
+    }
+    .plan-amount {
+      font-size: 3rem;
+      font-weight: 900;
+      color: #FFFFFF;
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+    .pricing-card.featured .plan-amount {
+      background: linear-gradient(135deg, #FFFFFF 0%, #FFD6E0 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .plan-period {
+      font-size: 0.9rem;
+      color: #9CA3AF;
+      font-weight: 600;
+    }
+    .plan-billed-note {
+      font-size: 0.78rem;
+      color: #10B981;
+      font-weight: 700;
+      min-height: 1.2rem;
+    }
+
+    .plan-features-list {
+      list-style: none;
+      padding: 0;
+      margin: 1.75rem 0 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 1.5rem;
+    }
+    .plan-feature-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: 0.9rem;
+      color: #D1D5DB;
+    }
+    .feature-icon-check {
+      color: #10B981;
+      font-weight: 900;
+      font-size: 1rem;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+    .feature-icon-cross {
+      color: #6B7280;
+      font-weight: 900;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+    .feature-disabled {
+      color: #6B7280;
+      text-decoration: line-through;
+    }
+
+    /* ── Comparison Table ── */
+    .comparison-section {
+      max-width: 1100px;
+      margin: 0 auto 4.5rem;
+      padding: 0 1rem;
+    }
+    .comparison-table-wrapper {
+      overflow-x: auto;
+      border-radius: 20px;
+      background: rgba(18, 19, 26, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(16px);
+    }
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    .comparison-table th, .comparison-table td {
+      padding: 1.1rem 1.25rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .comparison-table th {
+      background: rgba(255, 255, 255, 0.03);
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #FFFFFF;
+    }
+    .comparison-table td {
+      font-size: 0.9rem;
+      color: #D1D5DB;
+    }
+    .comparison-table td.highlight-col {
+      background: rgba(255, 61, 107, 0.04);
+      font-weight: 700;
+      color: #FFFFFF;
+    }
+    .comparison-table th.highlight-col {
+      background: rgba(255, 61, 107, 0.12);
+      color: #FF3D6B;
+    }
+
+    /* ── FAQ Section ── */
+    .faq-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.25rem;
+      max-width: 1100px;
+      margin: 0 auto 4rem;
+      padding: 0 1rem;
+    }
+    .faq-card {
+      background: rgba(18, 19, 26, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      padding: 1.5rem;
+      backdrop-filter: blur(12px);
+    }
+    .faq-question {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #FFFFFF;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .faq-answer {
+      font-size: 0.88rem;
+      color: #9CA3AF;
+      line-height: 1.5;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Skip to Main Content Accessibility Link -->
+  <a href="#mainContent" class="skip-to-main">Skip to main content</a>
+
+  <!-- ══════════════════════════════════════════════════════ NAVBAR ══ -->
+  <header class="navbar" id="navbar" role="banner">
+    <div class="nav-inner">
+
+      <!-- Brand -->
+      <a href="index.html" class="nav-brand" aria-label="UniVault – Go to homepage">
+        <span class="nav-logo-badge" aria-hidden="true">U</span>
+        <span class="nav-brand-name">UniVault</span>
+      </a>
+
+      <!-- Desktop Links -->
+      <ul class="nav-links-desktop" role="list" aria-label="Main navigation">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="movies.html">Movies</a></li>
+        <li><a href="tv-shows.html">TV Shows</a></li>
+        <li><a href="anime.html">Anime</a></li>
+        <li class="nav-dropdown" id="genreNav">
+          <a href="#" class="nav-dropdown-toggle" id="genreToggle" aria-haspopup="true" aria-expanded="false">
+            Genres <span class="dropdown-arrow" aria-hidden="true">▾</span>
+          </a>
+          <ul class="nav-dropdown-menu" id="genreDropdown" role="menu">
+            <li role="menuitem"><a href="movies.html?genre=28"><span class="genre-icon">🎬</span>Action</a></li>
+            <li role="menuitem"><a href="movies.html?genre=878"><span class="genre-icon">🚀</span>Sci-Fi</a></li>
+            <li role="menuitem"><a href="movies.html?genre=27"><span class="genre-icon">💀</span>Horror</a></li>
+            <li role="menuitem"><a href="movies.html?genre=35"><span class="genre-icon">😂</span>Comedy</a></li>
+            <li class="dropdown-divider" role="separator"></li>
+            <li role="menuitem"><a href="anime.html"><span class="genre-icon">⛩️</span>Anime</a></li>
+            <li role="menuitem"><a href="tv-shows.html"><span class="genre-icon">📺</span>Drama</a></li>
+            <li role="menuitem"><a href="tv-shows.html"><span class="genre-icon">🔍</span>Crime</a></li>
+            <li role="menuitem"><a href="movies.html"><span class="genre-icon">🏆</span>Documentary</a></li>
+          </ul>
+        </li>
+      </ul>
+
+      <!-- Desktop Right Actions -->
+      <div class="nav-actions-right">
+        <a href="search.html" class="nav-search-btn" aria-label="Search">
+          <span aria-hidden="true">🔍</span>
+          <span class="nav-search-label">Search</span>
+        </a>
+        <a href="login.html" class="nav-signin-btn">Sign In</a>
+        <a href="profile.html" class="nav-profile-btn" aria-label="Your profile">U</a>
+
+        <button class="hamburger" id="hamburger"
+                aria-label="Open navigation menu"
+                aria-expanded="false"
+                aria-controls="navDrawer">
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <nav class="nav-drawer" id="navDrawer" aria-label="Mobile navigation" aria-hidden="true">
+    <p class="nav-drawer-label">Browse</p>
+    <ul class="nav-drawer-links" role="list">
+      <li><a href="index.html"><span class="link-icon" aria-hidden="true">🏠</span>Home</a></li>
+      <li><a href="movies.html"><span class="link-icon" aria-hidden="true">🎬</span>Movies</a></li>
+      <li><a href="tv-shows.html"><span class="link-icon" aria-hidden="true">📺</span>TV Shows</a></li>
+      <li><a href="anime.html"><span class="link-icon" aria-hidden="true">⛩️</span>Anime</a></li>
+      <li><a href="watchlist.html"><span class="link-icon" aria-hidden="true">🔖</span>Watchlist</a></li>
+    </ul>
+    <div class="nav-drawer-divider"></div>
+    <div class="nav-drawer-auth">
+      <a href="login.html" class="signin-link">Sign In</a>
+      <a href="signup.html" class="signup-link">Get Started</a>
+    </div>
+  </nav>
+
+  <!-- Backdrop Overlay -->
+  <div class="nav-overlay" id="navOverlay" aria-hidden="true"></div>
+
+  <!-- ═══════════════════════════════════════════ MAIN CONTENT ══ -->
+  <main class="main-content" id="mainContent">
+    <div class="container">
+
+      <!-- ── 1. Pricing Header Hero ── -->
+      <section class="pricing-hero anim-fade-up">
+        <div class="status-pill" style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.35rem 0.9rem; border-radius: 999px; background: rgba(255,61,107,0.15); border: 1px solid rgba(255,61,107,0.35); color: #FF3D6B; font-size: 0.85rem; font-weight: 800; margin-bottom: 1.25rem;">
+          💎 Premium Membership Tiers
+        </div>
+        <h1 style="font-size: clamp(2rem, 4.5vw, 3.2rem); font-weight: 900; line-height: 1.15; margin-bottom: 0.75rem; color: #FFFFFF;">
+          Choose Your <span class="text-gradient">Cinematic Experience</span>
+        </h1>
+        <p class="text-muted" style="max-width: 580px; margin: 0 auto; font-size: 1.05rem;">
+          Stream in pristine 4K Ultra HD with spatial audio, multi-profile support, and zero ads on any device.
+        </p>
+
+        <!-- Monthly / Annual Toggle -->
+        <div class="pricing-toggle-wrapper">
+          <span class="toggle-label active" id="labelMonthly">Monthly</span>
+          <div class="toggle-switch" id="billingToggle" role="switch" aria-checked="false" aria-label="Toggle annual billing">
+            <div class="toggle-knob"></div>
+          </div>
+          <span class="toggle-label" id="labelAnnual">Annual</span>
+          <span class="discount-badge">Save 17% (2 Mo. Free)</span>
+        </div>
+      </section>
+
+      <!-- ── 2. Three Premium Pricing Cards ── -->
+      <section class="pricing-grid anim-fade-up">
+
+        <!-- 1. BASIC TIER (₹99/mo) -->
+        <div class="pricing-card" id="cardBasic">
+          <div>
+            <div class="plan-header">
+              <div class="plan-name">Basic</div>
+              <p class="plan-tagline">Ideal for individual viewers on mobile, tablet, and laptop screens.</p>
+              <div class="plan-price-wrap">
+                <span class="plan-currency">₹</span>
+                <span class="plan-amount" id="priceBasic">99</span>
+                <span class="plan-period" id="periodBasic">/month</span>
+              </div>
+              <div class="plan-billed-note" id="noteBasic">&nbsp;</div>
+            </div>
+
+            <ul class="plan-features-list">
+              <li class="plan-feature-item">
+                <span class="feature-icon-check">✓</span>
+                <span><strong>HD (720p)</strong> Resolution</span>
+              </li>
+              <li class="plan-feature-item">
+                <span class="feature-icon-check">✓</span>
+                <span><strong>1 Screen</strong> at a time</span>
+              </li>
+              <li class="plan-feature-item">
+                <span class="feature-icon-check">✓</span>
+                <span><strong>1 Profile</strong></span>
+              </li>
+              <li class="plan-feature-item">
+                <span class="feature-icon-check">✓</span>
+                <span>Mobile, Tablet &amp; Laptop Support</span>
+              </li>
+              <li class="plan-feature-item">
+                <span class="feature-icon-check">✓</span>
+                <span>Standard Stereo Audio</span>
+              </li>
+              <li class="plan-feature-item feature-disabled">
+                <span class="feature-icon-cross">✕</span>
+                <span>1080p Full HD / 4K UHD</span>
+              </li>
+              <li class="plan-feature-item feature-disabled">
+                <span class="feature-icon-cross">✕</span>
+                <span>Dolby Atmos® Spatial Sound</span>
+              </li>
+              <li class="plan-feature-item feature-disabled">
+                <span class="feature-icon-cross">✕</span>
+                <span>Offline Downloads</span>
+              </li>
+            </ul>
+          </div>
+
+          <a href="signup.html?plan=basic" class="btn btn-secondary btn-block" style="padding: 0.9rem; font-weight: 800; border-radius: 14px; text-align: center;">
+            Get Basic
+          </a>
+        </div>
+
+        <!-- 2. PREMIUM TIER (₹199/mo) — MOST POPULAR -->
+        <div class="pricing-card featured" id="cardPremium">
+          <div class="popular-float-badge">👑 MOST POPULAR</div>
+
+          <div>
+            <div class="plan-header">
+              <div class="plan-name" style="color: #FF8C42;">Premium</div>
+              <p class="plan-tagline">The most popular tier for couples and daily movie and anime streaming.</p>
+              <div class="plan-price-wrap">
+                <span class="plan-currency" style="color: #FF8C42;">₹</span>
+                <span class="plan-amount" id="pricePremium">199</span>
+                <span class="plan-period" id="periodPremium">/month</span>
+              </div>
+              <div class="plan-billed-note" id="notePremium">&nbsp;</div>
+            </div>
+
+            <ul class="plan-features-list">
+              <li class="plan-feature-item">
+                <span class="feature-icon-check" style="color: #FF3D6B;">✓</span>
+                <span><strong>Full HD (1080p)</strong> Crisp Resolution</span>
+              </li>
+              <li class="plan-feature-item">
+                <span class="feature-icon-check" style="color: #FF3D6B;">✓</span>
+                <span><strong>2 Screens</strong> simultaneous streaming</span>
+              </li>
+              <li class="plan-feature-item">
+                <span class="feature-icon-check" style="color: #FF3D6B;">✓</span>
+                <span><strong>3 User Profiles</strong> with personalized history</span>
+              </li>
+              <li class="plan-feature-item">
+                <span class="feature-icon-check" style="color: #FF3D6B;">✓</span>
+                <span>Smart TVs, Displays, PC &amp; Mobile</span>
+              </li>
+              <li class="plan-feature-item">
+                <span class="feature-icon-check" style="color: #FF3D6B;">✓</span>
+                <span>5.1 Surround &amp; Enhanced Spatial Audio</span>
+              </li>
+              <li class="plan-feature-item">
+                <span class="feature-icon-check" style="color: #FF3D6B;">✓</span>
+                <span><strong>Offline Downloads</strong> (Up to 25 titles)</span>
+              </li>
+              <li class="plan-feature-item">
+                <span class="feature-icon-check" style="color: #FF3D6B;">✓</span>
+                <span>100% Ad-Free Streaming Experience</span>
+              </li>
+              <li class="plan-feature-item feature-disabled">
+                <span class="feature-icon-cross">✕</span>
+                <span>4K Ultra HD &amp; Dolby Atmos</span>
+              </li>
+            </ul>
+          </div>
+
+          <a href="signup.html?plan=premium" class="btn btn-primary btn-block" style="padding: 0.95rem; font-weight: 900; border-radius: 14px; text-align: center; background: linear-gradient(135deg, #FF3D6B 0%, #FF8C42 100%); box-shadow: 0 6px 25px rgba(255, 61, 107, 0.4);">
+            👑 Start 14-Day Free Trial
+          </a>
+        </div>
+
+        <!-- 3. ULTIMATE TIER (₹299/mo) -->
+        <div class="pricing-card" id="cardUltimate">
+          <div>
+            <div class="plan-header">
+              <div class="plan-name" style="color: #F5C842;">Ultimate</div>
+              <p class="plan-tagline">The uncompromised 4K HDR home theater experience for families.</p>
+              <div class="plan-price-wrap">
+                <span class="plan-currency">₹</span>
+                <span class="plan-amount" id="priceUltimate">299</span>
+                <span class="plan-period" id="periodUltimate">/month</span>
+              </div>
+              <div class="plan-billed-note" id="noteUltimate">&nbsp;</div>
+            </div>
+
+            <ul class="plan-features-list">
+              <li class="plan-feature-item">
+                <span class="feature-icon-check" style="color: #F5C842;">✓</span>
+                <span><strong>4K Ultra HD</strong> + HDR10+ &amp; Dolby Vision</span>
+              </li>
+              <li class="plan-feature-item">
+                <span class="feature-icon-check" style="color: #F5C842;">✓</span>
+                <span><strong>4 Screens</strong> simultaneous streaming</span>
+              </li>
+              <li class="plan-feature-item">
+                <span class="feature-icon-check" style="color: #F5C842;">✓</span>
+                <span><strong>5 User Profiles</strong> + Kids PIN Protection</span>
+              </li>
+              <li class="plan-feature-item">
+                <span class="feature-icon-check" style="color: #F5C842;">✓</span>
+                <span>All Devices (Apple TV, Consoles, Smart TVs)</span>
+              </li>
+              <li class="plan-feature-item">
+                <span class="feature-icon-check" style="color: #F5C842;">✓</span>
+                <span><strong>Dolby Atmos®</strong> 3D Immersive Audio</span>
+              </li>
+              <li class="plan-feature-item">
+                <span class="feature-icon-check" style="color: #F5C842;">✓</span>
+                <span><strong>Unlimited Offline Downloads</strong></span>
+              </li>
+              <li class="plan-feature-item">
+                <span class="feature-icon-check" style="color: #F5C842;">✓</span>
+                <span>VIP Priority 4K Content CDN Routing</span>
+              </li>
+              <li class="plan-feature-item">
+                <span class="feature-icon-check" style="color: #F5C842;">✓</span>
+                <span>Early Access to Curated Premieres</span>
+              </li>
+            </ul>
+          </div>
+
+          <a href="signup.html?plan=ultimate" class="btn btn-secondary btn-block" style="padding: 0.9rem; font-weight: 800; border-radius: 14px; text-align: center; border-color: rgba(245,200,66,0.3); color: #F5C842;">
+            Get Ultimate 4K
+          </a>
+        </div>
+
+      </section>
+
+      <!-- ── 3. Detailed Features Comparison Matrix ── -->
+      <section class="comparison-section anim-fade-up">
+        <div style="text-align: center; margin-bottom: 2rem;">
+          <h2 style="font-size: 1.8rem; font-weight: 800; color: #FFFFFF; margin-bottom: 0.4rem;">Compare Plan Features</h2>
+          <p class="text-muted text-sm">Find the perfect tier for your streaming habits</p>
+        </div>
+
+        <div class="comparison-table-wrapper">
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th style="width: 34%;">Feature</th>
+                <th style="width: 22%;">Basic (₹99)</th>
+                <th style="width: 22%;" class="highlight-col">Premium (₹199) ⭐</th>
+                <th style="width: 22%;">Ultimate (₹299)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Video Resolution</strong></td>
+                <td>HD (720p)</td>
+                <td class="highlight-col">Full HD (1080p)</td>
+                <td><strong>4K Ultra HD + HDR10+</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Simultaneous Devices</strong></td>
+                <td>1 Device</td>
+                <td class="highlight-col">2 Devices</td>
+                <td><strong>4 Devices</strong></td>
+              </tr>
+              <tr>
+                <td><strong>User Profiles</strong></td>
+                <td>1 Profile</td>
+                <td class="highlight-col">3 Profiles</td>
+                <td>5 Profiles + Kids PIN</td>
+              </tr>
+              <tr>
+                <td><strong>Audio Quality</strong></td>
+                <td>Stereo 2.0</td>
+                <td class="highlight-col">5.1 Surround Sound</td>
+                <td><strong>Dolby Atmos® 3D</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Offline Downloads</strong></td>
+                <td>✕ None</td>
+                <td class="highlight-col">25 Titles</td>
+                <td><strong>Unlimited</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Ad-Free Streaming</strong></td>
+                <td>✓ Yes</td>
+                <td class="highlight-col">✓ Yes</td>
+                <td>✓ Yes</td>
+              </tr>
+              <tr>
+                <td><strong>Smart TV &amp; Console Apps</strong></td>
+                <td>✕ Limited</td>
+                <td class="highlight-col">✓ Full Access</td>
+                <td>✓ Full Access (4K Native)</td>
+              </tr>
+              <tr>
+                <td><strong>Watch Parties Sync</strong></td>
+                <td>✕ No</td>
+                <td class="highlight-col">✓ Up to 4 Friends</td>
+                <td>✓ Unlimited Friends</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ── 4. Frequently Asked Questions (FAQ) ── -->
+      <section style="margin-bottom: 4rem;">
+        <div style="text-align: center; margin-bottom: 2rem;">
+          <h2 style="font-size: 1.8rem; font-weight: 800; color: #FFFFFF; margin-bottom: 0.4rem;">Frequently Asked Questions</h2>
+          <p class="text-muted text-sm">Everything you need to know about UniVault billing and streaming</p>
+        </div>
+
+        <div class="faq-grid">
+          <div class="faq-card">
+            <div class="faq-question"><span>🔄</span> Can I switch or cancel plans anytime?</div>
+            <p class="faq-answer">Yes, absolutely. You can upgrade, downgrade, or cancel your subscription anytime directly from your Account Settings with zero cancellation fees.</p>
+          </div>
+
+          <div class="faq-card">
+            <div class="faq-question"><span>🎁</span> How does the 14-day free trial work?</div>
+            <p class="faq-answer">All Premium and Ultimate memberships start with a 14-day risk-free trial. You can explore our catalog in 4K before your first billing date.</p>
+          </div>
+
+          <div class="faq-card">
+            <div class="faq-question"><span>💳</span> What payment methods are supported?</div>
+            <p class="faq-answer">We support all major payment options across India and globally: UPI (Google Pay, PhonePe, Paytm), Credit/Debit Cards, Net Banking, and digital wallets.</p>
+          </div>
+
+          <div class="faq-card">
+            <div class="faq-question"><span>📺</span> What hardware supports 4K and Dolby Atmos?</div>
+            <p class="faq-answer">4K Ultra HD and Dolby Atmos playback are supported on 4K Smart TVs (Samsung, LG, Sony), Apple TV 4K, Fire TV 4K, Android TVs, and compatible sound systems.</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ══════════════════════════════════════════════════════ FOOTER ══ -->
+  <footer class="footer">
+    <div class="container">
+      <div style="text-align: center; max-width: 720px; margin: 0 auto 1.5rem; font-size: 0.78rem; color: #6B7280; line-height: 1.5;">
+        * UniVault subscription plans provide access to UniVault enhanced platform features, multi-device synchronization, 4K video configuration profiles, and personal catalog vaults. Movie and TV catalog metadata is provided via the TMDB API. TMDB is an informational database partner and does not provide direct media broadcast licenses.
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 UniVault Inc. All rights reserved.</span>
+        <div class="footer-legal"><a href="#">Privacy</a><a href="#">Terms</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/navbar.js"></script>
+
+  <!-- Monthly / Annual Toggle Script -->
+  <script>
+    (function() {
+      const toggle = document.getElementById('billingToggle');
+      const labelMonthly = document.getElementById('labelMonthly');
+      const labelAnnual = document.getElementById('labelAnnual');
+
+      const priceBasic = document.getElementById('priceBasic');
+      const periodBasic = document.getElementById('periodBasic');
+      const noteBasic = document.getElementById('noteBasic');
+
+      const pricePremium = document.getElementById('pricePremium');
+      const periodPremium = document.getElementById('periodPremium');
+      const notePremium = document.getElementById('notePremium');
+
+      const priceUltimate = document.getElementById('priceUltimate');
+      const periodUltimate = document.getElementById('periodUltimate');
+      const noteUltimate = document.getElementById('noteUltimate');
+
+      let isAnnual = false;
+
+      function updatePricing() {
+        if (isAnnual) {
+          toggle.classList.add('annual');
+          toggle.setAttribute('aria-checked', 'true');
+          labelMonthly.classList.remove('active');
+          labelAnnual.classList.add('active');
+
+          // Annual rates (₹990/yr = ~₹82/mo, ₹1990/yr = ~₹165/mo, ₹2990/yr = ~₹249/mo)
+          if (priceBasic) priceBasic.textContent = '990';
+          if (periodBasic) periodBasic.textContent = '/year';
+          if (noteBasic) noteBasic.textContent = '₹82.50/mo (Save ₹198/yr)';
+
+          if (pricePremium) pricePremium.textContent = '1,990';
+          if (periodPremium) periodPremium.textContent = '/year';
+          if (notePremium) notePremium.textContent = '₹165.80/mo (Save ₹398/yr)';
+
+          if (priceUltimate) priceUltimate.textContent = '2,990';
+          if (periodUltimate) periodUltimate.textContent = '/year';
+          if (noteUltimate) noteUltimate.textContent = '₹249.10/mo (Save ₹598/yr)';
+        } else {
+          toggle.classList.remove('annual');
+          toggle.setAttribute('aria-checked', 'false');
+          labelMonthly.classList.add('active');
+          labelAnnual.classList.remove('active');
+
+          if (priceBasic) priceBasic.textContent = '99';
+          if (periodBasic) periodBasic.textContent = '/month';
+          if (noteBasic) noteBasic.innerHTML = '&nbsp;';
+
+          if (pricePremium) pricePremium.textContent = '199';
+          if (periodPremium) periodPremium.textContent = '/month';
+          if (notePremium) notePremium.innerHTML = '&nbsp;';
+
+          if (priceUltimate) priceUltimate.textContent = '299';
+          if (periodUltimate) periodUltimate.textContent = '/month';
+          if (noteUltimate) noteUltimate.innerHTML = '&nbsp;';
+        }
+      }
+
+      if (toggle) {
+        toggle.addEventListener('click', () => {
+          isAnnual = !isAnnual;
+          updatePricing();
+        });
+      }
+      if (labelMonthly) {
+        labelMonthly.addEventListener('click', () => {
+          if (isAnnual) {
+            isAnnual = false;
+            updatePricing();
+          }
+        });
+      }
+      if (labelAnnual) {
+        labelAnnual.addEventListener('click', () => {
+          if (!isAnnual) {
+            isAnnual = true;
+            updatePricing();
+          }
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

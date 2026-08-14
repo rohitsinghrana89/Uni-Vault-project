@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile — UniVault 4K</title>
+  <meta name="description" content="Manage your UniVault profile, watchlist, watch history, subscription, and account settings.">
+  
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👤</text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/cards.css">
+  
+  <!-- Immediate Auth Gate Redirect before rendering -->
+  <script>
+    (function() {
+      try {
+        var token = localStorage.getItem('univault_token');
+        if (!token) {
+          window.location.replace('login.html?returnUrl=profile.html');
+        }
+      } catch(e) {
+        window.location.replace('login.html?returnUrl=profile.html');
+      }
+    })();
+  </script>
+
+  <style>
+    /* Profile Navigation & Section Styling */
+    .profile-nav-tabs {
+      display: flex;
+      gap: 0.5rem;
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+      margin-bottom: 2rem;
+      scrollbar-width: none;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .profile-nav-tabs::-webkit-scrollbar {
+      display: none;
+    }
+    .profile-tab-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.25rem;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: var(--text-muted, #9CA3AF);
+      background: transparent;
+      border: 1px solid transparent;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.25s ease;
+    }
+    .profile-tab-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .profile-tab-btn.active {
+      color: #fff;
+      background: linear-gradient(135deg, rgba(255, 61, 107, 0.2) 0%, rgba(255, 140, 66, 0.2) 100%);
+      border-color: rgba(255, 61, 107, 0.4);
+      box-shadow: 0 4px 15px rgba(255, 61, 107, 0.2);
+    }
+    .profile-badge-count {
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+    .profile-section-panel {
+      display: none;
+      animation: fadeIn 0.3s ease forwards;
+    }
+    .profile-section-panel.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .avatar-picker-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+    .avatar-option-btn {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.05);
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .avatar-option-btn:hover {
+      transform: scale(1.1);
+      border-color: #FF3D6B;
+    }
+    .avatar-option-btn.selected {
+      border-color: #FF3D6B;
+      background: rgba(255, 61, 107, 0.25);
+    }
+
+    /* ── Mobile Responsive Optimizations for Profile ── */
+    @media (max-width: 767px) {
+      .profile-nav-tabs {
+        gap: 0.4rem;
+        padding-bottom: 0.75rem;
+      }
+      .profile-tab-btn {
+        padding: 0.6rem 0.9rem;
+        font-size: 0.85rem;
+        min-height: 44px;
+      }
+      .catalog-grid,
+      #profileWatchlistGrid,
+      #profileRecentGrid,
+      #profileFavsGrid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.65rem !important;
+      }
+      #profileLogoutBtn {
+        width: 100%;
+        justify-content: center;
+        min-height: 44px;
+        margin-top: 0.5rem;
+      }
+    }
+
+    @media (max-width: 374px) {
+      .catalog-grid,
+      #profileWatchlistGrid,
+      #profileRecentGrid,
+      #profileFavsGrid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.45rem !important;
+      }
+      .avatar-option-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 1.25rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Skip to Main Content Accessibility Link -->
+  <a href="#profileViewContainer" class="skip-to-main">Skip to main content</a>
+
+  <!-- ══════════════════════════════════════════════════════ NAVBAR ══ -->
+  <header class="navbar" id="navbar" role="banner">
+    <div class="nav-inner">
+
+      <!-- Brand -->
+      <a href="index.html" class="nav-brand" aria-label="UniVault – Go to homepage">
+        <span class="nav-logo-badge" aria-hidden="true">U</span>
+        <span class="nav-brand-name">UniVault</span>
+      </a>
+
+      <!-- Desktop Links -->
+      <ul class="nav-links-desktop" role="list" aria-label="Main navigation">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="trailers.html">Trailers</a></li>
+        <li><a href="movies.html">Movies</a></li>
+        <li><a href="tv-shows.html">TV Shows</a></li>
+        <li><a href="anime.html">Anime</a></li>
+        <li class="nav-dropdown" id="genreNav">
+          <a href="#" class="nav-dropdown-toggle" id="genreToggle" aria-haspopup="true" aria-expanded="false">
+            Genres <span class="dropdown-arrow" aria-hidden="true">▾</span>
+          </a>
+          <ul class="nav-dropdown-menu" id="genreDropdown" role="menu">
+            <li role="menuitem"><a href="movies.html?genre=28"><span class="genre-icon">🎬</span>Action</a></li>
+            <li role="menuitem"><a href="movies.html?genre=878"><span class="genre-icon">🚀</span>Sci-Fi</a></li>
+            <li role="menuitem"><a href="movies.html?genre=27"><span class="genre-icon">💀</span>Horror</a></li>
+            <li role="menuitem"><a href="movies.html?genre=35"><span class="genre-icon">😂</span>Comedy</a></li>
+            <li class="dropdown-divider" role="separator"></li>
+            <li role="menuitem"><a href="trailers.html"><span class="genre-icon">🎬</span>Trailers</a></li>
+            <li role="menuitem"><a href="anime.html"><span class="genre-icon">⛩️</span>Anime</a></li>
+            <li role="menuitem"><a href="tv-shows.html"><span class="genre-icon">📺</span>Drama</a></li>
+            <li role="menuitem"><a href="tv-shows.html"><span class="genre-icon">🔍</span>Crime</a></li>
+            <li role="menuitem"><a href="movies.html"><span class="genre-icon">🏆</span>Documentary</a></li>
+          </ul>
+        </li>
+      </ul>
+
+      <!-- Desktop Right Actions -->
+      <div class="nav-actions-right">
+        <a href="search.html" class="nav-search-btn" aria-label="Search">
+          <span aria-hidden="true">🔍</span>
+          <span class="nav-search-label">Search</span>
+        </a>
+        <a href="login.html" class="nav-signin-btn">Sign In</a>
+        <a href="profile.html" class="nav-profile-btn active" aria-label="Your profile">U</a>
+
+        <button class="hamburger" id="hamburger"
+                aria-label="Open navigation menu"
+                aria-expanded="false"
+                aria-controls="navDrawer">
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <nav class="nav-drawer" id="navDrawer" aria-label="Mobile navigation" aria-hidden="true">
+    <p class="nav-drawer-label">Browse</p>
+    <ul class="nav-drawer-links" role="list">
+      <li><a href="index.html"><span class="link-icon" aria-hidden="true">🏠</span>Home</a></li>
+      <li><a href="trailers.html"><span class="link-icon" aria-hidden="true">🎬</span>Trailers</a></li>
+      <li><a href="movies.html"><span class="link-icon" aria-hidden="true">🎬</span>Movies</a></li>
+      <li><a href="tv-shows.html"><span class="link-icon" aria-hidden="true">📺</span>TV Shows</a></li>
+      <li><a href="anime.html"><span class="link-icon" aria-hidden="true">⛩️</span>Anime</a></li>
+      <li><a href="watchlist.html"><span class="link-icon" aria-hidden="true">🔖</span>Watchlist</a></li>
+    </ul>
+    <div class="nav-drawer-divider"></div>
+    <div class="nav-drawer-auth">
+      <a href="login.html" class="signin-link">Sign In</a>
+      <a href="signup.html" class="signup-link">Get Started</a>
+    </div>
+  </nav>
+
+  <!-- Backdrop Overlay -->
+  <div class="nav-overlay" id="navOverlay" aria-hidden="true"></div>
+
+  <!-- ═══════════════════════════════════════════ MAIN CONTENT ══ -->
+  <main class="main-content" id="profileViewContainer">
+    <div class="container">
+
+      <!-- Loading State -->
+      <div id="profileLoading" style="text-align: center; padding: 5rem 2rem;">
+        <div style="font-size: 2.8rem; margin-bottom: 1rem; animation: spin 1s infinite linear;">↻</div>
+        <p class="text-muted">Loading your profile & streaming preferences…</p>
+      </div>
+
+      <!-- Authenticated Profile Content -->
+      <div id="profileContent" style="display: none;">
+
+        <!-- ── 1. Profile Header Hero ── -->
+        <div class="glass-panel anim-fade-up" style="padding: clamp(1.5rem, 4vw, 2.5rem); margin-bottom: 2rem; border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem;">
+            
+            <div style="display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
+              <!-- Profile Picture / Avatar -->
+              <div style="position: relative;">
+                <div id="profileAvatar" style="width: 90px; height: 90px; background: linear-gradient(135deg, #FF3D6B 0%, #FF8C42 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.4rem; font-weight: 900; color: #fff; flex-shrink: 0; box-shadow: 0 8px 30px rgba(255,61,107,0.4); border: 3px solid rgba(255,255,255,0.2);">
+                  U
+                </div>
+                <button id="changeAvatarBtn" title="Change Avatar" style="position: absolute; bottom: 0; right: 0; width: 30px; height: 30px; border-radius: 50%; background: #1F2937; border: 2px solid #FF3D6B; color: #fff; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                  ✏️
+                </button>
+              </div>
+
+              <!-- User Information -->
+              <div style="min-width: 200px;">
+                <div style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;">
+                  <h1 id="profileName" style="margin: 0; font-size: clamp(1.5rem, 3vw, 1.9rem); font-weight: 800; color: #fff;">User Name</h1>
+                  <span class="status-pill" style="display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.2rem 0.65rem; border-radius: 999px; background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.35); color: #10B981; font-size: 0.75rem; font-weight: 700;">
+                    ✓ Verified Member
+                  </span>
+                </div>
+                <p id="profileEmail" class="text-muted text-sm" style="margin: 0.3rem 0 0.5rem; color: #9CA3AF; font-size: 0.95rem;">user@example.com</p>
+                <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; font-size: 0.85rem; color: #9CA3AF;">
+                  <span id="profileMemberSince">Member since 2026</span>
+                  <span>•</span>
+                  <span style="color: #F59E0B; font-weight: 700;">👑 4K VIP Pass Active</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Action Logout Button -->
+            <button id="profileLogoutBtn" class="btn btn-secondary btn-sm" style="background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.35); color: #FCA5A5; padding: 0.65rem 1.25rem; font-weight: 700; border-radius: 12px;">
+              🚪 Sign Out
+            </button>
+          </div>
+
+          <!-- Avatar Picker Modal/Drawer (Toggled by Change Avatar button) -->
+          <div id="avatarPickerPanel" style="display: none; margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid rgba(255,255,255,0.1);">
+            <div style="font-size: 0.85rem; font-weight: 700; color: #D1D5DB; margin-bottom: 0.5rem;">Choose your profile avatar:</div>
+            <div class="avatar-picker-grid">
+              <button class="avatar-option-btn" data-avatar="🍿">🍿</button>
+              <button class="avatar-option-btn" data-avatar="🚀">🚀</button>
+              <button class="avatar-option-btn" data-avatar="🎭">🎭</button>
+              <button class="avatar-option-btn" data-avatar="🦊">🦊</button>
+              <button class="avatar-option-btn" data-avatar="⚡">⚡</button>
+              <button class="avatar-option-btn" data-avatar="👑">👑</button>
+              <button class="avatar-option-btn" data-avatar="🎬">🎬</button>
+              <button class="avatar-option-btn" data-avatar="🎮">🎮</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── 2. Profile Section Navigation Tabs ── -->
+        <div class="profile-nav-tabs" role="tablist" aria-label="Profile navigation">
+          <button class="profile-tab-btn active" data-target="panelWatchlist" role="tab" aria-selected="true">
+            🔖 My Watchlist <span class="profile-badge-count" id="badgeWatchlistCount">0</span>
+          </button>
+          <button class="profile-tab-btn" data-target="panelRecent" role="tab" aria-selected="false">
+            ⏱️ Recently Viewed <span class="profile-badge-count" id="badgeRecentCount">0</span>
+          </button>
+          <button class="profile-tab-btn" data-target="panelFavorites" role="tab" aria-selected="false">
+            ⭐ Favorites <span class="profile-badge-count" id="badgeFavCount">0</span>
+          </button>
+          <button class="profile-tab-btn" data-target="panelSubscription" role="tab" aria-selected="false">
+            👑 Subscription
+          </button>
+          <button class="profile-tab-btn" data-target="panelSettings" role="tab" aria-selected="false">
+            ⚙️ Account Settings
+          </button>
+          <button class="profile-tab-btn" data-target="panelLogout" role="tab" aria-selected="false" style="color: #FCA5A5;">
+            🚪 Logout
+          </button>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════════════════ -->
+        <!-- SECTION 1: MY WATCHLIST                                       -->
+        <!-- ══════════════════════════════════════════════════════════════ -->
+        <div class="profile-section-panel active" id="panelWatchlist">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+            <div>
+              <h2 style="font-size: 1.4rem; font-weight: 800; color: #fff; margin: 0 0 0.25rem;">My Saved Watchlist</h2>
+              <p class="text-muted text-sm" style="margin: 0;">Movies and series saved to stream later</p>
+            </div>
+            <a href="watchlist.html" class="btn btn-glass btn-sm">Open Full Watchlist Page →</a>
+          </div>
+
+          <div class="catalog-grid" id="profileWatchlistGrid">
+            <!-- Rendered via JS -->
+          </div>
+
+          <div class="catalog-state-card" id="profileWatchlistEmpty" style="display: none; padding: 3rem 1.5rem;">
+            <div class="catalog-state-icon">🔖</div>
+            <h3 class="catalog-state-title" style="font-size: 1.2rem;">Your Watchlist is Empty</h3>
+            <p class="catalog-state-desc" style="font-size: 0.9rem;">Browse trending blockbusters and anime to add titles to your personal watchlist.</p>
+            <a href="movies.html" class="catalog-state-btn" style="margin-top: 1rem;">Explore Movies</a>
+          </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════════════════ -->
+        <!-- SECTION 2: RECENTLY VIEWED                                    -->
+        <!-- ══════════════════════════════════════════════════════════════ -->
+        <div class="profile-section-panel" id="panelRecent">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+            <div>
+              <h2 style="font-size: 1.4rem; font-weight: 800; color: #fff; margin: 0 0 0.25rem;">Recently Viewed</h2>
+              <p class="text-muted text-sm" style="margin: 0;">Titles you recently explored on UniVault</p>
+            </div>
+            <button id="clearRecentBtn" class="btn btn-secondary btn-sm" style="background: rgba(255,255,255,0.06); color: #9CA3AF;">
+              Clear History
+            </button>
+          </div>
+
+          <div class="catalog-grid" id="profileRecentGrid">
+            <!-- Rendered via JS -->
+          </div>
+
+          <div class="catalog-state-card" id="profileRecentEmpty" style="display: none; padding: 3rem 1.5rem;">
+            <div class="catalog-state-icon">⏱️</div>
+            <h3 class="catalog-state-title" style="font-size: 1.2rem;">No Watch History Yet</h3>
+            <p class="catalog-state-desc" style="font-size: 0.9rem;">As you explore movies and series across the catalog, they will appear here.</p>
+            <a href="index.html" class="catalog-state-btn" style="margin-top: 1rem;">Explore Catalog</a>
+          </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════════════════ -->
+        <!-- SECTION 3: FAVORITES                                          -->
+        <!-- ══════════════════════════════════════════════════════════════ -->
+        <div class="profile-section-panel" id="panelFavorites">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+            <div>
+              <h2 style="font-size: 1.4rem; font-weight: 800; color: #fff; margin: 0 0 0.25rem;">My Favorites</h2>
+              <p class="text-muted text-sm" style="margin: 0;">Your all-time top-rated movies and anime</p>
+            </div>
+          </div>
+
+          <div class="catalog-grid" id="profileFavoritesGrid">
+            <!-- Rendered via JS -->
+          </div>
+
+          <div class="catalog-state-card" id="profileFavoritesEmpty" style="display: none; padding: 3rem 1.5rem;">
+            <div class="catalog-state-icon">⭐</div>
+            <h3 class="catalog-state-title" style="font-size: 1.2rem;">No Favorites Marked</h3>
+            <p class="catalog-state-desc" style="font-size: 0.9rem;">Save titles to your favorites to quickly find your favorite cinematic experiences.</p>
+            <a href="movies.html" class="catalog-state-btn" style="margin-top: 1rem;">Browse Movies</a>
+          </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════════════════ -->
+        <!-- SECTION 4: SUBSCRIPTION                                       -->
+        <!-- ══════════════════════════════════════════════════════════════ -->
+        <div class="profile-section-panel" id="panelSubscription">
+          <div class="glass-panel" style="padding: clamp(1.5rem, 4vw, 2.5rem); border-radius: 20px; margin-bottom: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.5rem;">
+              <div>
+                <span class="status-pill-gold" style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.8rem; border-radius: 999px; background: rgba(245,200,66,0.15); border: 1px solid rgba(245,200,66,0.3); color: #F5C842; font-size: 0.82rem; font-weight: 800; margin-bottom: 0.75rem;">
+                  👑 VIP PASS • ACTIVE
+                </span>
+                <h2 style="font-size: 1.6rem; font-weight: 800; color: #fff; margin: 0 0 0.4rem;">VIP Pass 4K Ultra HD</h2>
+                <p class="text-muted text-sm" style="margin: 0 0 1rem;">Auto-renews on September 1, 2026 • $14.99 / month</p>
+              </div>
+              <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                <a href="subscription.html" class="btn btn-primary btn-sm">Change Plan</a>
+                <button class="btn btn-secondary btn-sm" onclick="alert('Your VIP Pass renewal is active. Next billing date: Sept 1, 2026.')">Manage Billing</button>
+              </div>
+            </div>
+
+            <div class="divider" style="margin-block: 1.5rem; height: 1px; background: rgba(255,255,255,0.08);"></div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem;">
+              <div style="background: rgba(255,255,255,0.03); padding: 1.25rem; border-radius: 14px; border: 1px solid rgba(255,255,255,0.06);">
+                <div style="color: #FF3D6B; font-weight: 800; font-size: 1.1rem; margin-bottom: 0.25rem;">4K UHD &amp; HDR10+</div>
+                <div style="color: #9CA3AF; font-size: 0.85rem;">Highest fidelity streaming with Dolby Atmos audio support.</div>
+              </div>
+              <div style="background: rgba(255,255,255,0.03); padding: 1.25rem; border-radius: 14px; border: 1px solid rgba(255,255,255,0.06);">
+                <div style="color: #10B981; font-weight: 800; font-size: 1.1rem; margin-bottom: 0.25rem;">4 Simultaneous Streams</div>
+                <div style="color: #9CA3AF; font-size: 0.85rem;">Share across family devices, TVs, laptops, and mobile.</div>
+              </div>
+              <div style="background: rgba(255,255,255,0.03); padding: 1.25rem; border-radius: 14px; border: 1px solid rgba(255,255,255,0.06);">
+                <div style="color: #F5C842; font-weight: 800; font-size: 1.1rem; margin-bottom: 0.25rem;">100% Ad-Free</div>
+                <div style="color: #9CA3AF; font-size: 0.85rem;">Zero interruptions, unlimited offline downloads.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════════════════ -->
+        <!-- SECTION 5: ACCOUNT SETTINGS                                   -->
+        <!-- ══════════════════════════════════════════════════════════════ -->
+        <div class="profile-section-panel" id="panelSettings">
+          <div class="glass-panel" style="max-width: 680px; padding: clamp(1.5rem, 4vw, 2.5rem); border-radius: 20px; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.4rem; font-weight: 800; color: #fff; margin: 0 0 1.5rem;">Account Settings</h2>
+
+            <!-- Feedback Alert -->
+            <div id="settingsAlert" style="display: none; padding: 0.75rem 1rem; border-radius: 12px; font-size: 0.88rem; font-weight: 600; margin-bottom: 1.5rem;"></div>
+
+            <form id="profileSettingsForm" style="display: flex; flex-direction: column; gap: 1.25rem;">
+              <div class="form-group">
+                <label class="form-label" for="settingsName" style="font-weight: 700; color: #D1D5DB; font-size: 0.88rem; display: block; margin-bottom: 0.4rem;">Display Name</label>
+                <input class="form-input" type="text" id="settingsName" required style="width: 100%; padding: 0.75rem 1rem; background: rgba(18,19,26,0.8); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; color: #fff; font-size: 0.95rem;">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="settingsEmail" style="font-weight: 700; color: #D1D5DB; font-size: 0.88rem; display: block; margin-bottom: 0.4rem;">Email Address</label>
+                <input class="form-input" type="email" id="settingsEmail" disabled style="width: 100%; padding: 0.75rem 1rem; background: rgba(18,19,26,0.4); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; color: #9CA3AF; font-size: 0.95rem; cursor: not-allowed;">
+                <span style="font-size: 0.78rem; color: #9CA3AF; margin-top: 0.25rem; display: block;">Email is linked to your verified SQLite account.</span>
+              </div>
+
+              <div class="divider" style="margin-block: 0.5rem; height: 1px; background: rgba(255,255,255,0.08);"></div>
+
+              <div class="form-group">
+                <label class="form-label" for="settingsQuality" style="font-weight: 700; color: #D1D5DB; font-size: 0.88rem; display: block; margin-bottom: 0.4rem;">Default Streaming Quality</label>
+                <select class="form-input" id="settingsQuality" style="width: 100%; padding: 0.75rem 1rem; background: #12131A; border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; color: #fff; font-size: 0.95rem;">
+                  <option value="4k">4K Ultra HD (HDR10+ / Dolby Vision)</option>
+                  <option value="1080p">1080p Full HD</option>
+                  <option value="720p">720p HD (Data Saver)</option>
+                  <option value="auto">Auto (Adaptive Bitrate)</option>
+                </select>
+              </div>
+
+              <div class="form-group" style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 0;">
+                <div>
+                  <div style="font-weight: 700; color: #fff; font-size: 0.92rem;">Autoplay Official Trailers</div>
+                  <div style="font-size: 0.8rem; color: #9CA3AF;">Automatically preview official YouTube trailers on hover</div>
+                </div>
+                <input type="checkbox" id="settingsAutoplay" checked style="width: 18px; height: 18px; accent-color: #FF3D6B; cursor: pointer;">
+              </div>
+
+              <button type="submit" id="saveSettingsBtn" class="btn btn-primary" style="margin-top: 0.5rem; padding: 0.8rem 1.5rem; font-weight: 800; border-radius: 12px; align-self: flex-start;">
+                Save Changes
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════════════════ -->
+        <!-- SECTION 6: LOGOUT PANEL                                       -->
+        <!-- ══════════════════════════════════════════════════════════════ -->
+        <div class="profile-section-panel" id="panelLogout">
+          <div class="glass-panel" style="max-width: 520px; text-align: center; padding: 3rem 2rem; border-radius: 20px;">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🚪</div>
+            <h2 style="font-size: 1.5rem; font-weight: 800; color: #fff; margin: 0 0 0.5rem;">Sign Out of UniVault?</h2>
+            <p class="text-muted" style="margin: 0 0 2rem; font-size: 0.92rem;">You can sign back in anytime to access your watchlist, playback history, and 4K streaming privileges.</p>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+              <button id="confirmLogoutBtn" class="btn btn-primary" style="background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%); box-shadow: 0 4px 20px rgba(239,68,68,0.4);">
+                Confirm Sign Out
+              </button>
+              <button id="cancelLogoutBtn" class="btn btn-secondary">
+                Stay Signed In
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ── Universal Trailer Player Modal ── -->
+  <div class="hero-modal-backdrop univault-trailer-modal" id="heroTrailerModal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Trailer Video Player">
+    <div class="hero-modal-content univault-trailer-content">
+      <div class="hero-modal-header">
+        <div class="hero-modal-title">
+          <span>🎬</span>
+          <span class="hero-modal-title-text" id="heroTrailerTitle">Watch Trailer</span>
+          <span class="hero-modal-badge" id="heroTrailerBadge">Official Trailer</span>
+        </div>
+        <button class="hero-modal-close univault-trailer-close" id="closeHeroTrailerModal" aria-label="Close trailer player">&times;</button>
+      </div>
+      <div class="hero-video-ratio" id="heroTrailerRatioWrap">
+        <div class="hero-modal-loading" id="heroTrailerLoading" style="display: none;">
+          <div class="hero-modal-spinner"></div>
+          <p class="hero-modal-loading-text" id="heroTrailerLoadingText">Loading trailer...</p>
+        </div>
+        <div class="hero-modal-error" id="heroTrailerError" style="display: none;">
+          <div class="hero-modal-error-icon">🎬</div>
+          <h3 class="hero-modal-error-title" id="heroTrailerErrorTitle">Trailer unavailable</h3>
+          <p class="hero-modal-error-desc" id="heroTrailerErrorDesc">Sorry, no official YouTube trailer is currently available for this title in the TMDB catalog.</p>
+          <div class="hero-modal-error-actions">
+            <a id="heroTrailerFallbackBtn" href="#" target="_blank" rel="noopener noreferrer" class="hero-modal-fallback-btn">
+              <span>▶</span> Watch on YouTube
+            </a>
+            <button type="button" class="hero-modal-fallback-close" id="heroTrailerErrorCloseBtn">Close</button>
+          </div>
+        </div>
+      </div>
+      <div class="hero-modal-footer" id="heroTrailerFooter">
+        <span style="color: #71717a; font-size: 0.8rem;">Powered by TMDB & YouTube Player API</span>
+        <a id="heroTrailerDirectYtLink" href="#" target="_blank" rel="noopener noreferrer" class="hero-modal-yt-link" style="display: none;">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" style="vertical-align: middle;"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          <span>Watch on YouTube ↗</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <span>© 2026 UniVault Inc. All rights reserved. Powered by TMDB API.</span>
+        <div class="footer-legal"><a href="#">Privacy</a><a href="#">Terms</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/auth.js"></script>
+  <script src="js/script.js"></script>
+  <script src="js/cards.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/navbar.js"></script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+{
+  "name": "univault",
+  "version": "1.0.0",
+  "description": "UniVault - Universal Entertainment & Streaming Hub",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "node --watch backend/server.js",
+    "backend": "node backend/server.js",
+    "backend:dev": "node --watch backend/server.js",
+    "test:db": "node backend/test-db.js"
+  },
+  "keywords": [
+    "univault",
+    "movies",
+    "tv-shows",
+    "anime",
+    "streaming"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^8.10.1"
+  }
+}
