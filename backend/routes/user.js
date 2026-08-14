@@ -26,6 +26,8 @@ router.get('/me', authenticateToken, async (req, res) => {
                 id: user._id.toString(),
                 name: user.name,
                 email: user.email,
+                avatar: user.avatar || '👤',
+                subscription: user.subscription || { plan: 'Free', status: 'active', billing: 'monthly' },
                 created_at: user.createdAt,
                 updated_at: user.updatedAt
             }
@@ -42,22 +44,30 @@ router.get('/me', authenticateToken, async (req, res) => {
 /**
  * ═════════════════════════════════════════════════════════════════════════════
  * 2. PUT /api/user/profile
- * Update authenticated user name in MongoDB
+ * Update authenticated user name or avatar in MongoDB
  * ═════════════════════════════════════════════════════════════════════════════
  */
 router.put('/profile', authenticateToken, async (req, res) => {
     try {
-        const { name } = req.body;
-        if (!name || typeof name !== 'string' || name.trim().length < 2) {
+        const { name, avatar } = req.body;
+        const updates = {};
+        if (name && typeof name === 'string' && name.trim().length >= 2) {
+            updates.name = name.trim();
+        }
+        if (avatar && typeof avatar === 'string') {
+            updates.avatar = avatar.trim();
+        }
+
+        if (Object.keys(updates).length === 0) {
             return res.status(400).json({
                 success: false,
-                message: 'Name must be at least 2 characters long.'
+                message: 'No valid update fields provided.'
             });
         }
 
         const user = await User.findByIdAndUpdate(
             req.user.id,
-            { name: name.trim() },
+            updates,
             { new: true, runValidators: true }
         ).select('-password');
 
@@ -75,6 +85,8 @@ router.put('/profile', authenticateToken, async (req, res) => {
                 id: user._id.toString(),
                 name: user.name,
                 email: user.email,
+                avatar: user.avatar || '👤',
+                subscription: user.subscription || { plan: 'Free', status: 'active', billing: 'monthly' },
                 created_at: user.createdAt
             }
         });

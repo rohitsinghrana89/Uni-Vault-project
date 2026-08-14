@@ -66,6 +66,9 @@ app.use('/api/user', userRoutes);
 const watchlistRoutes = require('./routes/watchlist');
 app.use('/api/watchlist', watchlistRoutes);
 
+const paymentRoutes = require('./routes/payment');
+app.use('/api/payment', paymentRoutes);
+
 // TMDB proxy route
 try {
     const tmdbRoutes = require('../routes/tmdb');

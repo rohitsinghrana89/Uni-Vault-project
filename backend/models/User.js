@@ -23,6 +23,37 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Password is required'],
       minlength: [6, 'Password must be at least 6 characters long']
+    },
+    avatar: {
+      type: String,
+      default: '👤'
+    },
+    subscription: {
+      plan: {
+        type: String,
+        enum: ['Free', 'Basic', 'Standard', 'Premium'],
+        default: 'Free'
+      },
+      billing: {
+        type: String,
+        enum: ['monthly', 'yearly'],
+        default: 'monthly'
+      },
+      status: {
+        type: String,
+        enum: ['active', 'inactive', 'pending_verification', 'expired'],
+        default: 'active'
+      },
+      startDate: {
+        type: Date,
+        default: Date.now
+      },
+      expiresAt: {
+        type: Date
+      },
+      paymentId: {
+        type: String
+      }
     }
   },
   {

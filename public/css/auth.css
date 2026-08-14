@@ -1,0 +1,747 @@
+/* ============================================================
+   UNIVAULT — Netflix-Inspired Cinematic Auth System v2.0
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Bebas+Neue&display=swap');
+
+:root {
+  /* Netflix Cinematic Palette */
+  --netflix-red: #E50914;
+  --netflix-red-hover: #F40612;
+  --netflix-red-dark: #B81D24;
+  --netflix-black: #000000;
+  --netflix-dark: #0A0A0C;
+  --netflix-card-bg: rgba(0, 0, 0, 0.78);
+  --netflix-input-bg: rgba(22, 22, 26, 0.85);
+  --netflix-border: rgba(255, 255, 255, 0.16);
+  --netflix-border-focus: #E50914;
+  
+  --auth-text: #FFFFFF;
+  --auth-muted: #B3B3B3;
+  --auth-subtle: #737373;
+  
+  --auth-glow: 0 0 25px rgba(229, 9, 20, 0.45);
+  --auth-glow-lg: 0 0 50px rgba(229, 9, 20, 0.6);
+  --auth-shadow-card: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 40px rgba(0, 0, 0, 0.5);
+  
+  --font-netflix: 'Outfit', sans-serif;
+  --font-logo: 'Bebas Neue', 'Outfit', sans-serif;
+  --font-sans: 'Plus Jakarta Sans', sans-serif;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100%;
+  background-color: var(--netflix-black);
+  color: var(--auth-text);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================================
+   1. CINEMATIC POSTER COLLAGE BACKDROP
+   ============================================================ */
+.auth-page-wrapper {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #000;
+  overflow: hidden;
+}
+
+.auth-backdrop {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Poster Collage Layer with high quality posters */
+.auth-poster-grid {
+  position: absolute;
+  inset: -10%;
+  width: 120%;
+  height: 120%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+  transform: rotate(-4deg) scale(1.08);
+  opacity: 0.28;
+  filter: saturate(1.1) brightness(0.7);
+  user-select: none;
+}
+
+.auth-poster-item {
+  aspect-ratio: 2 / 3;
+  border-radius: 8px;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.8);
+  transition: transform 0.5s ease;
+}
+
+/* Vignette & Gradients Overlay */
+.auth-overlay-gradient {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(ellipse at center, rgba(0, 0, 0, 0.2) 0%, rgba(5, 5, 8, 0.8) 55%, #000000 95%),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.3) 30%, rgba(0, 0, 0, 0.4) 70%, #000000 100%),
+    linear-gradient(to right, rgba(0, 0, 0, 0.8) 0%, transparent 25%, transparent 75%, rgba(0, 0, 0, 0.8) 100%);
+}
+
+/* ============================================================
+   2. HEADER & BRANDING (No Language / No Sign In)
+   ============================================================ */
+.auth-header {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  padding: clamp(1.5rem, 4vw, 2rem) clamp(1.5rem, 5vw, 4rem);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.auth-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.25s ease;
+}
+
+.auth-brand:hover {
+  transform: scale(1.03);
+}
+
+.auth-logo-text {
+  font-family: var(--font-logo);
+  font-size: clamp(2.4rem, 5vw, 3.2rem);
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: var(--netflix-red);
+  text-shadow: 0 0 20px rgba(229, 9, 20, 0.55), 0 4px 15px rgba(0,0,0,0.8);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.auth-logo-img,
+.auth-logo-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: clamp(36px, 5vw, 44px);
+  width: auto;
+  max-width: 65px;
+  object-fit: contain;
+  background: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  filter: drop-shadow(0 3px 12px rgba(229, 9, 20, 0.55));
+}
+
+/* ============================================================
+   3. LANDING HERO CONTAINER
+   ============================================================ */
+.auth-main {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(2rem, 5vw, 4rem) clamp(1rem, 4vw, 2rem);
+}
+
+.auth-hero-content {
+  max-width: 900px;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+  animation: authFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.auth-hero-title {
+  font-family: var(--font-netflix);
+  font-size: clamp(2.2rem, 5.5vw, 4.2rem);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: #FFFFFF;
+  margin-bottom: 1rem;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.9);
+}
+
+.auth-hero-subtitle {
+  font-family: var(--font-netflix);
+  font-size: clamp(1.15rem, 2.5vw, 1.6rem);
+  font-weight: 600;
+  color: #FFFFFF;
+  margin-bottom: 1.25rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+.auth-hero-prompt {
+  font-size: clamp(0.95rem, 1.8vw, 1.2rem);
+  font-weight: 400;
+  color: #E6E6E6;
+  margin-bottom: 1.75rem;
+  max-width: 650px;
+  line-height: 1.5;
+}
+
+/* Get Started Email Form */
+.auth-get-started-form {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: center;
+  gap: 0.6rem;
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto 1.5rem;
+}
+
+.auth-input-wrapper {
+  position: relative;
+  flex: 1;
+  min-width: 260px;
+}
+
+.auth-input-hero {
+  width: 100%;
+  height: 58px;
+  padding: 1.2rem 1.25rem 0.4rem;
+  background: var(--netflix-input-bg);
+  border: 1px solid var(--netflix-border);
+  border-radius: 8px;
+  color: #FFFFFF;
+  font-size: 1.05rem;
+  font-family: var(--font-sans);
+  outline: none;
+  transition: all 0.25s ease;
+  backdrop-filter: blur(8px);
+}
+
+.auth-input-hero:focus {
+  border-color: #FFFFFF;
+  background: rgba(30, 30, 36, 0.95);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+}
+
+.auth-input-label-floating {
+  position: absolute;
+  left: 1.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  color: var(--auth-muted);
+  pointer-events: none;
+  transition: all 0.2s ease;
+}
+
+.auth-input-hero:focus ~ .auth-input-label-floating,
+.auth-input-hero:not(:placeholder-shown) ~ .auth-input-label-floating {
+  top: 14px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--auth-muted);
+}
+
+.auth-btn-get-started {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  height: 58px;
+  padding: 0 2rem;
+  background: var(--netflix-red);
+  color: #FFFFFF;
+  font-family: var(--font-netflix);
+  font-size: 1.35rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 6px 25px rgba(229, 9, 20, 0.5);
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.auth-btn-get-started:hover {
+  background: var(--netflix-red-hover);
+  transform: scale(1.03);
+  box-shadow: 0 8px 35px rgba(229, 9, 20, 0.7);
+}
+
+.auth-btn-get-started:active {
+  transform: scale(0.98);
+}
+
+.auth-btn-chevron {
+  font-size: 1.5rem;
+  font-weight: 900;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.auth-btn-get-started:hover .auth-btn-chevron {
+  transform: translateX(4px);
+}
+
+.auth-quick-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  font-size: 0.95rem;
+  color: var(--auth-muted);
+  margin-top: 0.5rem;
+}
+
+.auth-quick-link-btn {
+  color: #FFFFFF;
+  font-weight: 600;
+  text-decoration: none;
+  background: none;
+  border: none;
+  font-size: 0.95rem;
+  cursor: pointer;
+  padding: 0.3rem 0.5rem;
+  border-radius: 4px;
+  transition: color 0.2s ease, text-decoration 0.2s ease;
+}
+
+.auth-quick-link-btn:hover {
+  color: var(--netflix-red);
+  text-decoration: underline;
+}
+
+/* ============================================================
+   4. GLASSMORPHIC AUTH CARDS (SIGN IN & SIGN UP)
+   ============================================================ */
+.auth-card-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(12px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.auth-card-modal-backdrop.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 460px;
+  background: var(--netflix-card-bg);
+  border: 1px solid var(--netflix-border);
+  border-radius: 16px;
+  padding: clamp(2rem, 5vw, 3.25rem) clamp(1.5rem, 5vw, 3rem);
+  box-shadow: var(--auth-shadow-card);
+  backdrop-filter: blur(20px);
+  position: relative;
+  transform: translateY(20px) scale(0.96);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.auth-card-modal-backdrop.active .auth-card {
+  transform: translateY(0) scale(1);
+}
+
+/* Standalone Page Auth Card (used on login.html & signup.html) */
+.auth-card-standalone {
+  margin: 0 auto;
+  transform: none;
+  animation: authFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.auth-card-close-btn {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.auth-card-close-btn:hover {
+  background: rgba(229, 9, 20, 0.8);
+  border-color: var(--netflix-red);
+  transform: rotate(90deg);
+}
+
+.auth-card-title {
+  font-family: var(--font-netflix);
+  font-size: 2rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin-bottom: 0.5rem;
+}
+
+.auth-card-subtitle {
+  font-size: 0.9rem;
+  color: var(--auth-muted);
+  margin-bottom: 1.75rem;
+}
+
+/* Error Banner */
+.auth-error-banner {
+  display: none;
+  background: rgba(229, 9, 20, 0.18);
+  border: 1px solid rgba(229, 9, 20, 0.5);
+  color: #FFA5A5;
+  padding: 0.85rem 1rem;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+  line-height: 1.4;
+  animation: authShake 0.4s ease;
+}
+
+/* Form Groups */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  width: 100%;
+}
+
+.auth-field-group {
+  position: relative;
+  width: 100%;
+}
+
+.auth-input-card {
+  width: 100%;
+  height: 54px;
+  padding: 1.15rem 1rem 0.35rem;
+  background: rgba(22, 22, 28, 0.8);
+  border: 1px solid var(--netflix-border);
+  border-radius: 8px;
+  color: #FFFFFF;
+  font-size: 0.95rem;
+  font-family: var(--font-sans);
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.auth-input-card:focus {
+  border-color: #FFFFFF;
+  background: rgba(30, 30, 38, 0.95);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
+}
+
+.auth-label-card {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.9rem;
+  color: var(--auth-muted);
+  pointer-events: none;
+  transition: all 0.2s ease;
+}
+
+.auth-input-card:focus ~ .auth-label-card,
+.auth-input-card:not(:placeholder-shown) ~ .auth-label-card {
+  top: 13px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--auth-muted);
+}
+
+.auth-toggle-pass-btn {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--auth-muted);
+  cursor: pointer;
+  padding: 0.4rem;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+.auth-toggle-pass-btn:hover {
+  color: #FFFFFF;
+}
+
+/* Submit Buttons */
+.auth-btn-submit {
+  width: 100%;
+  height: 50px;
+  background: var(--netflix-red);
+  color: #FFFFFF;
+  font-family: var(--font-netflix);
+  font-size: 1.05rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  box-shadow: 0 4px 20px rgba(229, 9, 20, 0.4);
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-btn-submit:hover {
+  background: var(--netflix-red-hover);
+  box-shadow: 0 6px 25px rgba(229, 9, 20, 0.6);
+  transform: translateY(-1px);
+}
+
+.auth-btn-submit:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Google Sign-in Alternative Button */
+.auth-btn-google {
+  width: 100%;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #FFFFFF;
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-top: 0.75rem;
+  transition: all 0.2s ease;
+}
+
+.auth-btn-google:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.auth-btn-google svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Card Divider */
+.auth-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 1.25rem 0;
+  color: var(--auth-subtle);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.auth-divider span {
+  padding: 0 0.75rem;
+}
+
+/* Card Switch / Footer Links */
+.auth-card-footer {
+  margin-top: 1.5rem;
+  text-align: left;
+  font-size: 0.9rem;
+  color: var(--auth-subtle);
+}
+
+.auth-card-footer-text {
+  color: var(--auth-muted);
+}
+
+.auth-card-switch-link {
+  color: #FFFFFF;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  margin-left: 0.35rem;
+  transition: color 0.2s ease;
+}
+
+.auth-card-switch-link:hover {
+  color: var(--netflix-red);
+  text-decoration: underline;
+}
+
+/* ============================================================
+   5. MINIMAL NETFLIX FOOTER
+   ============================================================ */
+.auth-footer {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  padding: 2.5rem clamp(1.5rem, 5vw, 4rem);
+  background: rgba(0, 0, 0, 0.85);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--auth-subtle);
+  font-size: 0.88rem;
+}
+
+.auth-footer-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.auth-footer-contact {
+  margin-bottom: 1.5rem;
+}
+
+.auth-footer-contact a {
+  color: var(--auth-subtle);
+  text-decoration: none;
+}
+
+.auth-footer-contact a:hover {
+  text-decoration: underline;
+}
+
+.auth-footer-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.75rem 1.5rem;
+  list-style: none;
+  margin-bottom: 1.5rem;
+}
+
+.auth-footer-links a {
+  color: var(--auth-subtle);
+  text-decoration: none;
+  font-size: 0.82rem;
+  transition: color 0.2s ease;
+}
+
+.auth-footer-links a:hover {
+  color: #FFFFFF;
+  text-decoration: underline;
+}
+
+.auth-footer-copyright {
+  font-size: 0.8rem;
+  color: var(--auth-subtle);
+}
+
+/* ============================================================
+   6. ANIMATIONS & RESPONSIVE
+   ============================================================ */
+@keyframes authFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes authShake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+@media (max-width: 768px) {
+  .auth-get-started-form {
+    flex-direction: column;
+    max-width: 480px;
+  }
+
+  .auth-btn-get-started {
+    height: 52px;
+    font-size: 1.15rem;
+  }
+
+  .auth-hero-title {
+    font-size: 2.2rem;
+  }
+
+  .auth-hero-subtitle {
+    font-size: 1.15rem;
+  }
+
+  .auth-card {
+    padding: 2rem 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-header {
+    padding: 1.25rem 1rem;
+  }
+
+  .auth-logo-text {
+    font-size: 2rem;
+  }
+
+  .auth-hero-title {
+    font-size: 1.85rem;
+  }
+
+  .auth-quick-links {
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+}

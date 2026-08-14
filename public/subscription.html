@@ -3,813 +3,1544 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Subscription Plans — UniVault 4K</title>
-  <meta name="description" content="Choose your UniVault streaming tier — Basic (₹99), Premium (₹199), or Ultimate (₹299). 4K Ultra HD, Dolby Atmos, and multi-device streaming.">
+  <title>Choose Your Plan — UniVault 4K Subscription</title>
+  <meta name="description" content="Unlock unlimited 4K Ultra HD movies, series, and anime with UniVault Premium. Pay securely via PhonePe UPI QR code.">
   
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👑</text></svg>">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="images/logo.png" type="image/png">
+  <link rel="stylesheet" href="css/netflix-theme.css">
   <link rel="stylesheet" href="css/navbar.css">
-  <link rel="stylesheet" href="css/cards.css">
 
   <style>
-    /* ── Subscription Page Styles ── */
-    .pricing-hero {
+    /* ═══════════════════════════════════════════════════════════════════════
+       SUBSCRIPTION PAGE & CLEAN PHONEPE QR PAYMENT STYLES
+       ═══════════════════════════════════════════════════════════════════════ */
+    
+    /* ── Hero & Header ── */
+    .sub-hero {
       text-align: center;
-      padding: clamp(2rem, 5vw, 4rem) 1rem 2rem;
+      padding: clamp(3rem, 6vw, 5.5rem) clamp(1.25rem, 4vw, 3rem) 2.5rem;
+      position: relative;
+      overflow: hidden;
+      background: radial-gradient(circle at 50% 10%, rgba(229, 9, 20, 0.16) 0%, transparent 65%);
     }
-    .pricing-toggle-wrapper {
+
+    .sub-badge {
       display: inline-flex;
       align-items: center;
-      gap: 0.85rem;
-      background: rgba(18, 19, 26, 0.85);
-      padding: 0.35rem 0.5rem 0.35rem 1rem;
-      border-radius: 999px;
+      gap: 0.5rem;
+      padding: 0.35rem 0.95rem;
+      background: rgba(229, 9, 20, 0.16);
+      border: 1px solid rgba(229, 9, 20, 0.4);
+      color: #FFA5A5;
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-radius: var(--radius-pill);
+      margin-bottom: 1.25rem;
+      backdrop-filter: blur(8px);
+    }
+
+    .sub-hero-title {
+      font-size: clamp(2.2rem, 4.5vw, 3.6rem);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      color: #fff;
+      margin-bottom: 0.75rem;
+      line-height: 1.15;
+    }
+
+    .sub-hero-subtitle {
+      font-size: clamp(1rem, 1.8vw, 1.2rem);
+      color: var(--text-secondary);
+      max-width: 680px;
+      margin: 0 auto 2rem;
+      line-height: 1.5;
+    }
+
+    /* ── Monthly / Yearly Toggle ── */
+    .pricing-toggle-container {
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      background: #14141c;
       border: 1px solid rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(12px);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-      margin-top: 1.5rem;
+      border-radius: var(--radius-pill);
+      padding: 0.35rem 0.5rem 0.35rem 1.25rem;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
       margin-bottom: 3rem;
     }
-    .toggle-label {
-      font-size: 0.9rem;
+
+    .pricing-toggle-label {
+      font-size: 0.92rem;
       font-weight: 700;
-      color: #9CA3AF;
+      color: var(--text-secondary);
       cursor: pointer;
       user-select: none;
       transition: color 0.2s;
     }
-    .toggle-label.active {
-      color: #FFFFFF;
+    .pricing-toggle-label.active {
+      color: #fff;
     }
-    .toggle-switch {
+
+    .pricing-toggle-switch {
       position: relative;
-      width: 48px;
-      height: 26px;
+      width: 52px;
+      height: 28px;
       background: rgba(255, 255, 255, 0.15);
-      border-radius: 999px;
+      border-radius: var(--radius-pill);
       cursor: pointer;
       transition: background 0.3s;
     }
-    .toggle-switch.annual {
-      background: linear-gradient(135deg, #FF3D6B 0%, #FF8C42 100%);
+    .pricing-toggle-switch.yearly {
+      background: var(--accent-gradient);
     }
-    .toggle-knob {
+
+    .pricing-toggle-knob {
       position: absolute;
       top: 3px;
       left: 3px;
-      width: 20px;
-      height: 20px;
-      background: #FFFFFF;
+      width: 22px;
+      height: 22px;
+      background: #fff;
       border-radius: 50%;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
       transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
     }
-    .toggle-switch.annual .toggle-knob {
-      transform: translateX(22px);
+    .pricing-toggle-switch.yearly .pricing-toggle-knob {
+      transform: translateX(24px);
     }
-    .discount-badge {
-      padding: 0.2rem 0.65rem;
-      border-radius: 999px;
-      font-size: 0.75rem;
+
+    .pricing-discount-badge {
+      background: var(--accent-gradient);
+      color: #fff;
+      font-size: 0.72rem;
       font-weight: 800;
-      background: linear-gradient(135deg, #10B981 0%, #059669 100%);
-      color: #FFFFFF;
-      box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3);
+      padding: 0.25rem 0.65rem;
+      border-radius: var(--radius-pill);
+      letter-spacing: 0.04em;
     }
 
     /* ── Pricing Cards Grid ── */
-    .pricing-grid {
+    .pricing-cards-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
-      max-width: 1160px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      max-width: 1400px;
       margin: 0 auto 4.5rem;
       align-items: stretch;
     }
-    .pricing-card {
+
+    @media (max-width: 1200px) {
+      .pricing-cards-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .pricing-cards-grid { grid-template-columns: 1fr; }
+    }
+
+    .plan-card {
       position: relative;
-      background: rgba(18, 19, 26, 0.7);
+      background: #14141e;
       border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 24px;
-      padding: 2.5rem 2rem;
-      backdrop-filter: blur(16px);
+      border-radius: var(--radius-lg);
+      padding: 2rem 1.75rem;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
     }
-    .pricing-card:hover {
-      transform: translateY(-6px);
-      border-color: rgba(255, 255, 255, 0.2);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+
+    .plan-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8);
     }
-    .pricing-card.featured {
-      background: linear-gradient(180deg, rgba(30, 24, 38, 0.9) 0%, rgba(18, 19, 26, 0.95) 100%);
-      border: 2px solid rgba(255, 61, 107, 0.6);
-      box-shadow: 0 20px 50px rgba(255, 61, 107, 0.25);
+
+    /* Most Popular Card Highlight */
+    .plan-card.featured {
+      background: #181826;
+      border: 2px solid var(--accent-red);
+      box-shadow: 0 12px 36px var(--accent-glow);
       transform: scale(1.03);
     }
-    .pricing-card.featured:hover {
-      transform: scale(1.03) translateY(-6px);
-      border-color: rgba(255, 61, 107, 0.9);
-      box-shadow: 0 25px 60px rgba(255, 61, 107, 0.35);
+    .plan-card.featured:hover {
+      transform: scale(1.03) translateY(-8px);
+      box-shadow: 0 20px 48px var(--accent-glow-strong);
     }
 
-    @media (max-width: 768px) {
-      .pricing-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-      }
-      .pricing-card.featured {
-        transform: none !important;
-      }
-      .pricing-card {
-        padding: 2rem 1.5rem;
-        border-radius: 20px;
-      }
-      .pricing-toggle-wrapper {
-        gap: 0.5rem;
-        padding: 0.35rem 0.5rem;
-      }
-    }
-
-    @media (max-width: 374px) {
-      .pricing-card {
-        padding: 1.5rem 1rem;
-      }
-      .plan-amount {
-        font-size: 2.4rem;
-      }
-      .pricing-toggle-wrapper {
-        flex-direction: column;
-        border-radius: 18px;
-        padding: 0.75rem 1rem;
-        gap: 0.75rem;
-      }
-    }
-    .popular-float-badge {
+    .plan-card-popular-tag {
       position: absolute;
-      top: -15px;
+      top: -14px;
       left: 50%;
       transform: translateX(-50%);
-      background: linear-gradient(135deg, #FF3D6B 0%, #FF8C42 100%);
-      color: #FFFFFF;
-      font-size: 0.78rem;
-      font-weight: 900;
+      background: var(--accent-gradient);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 800;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      padding: 0.35rem 1.1rem;
-      border-radius: 999px;
-      box-shadow: 0 4px 15px rgba(255, 61, 107, 0.5);
-      white-space: nowrap;
+      padding: 0.35rem 1rem;
+      border-radius: var(--radius-pill);
+      box-shadow: 0 4px 15px var(--accent-glow);
+    }
+
+    .plan-card-current-tag {
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #10B981;
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.35rem 1rem;
+      border-radius: var(--radius-pill);
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
     }
 
     .plan-header {
-      margin-bottom: 1.75rem;
+      margin-bottom: 1.5rem;
     }
+
     .plan-name {
       font-size: 1.3rem;
       font-weight: 800;
-      color: #FFFFFF;
+      color: #fff;
       margin-bottom: 0.35rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
-    .plan-tagline {
+
+    .plan-desc {
       font-size: 0.85rem;
-      color: #9CA3AF;
-      min-height: 2.5rem;
+      color: var(--text-secondary);
+      min-height: 40px;
+      line-height: 1.4;
     }
-    .plan-price-wrap {
-      display: flex;
-      align-items: baseline;
-      gap: 0.25rem;
-      margin-top: 1rem;
-      margin-bottom: 0.5rem;
+
+    .plan-pricing-box {
+      margin-bottom: 1.75rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
-    .plan-currency {
-      font-size: 1.6rem;
-      font-weight: 800;
-      color: #FFFFFF;
-    }
-    .plan-amount {
-      font-size: 3rem;
+
+    .plan-price-amount {
+      font-size: 2.5rem;
       font-weight: 900;
-      color: #FFFFFF;
+      color: #fff;
+      letter-spacing: -0.04em;
       line-height: 1;
-      letter-spacing: -0.02em;
     }
-    .pricing-card.featured .plan-amount {
-      background: linear-gradient(135deg, #FFFFFF 0%, #FFD6E0 100%);
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .plan-period {
-      font-size: 0.9rem;
-      color: #9CA3AF;
+
+    .plan-price-period {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
       font-weight: 600;
-    }
-    .plan-billed-note {
-      font-size: 0.78rem;
-      color: #10B981;
-      font-weight: 700;
-      min-height: 1.2rem;
+      margin-left: 0.25rem;
     }
 
     .plan-features-list {
       list-style: none;
-      padding: 0;
-      margin: 1.75rem 0 2rem;
       display: flex;
       flex-direction: column;
       gap: 0.85rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      padding-top: 1.5rem;
+      margin-bottom: 2rem;
+      flex: 1;
     }
+
     .plan-feature-item {
       display: flex;
       align-items: flex-start;
-      gap: 0.75rem;
+      gap: 0.65rem;
       font-size: 0.9rem;
       color: #D1D5DB;
+      line-height: 1.35;
     }
-    .feature-icon-check {
+
+    .plan-feature-icon {
       color: #10B981;
-      font-weight: 900;
-      font-size: 1rem;
+      font-weight: 800;
       flex-shrink: 0;
-      margin-top: 0.1rem;
     }
-    .feature-icon-cross {
-      color: #6B7280;
-      font-weight: 900;
-      font-size: 0.9rem;
-      flex-shrink: 0;
-      margin-top: 0.1rem;
+
+    .plan-cta-btn {
+      width: 100%;
+      padding: 0.9rem;
+      font-size: 0.95rem;
+      font-weight: 800;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
     }
-    .feature-disabled {
-      color: #6B7280;
-      text-decoration: line-through;
+
+    .plan-cta-btn.primary {
+      background: var(--accent-gradient);
+      color: #fff;
+      box-shadow: 0 4px 16px var(--accent-glow);
+    }
+    .plan-cta-btn.primary:hover {
+      background: var(--accent-gradient-hover);
+      transform: scale(1.03);
+      box-shadow: 0 6px 24px var(--accent-glow-strong);
+    }
+
+    .plan-cta-btn.secondary {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+    .plan-cta-btn.secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: scale(1.03);
+    }
+
+    .plan-cta-btn.current {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #6EE7B7;
+      cursor: default;
     }
 
     /* ── Comparison Table ── */
     .comparison-section {
-      max-width: 1100px;
-      margin: 0 auto 4.5rem;
-      padding: 0 1rem;
+      max-width: 1200px;
+      margin: 0 auto 5rem;
     }
+
     .comparison-table-wrapper {
       overflow-x: auto;
-      border-radius: 20px;
-      background: rgba(18, 19, 26, 0.75);
+      background: #14141c;
       border: 1px solid rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(16px);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
     }
+
     .comparison-table {
       width: 100%;
       border-collapse: collapse;
       text-align: left;
+      font-size: 0.92rem;
     }
-    .comparison-table th, .comparison-table td {
+
+    .comparison-table th, 
+    .comparison-table td {
       padding: 1.1rem 1.25rem;
       border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     }
+
     .comparison-table th {
-      background: rgba(255, 255, 255, 0.03);
-      font-size: 0.95rem;
+      background: #181824;
       font-weight: 800;
-      color: #FFFFFF;
-    }
-    .comparison-table td {
-      font-size: 0.9rem;
-      color: #D1D5DB;
-    }
-    .comparison-table td.highlight-col {
-      background: rgba(255, 61, 107, 0.04);
-      font-weight: 700;
-      color: #FFFFFF;
-    }
-    .comparison-table th.highlight-col {
-      background: rgba(255, 61, 107, 0.12);
-      color: #FF3D6B;
+      color: #fff;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 0.04em;
     }
 
-    /* ── FAQ Section ── */
-    .faq-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 1.25rem;
-      max-width: 1100px;
-      margin: 0 auto 4rem;
-      padding: 0 1rem;
+    .comparison-table th.featured-col,
+    .comparison-table td.featured-col {
+      background: rgba(229, 9, 20, 0.06);
+      color: #fff;
+      font-weight: 700;
     }
-    .faq-card {
-      background: rgba(18, 19, 26, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 18px;
-      padding: 1.5rem;
-      backdrop-filter: blur(12px);
+
+    .comparison-table td:not(:first-child),
+    .comparison-table th:not(:first-child) {
+      text-align: center;
     }
-    .faq-question {
-      font-size: 1rem;
+
+    .table-check {
+      color: #10B981;
       font-weight: 800;
-      color: #FFFFFF;
+      font-size: 1.1rem;
+    }
+    .table-dash {
+      color: #4B5563;
+      font-size: 1.1rem;
+    }
+
+    /* ── Why Choose UniVault Premium ── */
+    .why-section {
+      max-width: 1200px;
+      margin: 0 auto 5rem;
+      text-align: center;
+    }
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+      text-align: left;
+    }
+
+    @media (max-width: 992px) {
+      .why-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 540px) {
+      .why-grid { grid-template-columns: 1fr; }
+    }
+
+    .why-card {
+      background: #14141c;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-md);
+      padding: 1.75rem;
+      transition: transform 0.3s ease;
+    }
+    .why-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .why-card-icon {
+      font-size: 2.2rem;
+      margin-bottom: 1rem;
+    }
+
+    .why-card-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #fff;
       margin-bottom: 0.5rem;
+    }
+
+    .why-card-desc {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* ── FAQ Accordion ── */
+    .faq-section {
+      max-width: 860px;
+      margin: 0 auto 5.5rem;
+    }
+
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: 2rem;
+    }
+
+    .faq-item {
+      background: #14141c;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .faq-item:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .faq-question-btn {
+      width: 100%;
+      text-align: left;
+      padding: 1.25rem 1.5rem;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      justify-content: space-between;
+      color: #fff;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
     }
-    .faq-answer {
-      font-size: 0.88rem;
+
+    .faq-icon {
+      font-size: 1.3rem;
       color: #9CA3AF;
-      line-height: 1.5;
-      margin: 0;
+      transition: transform 0.3s ease;
+    }
+    .faq-item.open .faq-icon {
+      transform: rotate(45deg);
+      color: var(--accent-red);
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      padding: 0 1.5rem;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), padding 0.35s ease;
+    }
+    .faq-item.open .faq-answer {
+      max-height: 300px;
+      padding: 0 1.5rem 1.5rem;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════
+       IMPROVED CLEAN PHONEPE QR PAYMENT MODAL (Netflix-Inspired Dark UI)
+       ═══════════════════════════════════════════════════════════════════════ */
+    .qr-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: rgba(0, 0, 0, 0.88);
+      backdrop-filter: blur(16px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.28s ease;
+    }
+    .qr-modal-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .qr-modal-box {
+      width: 100%;
+      max-width: 440px;
+      max-height: 94vh;
+      overflow-y: auto;
+      background: #11111a;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.95), 0 0 32px rgba(229, 9, 20, 0.22);
+      padding: 1.75rem clamp(1.25rem, 3vw, 1.85rem);
+      position: relative;
+      transform: scale(0.92);
+      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .qr-modal-backdrop.active .qr-modal-box {
+      transform: scale(1);
+    }
+
+    .qr-modal-close-btn {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.2rem;
+      color: #9CA3AF;
+      font-size: 1.25rem;
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.06);
+      transition: all 0.2s;
+    }
+    .qr-modal-close-btn:hover {
+      background: var(--accent-red);
+      color: #fff;
+      transform: scale(1.1);
+    }
+
+    .qr-modal-header {
+      text-align: center;
+      margin-bottom: 1.25rem;
+    }
+
+    .qr-modal-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+
+    .qr-plan-pill {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-md);
+      padding: 0.65rem 1rem;
+      margin-top: 0.75rem;
+    }
+    .qr-plan-name {
+      font-weight: 800;
+      font-size: 1rem;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .qr-plan-price {
+      font-size: 1.2rem;
+      font-weight: 900;
+      color: var(--accent-red);
+    }
+
+    /* ── Compact Centered QR Container ── */
+    .qr-compact-container {
+      position: relative;
+      width: clamp(160px, 45vw, 220px);
+      height: clamp(160px, 45vw, 220px);
+      margin: 1rem auto 0.75rem;
+      background: #FFFFFF;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 16px;
+      padding: 8px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 24px rgba(229, 9, 20, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .qr-clean-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 8px;
+      display: block;
+    }
+
+    /* QR Expiration Overlay */
+    .qr-expired-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(17, 17, 26, 0.95);
+      backdrop-filter: blur(8px);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 1rem;
+      z-index: 5;
+    }
+    .qr-expired-overlay.active {
+      display: flex;
+    }
+    .qr-expired-icon {
+      font-size: 2.2rem;
+      margin-bottom: 0.35rem;
+    }
+    .qr-expired-title {
+      font-size: 0.95rem;
+      font-weight: 900;
+      color: #EF4444;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.25rem;
+    }
+    .qr-expired-desc {
+      font-size: 0.78rem;
+      color: #9CA3AF;
+      margin-bottom: 0.85rem;
+    }
+
+    /* ── Expiration Countdown Timer ── */
+    .qr-timer-box {
+      text-align: center;
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: #FBBF24;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      margin-bottom: 0.9rem;
+    }
+    .qr-timer-box.urgent {
+      color: #EF4444;
+      animation: pulseGlow 1s infinite;
+    }
+
+    .qr-scan-prompt {
+      text-align: center;
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: #D1D5DB;
+      margin-bottom: 0.45rem;
+    }
+
+    /* ── Responsive Grid for UPI App Badges ── */
+    .qr-apps-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.45rem;
+      margin-bottom: 1.1rem;
+    }
+    @media (max-width: 420px) {
+      .qr-apps-row {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .qr-app-chip {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 38px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 0.35rem 0.5rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      touch-action: manipulation;
+    }
+    .qr-app-chip:hover {
+      background: rgba(229, 9, 20, 0.18);
+      border-color: var(--accent-red);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+
+    /* Landscape and Short Screen Responsiveness */
+    @media (max-height: 640px) {
+      .qr-modal-box {
+        max-height: 96vh;
+        padding: 1rem 1.25rem;
+      }
+      .qr-compact-container {
+        width: 130px;
+        height: 130px;
+        margin: 0.4rem auto;
+        padding: 5px;
+      }
+      .qr-timer-box {
+        margin-bottom: 0.5rem;
+        font-size: 0.82rem;
+      }
+      .qr-apps-row {
+        margin-bottom: 0.5rem;
+      }
+      .qr-status-box {
+        margin-bottom: 0.5rem;
+        padding: 0.5rem;
+      }
+    }
+
+    /* ── Clean Live Status Area ── */
+    .qr-status-box {
+      text-align: center;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius-md);
+      margin-bottom: 1.2rem;
+      font-size: 0.88rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.25s ease;
+    }
+
+    .qr-status-box.waiting {
+      background: rgba(255, 255, 255, 0.04);
+      color: #D1D5DB;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .qr-status-box.verifying {
+      background: rgba(59, 130, 246, 0.12);
+      color: #93C5FD;
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      animation: pulseGlow 1.5s infinite;
+    }
+
+    .qr-status-box.success {
+      background: rgba(16, 185, 129, 0.15);
+      color: #6EE7B7;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+    }
+
+    .qr-status-box.failed {
+      background: rgba(239, 68, 68, 0.15);
+      color: #FCA5A5;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+    }
+
+    .qr-status-box.expired {
+      background: rgba(245, 158, 11, 0.12);
+      color: #FCD34D;
+      border: 1px solid rgba(245, 158, 11, 0.35);
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.65; }
+    }
+
+    .qr-actions-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
     }
   </style>
 </head>
 <body>
-  <!-- Skip to Main Content Accessibility Link -->
-  <a href="#mainContent" class="skip-to-main">Skip to main content</a>
 
-  <!-- ══════════════════════════════════════════════════════ NAVBAR ══ -->
-  <header class="navbar" id="navbar" role="banner">
-    <div class="nav-inner">
+  <!-- Minimal Global Navbar -->
+  <header class="navbar" id="globalNavbar" role="banner"></header>
 
-      <!-- Brand -->
-      <a href="index.html" class="nav-brand" aria-label="UniVault – Go to homepage">
-        <span class="nav-logo-badge" aria-hidden="true">U</span>
-        <span class="nav-brand-name">UniVault</span>
-      </a>
+  <main class="app-container" style="padding-top: 5rem;" role="main">
 
-      <!-- Desktop Links -->
-      <ul class="nav-links-desktop" role="list" aria-label="Main navigation">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="movies.html">Movies</a></li>
-        <li><a href="tv-shows.html">TV Shows</a></li>
-        <li><a href="anime.html">Anime</a></li>
-        <li class="nav-dropdown" id="genreNav">
-          <a href="#" class="nav-dropdown-toggle" id="genreToggle" aria-haspopup="true" aria-expanded="false">
-            Genres <span class="dropdown-arrow" aria-hidden="true">▾</span>
-          </a>
-          <ul class="nav-dropdown-menu" id="genreDropdown" role="menu">
-            <li role="menuitem"><a href="movies.html?genre=28"><span class="genre-icon">🎬</span>Action</a></li>
-            <li role="menuitem"><a href="movies.html?genre=878"><span class="genre-icon">🚀</span>Sci-Fi</a></li>
-            <li role="menuitem"><a href="movies.html?genre=27"><span class="genre-icon">💀</span>Horror</a></li>
-            <li role="menuitem"><a href="movies.html?genre=35"><span class="genre-icon">😂</span>Comedy</a></li>
-            <li class="dropdown-divider" role="separator"></li>
-            <li role="menuitem"><a href="anime.html"><span class="genre-icon">⛩️</span>Anime</a></li>
-            <li role="menuitem"><a href="tv-shows.html"><span class="genre-icon">📺</span>Drama</a></li>
-            <li role="menuitem"><a href="tv-shows.html"><span class="genre-icon">🔍</span>Crime</a></li>
-            <li role="menuitem"><a href="movies.html"><span class="genre-icon">🏆</span>Documentary</a></li>
-          </ul>
-        </li>
-      </ul>
+    <!-- ══════════════════════════════════════════════════ HERO SECTION ══ -->
+    <section class="sub-hero">
+      <div class="sub-badge">✨ UNLOCK PREMIUM ENTERTAINMENT</div>
+      <h1 class="sub-hero-title">Choose the plan that's right for you</h1>
+      <p class="sub-hero-subtitle">
+        Enjoy unlimited movies, TV shows, anime, and premium entertainment in 4K with UniVault.
+      </p>
 
-      <!-- Desktop Right Actions -->
-      <div class="nav-actions-right">
-        <a href="search.html" class="nav-search-btn" aria-label="Search">
-          <span aria-hidden="true">🔍</span>
-          <span class="nav-search-label">Search</span>
-        </a>
-        <a href="login.html" class="nav-signin-btn">Sign In</a>
-        <a href="profile.html" class="nav-profile-btn" aria-label="Your profile">U</a>
+      <!-- Monthly / Yearly Billing Toggle -->
+      <div class="pricing-toggle-container">
+        <span class="pricing-toggle-label active" id="labelMonthly">Monthly</span>
+        <div class="pricing-toggle-switch" id="pricingSwitch" role="switch" aria-checked="false" aria-label="Toggle annual billing">
+          <div class="pricing-toggle-knob"></div>
+        </div>
+        <span class="pricing-toggle-label" id="labelYearly">Yearly</span>
+        <span class="pricing-discount-badge">SAVE UP TO 20%</span>
+      </div>
+    </section>
 
-        <button class="hamburger" id="hamburger"
-                aria-label="Open navigation menu"
-                aria-expanded="false"
-                aria-controls="navDrawer">
-          <span class="hamburger-bar"></span>
-          <span class="hamburger-bar"></span>
-          <span class="hamburger-bar"></span>
+    <!-- ═════════════════════════════════════════════════ PRICING CARDS ══ -->
+    <section class="section-container" style="padding-top: 0;">
+      <div class="pricing-cards-grid">
+        
+        <!-- 1. FREE PLAN -->
+        <div class="plan-card" id="cardFree">
+          <div>
+            <div class="plan-header">
+              <h2 class="plan-name">Free</h2>
+              <p class="plan-desc">Basic entertainment for casual movie watchers.</p>
+            </div>
+            <div class="plan-pricing-box">
+              <span class="plan-price-amount" data-monthly="₹0" data-yearly="₹0">₹0</span>
+              <span class="plan-price-period">/ month</span>
+            </div>
+            <ul class="plan-features-list">
+              <li class="plan-feature-item"><span class="plan-feature-icon">✓</span> Limited content library</li>
+              <li class="plan-feature-item"><span class="plan-feature-icon">✓</span> Standard 720p quality</li>
+              <li class="plan-feature-item"><span class="plan-feature-icon">✓</span> Ads supported</li>
+              <li class="plan-feature-item"><span class="plan-feature-icon">✓</span> Basic recommendations</li>
+              <li class="plan-feature-item"><span class="plan-feature-icon">✓</span> Personal Watchlist</li>
+            </ul>
+          </div>
+          <button type="button" class="plan-cta-btn secondary" id="btnPlanFree" onclick="handlePlanSelection('Free', 0, 0)">
+            Current Plan
+          </button>
+        </div>
+
+        <!-- 2. BASIC PLAN -->
+        <div class="plan-card" id="cardBasic">
+          <div>
+            <div class="plan-header">
+              <h2 class="plan-name">Basic</h2>
+              <p class="plan-desc">Great HD streaming for individual streamers.</p>
+            </div>
+            <div class="plan-pricing-box">
+              <span class="plan-price-amount" data-monthly="₹99" data-yearly="₹999">₹99</span>
+              <span class="plan-price-period" id="periodBasic">/ month</span>
+            </div>
+            <ul class="plan-features-list">
+              <li class="plan-feature-item"><span class="plan-feature-icon">✓</span> Unlimited movies</li>
+              <li class="plan-feature-item"><span class="plan-feature-icon">✓</span> Unlimited TV shows</li>
+              <li class="plan-feature-item"><span class="plan-feature-icon">✓</span> Complete anime library</li>
+              <li class="plan-feature-item"><span class="plan-feature-icon">✓</span> HD 720p streaming</li>
+              <li class="plan-feature-item"><span class="plan-feature-icon">✓</span> Watchlist & Recent history</li>
+              <li class="plan-feature-item"><span class="plan-feature-icon">✓</span> Limited ads</li>
+            </ul>
+          </div>
+          <button type="button" class="plan-cta-btn secondary" id="btnPlanBasic" onclick="handlePlanSelection('Basic', 99, 999)">
+            Choose Basic
+          </button>
+        </div>
+
+        <!-- 3. STANDARD PLAN (MOST POPULAR) -->
+        <div class="plan-card featured" id="cardStandard">
+          <div class="plan-card-popular-tag">★ MOST POPULAR</div>
+          <div>
+            <div class="plan-header">
+              <h2 class="plan-name" style="color: #fff;">Standard</h2>
+              <p class="plan-desc">Full HD ad-free streaming on multiple screens.</p>
+            </div>
+            <div class="plan-pricing-box">
+              <span class="plan-price-amount" style="color: #fff;" data-monthly="₹199" data-yearly="₹1,999">₹199</span>
+              <span class="plan-price-period" id="periodStandard">/ month</span>
+            </div>
+            <ul class="plan-features-list">
+              <li class="plan-feature-item"><span class="plan-feature-icon">✓</span> Unlimited movies & TV shows</li>
+              <li class="plan-feature-item"><span class="plan-feature-icon">✓</span> Unlimited anime library</li>
+              <li class="plan-feature-item"><span class="plan-feature-icon">✓</span> Full HD 1080p streaming</li>
+              <li class="plan-feature-item"><span class="plan-feature-icon">✓</span> 100% Ad-free experience</li>
+              <li class="plan-feature-item"><span class="plan-feature-icon">✓</span> Personalized AI recommendations</li>
+              <li class="plan-feature-item"><span class="plan-feature-icon">✓</span> 2 Simultaneous devices</li>
+            </ul>
+          </div>
+          <button type="button" class="plan-cta-btn primary" id="btnPlanStandard" onclick="handlePlanSelection('Standard', 199, 1999)">
+            Choose Standard
+          </button>
+        </div>
+
+        <!-- 4. PREMIUM PLAN -->
+        <div class="plan-card" id="cardPremium">
+          <div>
+            <div class="plan-header">
+              <h2 class="plan-name">Premium</h2>
+              <p class="plan-desc">Ultimate 4K Ultra HD & Dolby Atmos experience.</p>
+            </div>
+            <div class="plan-pricing-box">
+              <span class="plan-price-amount" data-monthly="₹299" data-yearly="₹2,999">₹299</span>
+              <span class="plan-price-period" id="periodPremium">/ month</span>
+            </div>
+            <ul class="plan-features-list">
+              <li class="plan-feature-item"><span class="plan-feature-icon">✓</span> Everything in Standard</li>
+              <li class="plan-feature-item"><span class="plan-feature-icon">✓</span> 4K Ultra HD + HDR10+</li>
+              <li class="plan-feature-item"><span class="plan-feature-icon">✓</span> Dolby Atmos spatial audio</li>
+              <li class="plan-feature-item"><span class="plan-feature-icon">✓</span> 4 Simultaneous screens</li>
+              <li class="plan-feature-item"><span class="plan-feature-icon">✓</span> Priority 24/7 VIP support</li>
+              <li class="plan-feature-item"><span class="plan-feature-icon">✓</span> Exclusive premiere access</li>
+            </ul>
+          </div>
+          <button type="button" class="plan-cta-btn secondary" id="btnPlanPremium" onclick="handlePlanSelection('Premium', 299, 2999)">
+            Choose Premium
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════ COMPARE PLANS ══ -->
+    <section class="section-container comparison-section">
+      <div class="section-header" style="justify-content: center; margin-bottom: 2rem;">
+        <h2 class="section-title" style="font-size: 2rem;">Compare Plans</h2>
+      </div>
+
+      <div class="comparison-table-wrapper">
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Features</th>
+              <th>Free</th>
+              <th>Basic</th>
+              <th class="featured-col">Standard</th>
+              <th>Premium</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Movies & TV Series</td>
+              <td>Limited</td>
+              <td>Unlimited</td>
+              <td class="featured-col">Unlimited</td>
+              <td>Unlimited</td>
+            </tr>
+            <tr>
+              <td>Anime Library</td>
+              <td>Limited</td>
+              <td>Full Library</td>
+              <td class="featured-col">Full Library</td>
+              <td>Full Library + Dubs</td>
+            </tr>
+            <tr>
+              <td>Video Quality</td>
+              <td>Standard (720p)</td>
+              <td>HD (720p)</td>
+              <td class="featured-col">Full HD (1080p)</td>
+              <td>4K Ultra HD + HDR</td>
+            </tr>
+            <tr>
+              <td>Ad-Free Streaming</td>
+              <td><span class="table-dash">—</span></td>
+              <td>Limited</td>
+              <td class="featured-col"><span class="table-check">✓</span></td>
+              <td><span class="table-check">✓</span></td>
+            </tr>
+            <tr>
+              <td>Watchlist & History</td>
+              <td><span class="table-check">✓</span></td>
+              <td><span class="table-check">✓</span></td>
+              <td class="featured-col"><span class="table-check">✓</span></td>
+              <td><span class="table-check">✓</span></td>
+            </tr>
+            <tr>
+              <td>Simultaneous Screens</td>
+              <td>1 Screen</td>
+              <td>1 Screen</td>
+              <td class="featured-col">2 Screens</td>
+              <td>4 Screens</td>
+            </tr>
+            <tr>
+              <td>Spatial Audio / Dolby</td>
+              <td><span class="table-dash">—</span></td>
+              <td><span class="table-dash">—</span></td>
+              <td class="featured-col"><span class="table-dash">—</span></td>
+              <td><span class="table-check">✓</span></td>
+            </tr>
+            <tr>
+              <td>Priority VIP Support</td>
+              <td><span class="table-dash">—</span></td>
+              <td><span class="table-dash">—</span></td>
+              <td class="featured-col"><span class="table-dash">—</span></td>
+              <td><span class="table-check">✓</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════ WHY GO PREMIUM ══ -->
+    <section class="section-container why-section">
+      <h2 class="section-title" style="font-size: 2rem; justify-content: center;">Why choose UniVault Premium?</h2>
+      <div class="why-grid">
+        <div class="why-card">
+          <div class="why-card-icon">🎬</div>
+          <h3 class="why-card-title">Unlimited Entertainment</h3>
+          <p class="why-card-desc">Watch thousands of blockbusters, critically acclaimed series, and anime with zero restrictions.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-card-icon">⚡</div>
+          <h3 class="why-card-title">High Quality Streaming</h3>
+          <p class="why-card-desc">Enjoy crystal-clear Full HD and cinema-grade 4K Ultra HD with HDR10+ on supported devices.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-card-icon">🚫</div>
+          <h3 class="why-card-title">Ad-Free Experience</h3>
+          <p class="why-card-desc">Immerse yourself completely in your favorite movies and shows with uninterrupted playback.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-card-icon">📱</div>
+          <h3 class="why-card-title">Watch Anywhere</h3>
+          <p class="why-card-desc">Stream seamlessly on phones, tablets, smart TVs, and laptops with synchronized watchlist and progress.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════ FAQ ══ -->
+    <section class="section-container faq-section">
+      <h2 class="section-title" style="font-size: 2rem; justify-content: center;">Frequently Asked Questions</h2>
+      <div class="faq-list">
+        
+        <div class="faq-item">
+          <button type="button" class="faq-question-btn">
+            <span>What is UniVault Premium?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            UniVault Premium is our highest-tier subscription offering unlimited 4K Ultra HD streaming, spatial Dolby Atmos audio, 4 simultaneous devices, and early premiere access without any ads.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button type="button" class="faq-question-btn">
+            <span>Can I cancel my subscription anytime?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            Yes, absolutely. There are no contracts or hidden cancellation fees. You can easily cancel or change your plan at any time through your Profile Settings.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button type="button" class="faq-question-btn">
+            <span>Can I change my plan later?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            Yes. You can upgrade or downgrade your plan at any time. When upgrading, the change takes effect immediately with prorated billing.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button type="button" class="faq-question-btn">
+            <span>What payment methods are supported?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            We support instant UPI scanning (PhonePe, Google Pay, Paytm, BHIM, Cred) across all leading UPI apps in India.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button type="button" class="faq-question-btn">
+            <span>Can I watch on multiple devices?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            Yes. The Standard plan supports 2 simultaneous streams, and the Premium plan supports up to 4 simultaneous devices anywhere.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button type="button" class="faq-question-btn">
+            <span>Does Premium include 4K?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            Yes, our Premium tier includes full 4K Ultra HD resolution with HDR10+ support on all compatible smart TVs and devices.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button type="button" class="faq-question-btn">
+            <span>Is there a free plan?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            Yes! UniVault offers a Free tier with access to a curated selection of titles in standard definition with ad support.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ══════════════════════════════════════════ IMPROVED CLEAN PHONEPE QR MODAL ══ -->
+  <div class="qr-modal-backdrop" id="paymentModalBackdrop" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="qr-modal-box">
+      <button type="button" class="qr-modal-close-btn" id="closePayModalBtn" aria-label="Close modal">✕</button>
+      
+      <div class="qr-modal-header">
+        <h3 class="qr-modal-title">Complete Your Payment</h3>
+        <div class="qr-plan-pill">
+          <span class="qr-plan-name" id="modalPlanName">Standard Plan</span>
+          <span class="qr-plan-price" id="modalPlanPrice">₹199 / month</span>
+        </div>
+      </div>
+
+      <!-- Compact Centered QR Container (No visible UPI ID text) -->
+      <div class="qr-compact-container">
+        <img 
+          src="assets/payment/phonepe-qr-clean.png" 
+          alt="Payment QR Code" 
+          class="qr-clean-img"
+          id="phonepeQrImg"
+          loading="eager"
+        >
+        <!-- QR Expired Overlay State -->
+        <div class="qr-expired-overlay" id="qrExpiredOverlay">
+          <div class="qr-expired-icon">⌛</div>
+          <div class="qr-expired-title">QR CODE EXPIRED</div>
+          <div class="qr-expired-desc">Your payment session has expired.</div>
+          <button type="button" class="btn-netflix btn-netflix-red" style="padding: 0.45rem 1rem; font-size: 0.85rem;" id="generateNewQrBtn">
+            Generate New QR
+          </button>
+        </div>
+      </div>
+
+      <!-- Countdown Expiration Timer -->
+      <div class="qr-timer-box" id="qrTimerBox">
+        <span>⏱</span> <span id="timerText">Payment expires in 10:00</span>
+      </div>
+
+      <!-- Scan & Pay Prompt -->
+      <div class="qr-scan-prompt">Scan & Pay using any UPI app</div>
+      
+      <!-- Interactive UPI App Badges -->
+      <div class="qr-apps-row" id="upiAppsRow">
+        <a href="javascript:void(0)" class="qr-app-chip" data-app="phonepe">PhonePe</a>
+        <a href="javascript:void(0)" class="qr-app-chip" data-app="gpay">Google Pay</a>
+        <a href="javascript:void(0)" class="qr-app-chip" data-app="paytm">Paytm</a>
+        <a href="javascript:void(0)" class="qr-app-chip" data-app="bhim">BHIM</a>
+        <a href="javascript:void(0)" class="qr-app-chip" data-app="cred">Cred</a>
+        <a href="javascript:void(0)" class="qr-app-chip" data-app="all">All UPI Apps</a>
+      </div>
+
+      <!-- Live Payment Status Area -->
+      <div class="qr-status-box waiting" id="paymentStatusBox">
+        ● Waiting for payment...
+      </div>
+
+      <!-- Modal Action Buttons -->
+      <div class="qr-actions-row">
+        <button type="button" class="btn-netflix btn-netflix-red" style="width: 100%;" id="confirmPaymentBtn">
+          I've Completed Payment
+        </button>
+        <button type="button" class="btn-netflix btn-netflix-secondary" style="width: 100%;" id="cancelPayBtn">
+          Cancel
         </button>
       </div>
 
     </div>
-  </header>
+  </div>
 
-  <!-- Mobile Drawer -->
-  <nav class="nav-drawer" id="navDrawer" aria-label="Mobile navigation" aria-hidden="true">
-    <p class="nav-drawer-label">Browse</p>
-    <ul class="nav-drawer-links" role="list">
-      <li><a href="index.html"><span class="link-icon" aria-hidden="true">🏠</span>Home</a></li>
-      <li><a href="movies.html"><span class="link-icon" aria-hidden="true">🎬</span>Movies</a></li>
-      <li><a href="tv-shows.html"><span class="link-icon" aria-hidden="true">📺</span>TV Shows</a></li>
-      <li><a href="anime.html"><span class="link-icon" aria-hidden="true">⛩️</span>Anime</a></li>
-      <li><a href="watchlist.html"><span class="link-icon" aria-hidden="true">🔖</span>Watchlist</a></li>
-    </ul>
-    <div class="nav-drawer-divider"></div>
-    <div class="nav-drawer-auth">
-      <a href="login.html" class="signin-link">Sign In</a>
-      <a href="signup.html" class="signup-link">Get Started</a>
-    </div>
-  </nav>
-
-  <!-- Backdrop Overlay -->
-  <div class="nav-overlay" id="navOverlay" aria-hidden="true"></div>
-
-  <!-- ═══════════════════════════════════════════ MAIN CONTENT ══ -->
-  <main class="main-content" id="mainContent">
-    <div class="container">
-
-      <!-- ── 1. Pricing Header Hero ── -->
-      <section class="pricing-hero anim-fade-up">
-        <div class="status-pill" style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.35rem 0.9rem; border-radius: 999px; background: rgba(255,61,107,0.15); border: 1px solid rgba(255,61,107,0.35); color: #FF3D6B; font-size: 0.85rem; font-weight: 800; margin-bottom: 1.25rem;">
-          💎 Premium Membership Tiers
-        </div>
-        <h1 style="font-size: clamp(2rem, 4.5vw, 3.2rem); font-weight: 900; line-height: 1.15; margin-bottom: 0.75rem; color: #FFFFFF;">
-          Choose Your <span class="text-gradient">Cinematic Experience</span>
-        </h1>
-        <p class="text-muted" style="max-width: 580px; margin: 0 auto; font-size: 1.05rem;">
-          Stream in pristine 4K Ultra HD with spatial audio, multi-profile support, and zero ads on any device.
-        </p>
-
-        <!-- Monthly / Annual Toggle -->
-        <div class="pricing-toggle-wrapper">
-          <span class="toggle-label active" id="labelMonthly">Monthly</span>
-          <div class="toggle-switch" id="billingToggle" role="switch" aria-checked="false" aria-label="Toggle annual billing">
-            <div class="toggle-knob"></div>
-          </div>
-          <span class="toggle-label" id="labelAnnual">Annual</span>
-          <span class="discount-badge">Save 17% (2 Mo. Free)</span>
-        </div>
-      </section>
-
-      <!-- ── 2. Three Premium Pricing Cards ── -->
-      <section class="pricing-grid anim-fade-up">
-
-        <!-- 1. BASIC TIER (₹99/mo) -->
-        <div class="pricing-card" id="cardBasic">
-          <div>
-            <div class="plan-header">
-              <div class="plan-name">Basic</div>
-              <p class="plan-tagline">Ideal for individual viewers on mobile, tablet, and laptop screens.</p>
-              <div class="plan-price-wrap">
-                <span class="plan-currency">₹</span>
-                <span class="plan-amount" id="priceBasic">99</span>
-                <span class="plan-period" id="periodBasic">/month</span>
-              </div>
-              <div class="plan-billed-note" id="noteBasic">&nbsp;</div>
-            </div>
-
-            <ul class="plan-features-list">
-              <li class="plan-feature-item">
-                <span class="feature-icon-check">✓</span>
-                <span><strong>HD (720p)</strong> Resolution</span>
-              </li>
-              <li class="plan-feature-item">
-                <span class="feature-icon-check">✓</span>
-                <span><strong>1 Screen</strong> at a time</span>
-              </li>
-              <li class="plan-feature-item">
-                <span class="feature-icon-check">✓</span>
-                <span><strong>1 Profile</strong></span>
-              </li>
-              <li class="plan-feature-item">
-                <span class="feature-icon-check">✓</span>
-                <span>Mobile, Tablet &amp; Laptop Support</span>
-              </li>
-              <li class="plan-feature-item">
-                <span class="feature-icon-check">✓</span>
-                <span>Standard Stereo Audio</span>
-              </li>
-              <li class="plan-feature-item feature-disabled">
-                <span class="feature-icon-cross">✕</span>
-                <span>1080p Full HD / 4K UHD</span>
-              </li>
-              <li class="plan-feature-item feature-disabled">
-                <span class="feature-icon-cross">✕</span>
-                <span>Dolby Atmos® Spatial Sound</span>
-              </li>
-              <li class="plan-feature-item feature-disabled">
-                <span class="feature-icon-cross">✕</span>
-                <span>Offline Downloads</span>
-              </li>
-            </ul>
-          </div>
-
-          <a href="signup.html?plan=basic" class="btn btn-secondary btn-block" style="padding: 0.9rem; font-weight: 800; border-radius: 14px; text-align: center;">
-            Get Basic
-          </a>
-        </div>
-
-        <!-- 2. PREMIUM TIER (₹199/mo) — MOST POPULAR -->
-        <div class="pricing-card featured" id="cardPremium">
-          <div class="popular-float-badge">👑 MOST POPULAR</div>
-
-          <div>
-            <div class="plan-header">
-              <div class="plan-name" style="color: #FF8C42;">Premium</div>
-              <p class="plan-tagline">The most popular tier for couples and daily movie and anime streaming.</p>
-              <div class="plan-price-wrap">
-                <span class="plan-currency" style="color: #FF8C42;">₹</span>
-                <span class="plan-amount" id="pricePremium">199</span>
-                <span class="plan-period" id="periodPremium">/month</span>
-              </div>
-              <div class="plan-billed-note" id="notePremium">&nbsp;</div>
-            </div>
-
-            <ul class="plan-features-list">
-              <li class="plan-feature-item">
-                <span class="feature-icon-check" style="color: #FF3D6B;">✓</span>
-                <span><strong>Full HD (1080p)</strong> Crisp Resolution</span>
-              </li>
-              <li class="plan-feature-item">
-                <span class="feature-icon-check" style="color: #FF3D6B;">✓</span>
-                <span><strong>2 Screens</strong> simultaneous streaming</span>
-              </li>
-              <li class="plan-feature-item">
-                <span class="feature-icon-check" style="color: #FF3D6B;">✓</span>
-                <span><strong>3 User Profiles</strong> with personalized history</span>
-              </li>
-              <li class="plan-feature-item">
-                <span class="feature-icon-check" style="color: #FF3D6B;">✓</span>
-                <span>Smart TVs, Displays, PC &amp; Mobile</span>
-              </li>
-              <li class="plan-feature-item">
-                <span class="feature-icon-check" style="color: #FF3D6B;">✓</span>
-                <span>5.1 Surround &amp; Enhanced Spatial Audio</span>
-              </li>
-              <li class="plan-feature-item">
-                <span class="feature-icon-check" style="color: #FF3D6B;">✓</span>
-                <span><strong>Offline Downloads</strong> (Up to 25 titles)</span>
-              </li>
-              <li class="plan-feature-item">
-                <span class="feature-icon-check" style="color: #FF3D6B;">✓</span>
-                <span>100% Ad-Free Streaming Experience</span>
-              </li>
-              <li class="plan-feature-item feature-disabled">
-                <span class="feature-icon-cross">✕</span>
-                <span>4K Ultra HD &amp; Dolby Atmos</span>
-              </li>
-            </ul>
-          </div>
-
-          <a href="signup.html?plan=premium" class="btn btn-primary btn-block" style="padding: 0.95rem; font-weight: 900; border-radius: 14px; text-align: center; background: linear-gradient(135deg, #FF3D6B 0%, #FF8C42 100%); box-shadow: 0 6px 25px rgba(255, 61, 107, 0.4);">
-            👑 Start 14-Day Free Trial
-          </a>
-        </div>
-
-        <!-- 3. ULTIMATE TIER (₹299/mo) -->
-        <div class="pricing-card" id="cardUltimate">
-          <div>
-            <div class="plan-header">
-              <div class="plan-name" style="color: #F5C842;">Ultimate</div>
-              <p class="plan-tagline">The uncompromised 4K HDR home theater experience for families.</p>
-              <div class="plan-price-wrap">
-                <span class="plan-currency">₹</span>
-                <span class="plan-amount" id="priceUltimate">299</span>
-                <span class="plan-period" id="periodUltimate">/month</span>
-              </div>
-              <div class="plan-billed-note" id="noteUltimate">&nbsp;</div>
-            </div>
-
-            <ul class="plan-features-list">
-              <li class="plan-feature-item">
-                <span class="feature-icon-check" style="color: #F5C842;">✓</span>
-                <span><strong>4K Ultra HD</strong> + HDR10+ &amp; Dolby Vision</span>
-              </li>
-              <li class="plan-feature-item">
-                <span class="feature-icon-check" style="color: #F5C842;">✓</span>
-                <span><strong>4 Screens</strong> simultaneous streaming</span>
-              </li>
-              <li class="plan-feature-item">
-                <span class="feature-icon-check" style="color: #F5C842;">✓</span>
-                <span><strong>5 User Profiles</strong> + Kids PIN Protection</span>
-              </li>
-              <li class="plan-feature-item">
-                <span class="feature-icon-check" style="color: #F5C842;">✓</span>
-                <span>All Devices (Apple TV, Consoles, Smart TVs)</span>
-              </li>
-              <li class="plan-feature-item">
-                <span class="feature-icon-check" style="color: #F5C842;">✓</span>
-                <span><strong>Dolby Atmos®</strong> 3D Immersive Audio</span>
-              </li>
-              <li class="plan-feature-item">
-                <span class="feature-icon-check" style="color: #F5C842;">✓</span>
-                <span><strong>Unlimited Offline Downloads</strong></span>
-              </li>
-              <li class="plan-feature-item">
-                <span class="feature-icon-check" style="color: #F5C842;">✓</span>
-                <span>VIP Priority 4K Content CDN Routing</span>
-              </li>
-              <li class="plan-feature-item">
-                <span class="feature-icon-check" style="color: #F5C842;">✓</span>
-                <span>Early Access to Curated Premieres</span>
-              </li>
-            </ul>
-          </div>
-
-          <a href="signup.html?plan=ultimate" class="btn btn-secondary btn-block" style="padding: 0.9rem; font-weight: 800; border-radius: 14px; text-align: center; border-color: rgba(245,200,66,0.3); color: #F5C842;">
-            Get Ultimate 4K
-          </a>
-        </div>
-
-      </section>
-
-      <!-- ── 3. Detailed Features Comparison Matrix ── -->
-      <section class="comparison-section anim-fade-up">
-        <div style="text-align: center; margin-bottom: 2rem;">
-          <h2 style="font-size: 1.8rem; font-weight: 800; color: #FFFFFF; margin-bottom: 0.4rem;">Compare Plan Features</h2>
-          <p class="text-muted text-sm">Find the perfect tier for your streaming habits</p>
-        </div>
-
-        <div class="comparison-table-wrapper">
-          <table class="comparison-table">
-            <thead>
-              <tr>
-                <th style="width: 34%;">Feature</th>
-                <th style="width: 22%;">Basic (₹99)</th>
-                <th style="width: 22%;" class="highlight-col">Premium (₹199) ⭐</th>
-                <th style="width: 22%;">Ultimate (₹299)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong>Video Resolution</strong></td>
-                <td>HD (720p)</td>
-                <td class="highlight-col">Full HD (1080p)</td>
-                <td><strong>4K Ultra HD + HDR10+</strong></td>
-              </tr>
-              <tr>
-                <td><strong>Simultaneous Devices</strong></td>
-                <td>1 Device</td>
-                <td class="highlight-col">2 Devices</td>
-                <td><strong>4 Devices</strong></td>
-              </tr>
-              <tr>
-                <td><strong>User Profiles</strong></td>
-                <td>1 Profile</td>
-                <td class="highlight-col">3 Profiles</td>
-                <td>5 Profiles + Kids PIN</td>
-              </tr>
-              <tr>
-                <td><strong>Audio Quality</strong></td>
-                <td>Stereo 2.0</td>
-                <td class="highlight-col">5.1 Surround Sound</td>
-                <td><strong>Dolby Atmos® 3D</strong></td>
-              </tr>
-              <tr>
-                <td><strong>Offline Downloads</strong></td>
-                <td>✕ None</td>
-                <td class="highlight-col">25 Titles</td>
-                <td><strong>Unlimited</strong></td>
-              </tr>
-              <tr>
-                <td><strong>Ad-Free Streaming</strong></td>
-                <td>✓ Yes</td>
-                <td class="highlight-col">✓ Yes</td>
-                <td>✓ Yes</td>
-              </tr>
-              <tr>
-                <td><strong>Smart TV &amp; Console Apps</strong></td>
-                <td>✕ Limited</td>
-                <td class="highlight-col">✓ Full Access</td>
-                <td>✓ Full Access (4K Native)</td>
-              </tr>
-              <tr>
-                <td><strong>Watch Parties Sync</strong></td>
-                <td>✕ No</td>
-                <td class="highlight-col">✓ Up to 4 Friends</td>
-                <td>✓ Unlimited Friends</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- ── 4. Frequently Asked Questions (FAQ) ── -->
-      <section style="margin-bottom: 4rem;">
-        <div style="text-align: center; margin-bottom: 2rem;">
-          <h2 style="font-size: 1.8rem; font-weight: 800; color: #FFFFFF; margin-bottom: 0.4rem;">Frequently Asked Questions</h2>
-          <p class="text-muted text-sm">Everything you need to know about UniVault billing and streaming</p>
-        </div>
-
-        <div class="faq-grid">
-          <div class="faq-card">
-            <div class="faq-question"><span>🔄</span> Can I switch or cancel plans anytime?</div>
-            <p class="faq-answer">Yes, absolutely. You can upgrade, downgrade, or cancel your subscription anytime directly from your Account Settings with zero cancellation fees.</p>
-          </div>
-
-          <div class="faq-card">
-            <div class="faq-question"><span>🎁</span> How does the 14-day free trial work?</div>
-            <p class="faq-answer">All Premium and Ultimate memberships start with a 14-day risk-free trial. You can explore our catalog in 4K before your first billing date.</p>
-          </div>
-
-          <div class="faq-card">
-            <div class="faq-question"><span>💳</span> What payment methods are supported?</div>
-            <p class="faq-answer">We support all major payment options across India and globally: UPI (Google Pay, PhonePe, Paytm), Credit/Debit Cards, Net Banking, and digital wallets.</p>
-          </div>
-
-          <div class="faq-card">
-            <div class="faq-question"><span>📺</span> What hardware supports 4K and Dolby Atmos?</div>
-            <p class="faq-answer">4K Ultra HD and Dolby Atmos playback are supported on 4K Smart TVs (Samsung, LG, Sony), Apple TV 4K, Fire TV 4K, Android TVs, and compatible sound systems.</p>
-          </div>
-        </div>
-      </section>
-
-    </div>
-  </main>
-
-  <!-- ══════════════════════════════════════════════════════ FOOTER ══ -->
-  <footer class="footer">
-    <div class="container">
-      <div style="text-align: center; max-width: 720px; margin: 0 auto 1.5rem; font-size: 0.78rem; color: #6B7280; line-height: 1.5;">
-        * UniVault subscription plans provide access to UniVault enhanced platform features, multi-device synchronization, 4K video configuration profiles, and personal catalog vaults. Movie and TV catalog metadata is provided via the TMDB API. TMDB is an informational database partner and does not provide direct media broadcast licenses.
-      </div>
-      <div class="footer-bottom">
-        <span>© 2026 UniVault Inc. All rights reserved.</span>
-        <div class="footer-legal"><a href="#">Privacy</a><a href="#">Terms</a></div>
-      </div>
-    </div>
-  </footer>
+  <!-- Global Footer -->
+  <footer class="netflix-footer" id="globalFooter" role="contentinfo"></footer>
 
   <!-- Scripts -->
   <script src="js/auth.js"></script>
-  <script src="js/app.js"></script>
-  <script src="js/navbar.js"></script>
-
-  <!-- Monthly / Annual Toggle Script -->
+  <script src="js/components.js"></script>
+  
   <script>
-    (function() {
-      const toggle = document.getElementById('billingToggle');
-      const labelMonthly = document.getElementById('labelMonthly');
-      const labelAnnual = document.getElementById('labelAnnual');
+    let isYearly = false;
+    let selectedPlan = 'Standard';
+    let currentPaymentOrder = null;
+    let countdownInterval = null;
+    let secondsLeft = 600;
 
-      const priceBasic = document.getElementById('priceBasic');
-      const periodBasic = document.getElementById('periodBasic');
-      const noteBasic = document.getElementById('noteBasic');
+    // ── 1. Monthly / Yearly Toggle ──
+    const pricingSwitch = document.getElementById('pricingSwitch');
+    const labelMonthly = document.getElementById('labelMonthly');
+    const labelYearly = document.getElementById('labelYearly');
 
-      const pricePremium = document.getElementById('pricePremium');
-      const periodPremium = document.getElementById('periodPremium');
-      const notePremium = document.getElementById('notePremium');
+    function toggleBilling(yearly) {
+      isYearly = yearly;
+      if (pricingSwitch) pricingSwitch.classList.toggle('yearly', isYearly);
+      if (labelMonthly) labelMonthly.classList.toggle('active', !isYearly);
+      if (labelYearly) labelYearly.classList.toggle('active', isYearly);
 
-      const priceUltimate = document.getElementById('priceUltimate');
-      const periodUltimate = document.getElementById('periodUltimate');
-      const noteUltimate = document.getElementById('noteUltimate');
+      document.querySelectorAll('.plan-price-amount').forEach(el => {
+        const val = isYearly ? el.getAttribute('data-yearly') : el.getAttribute('data-monthly');
+        if (val) el.textContent = val;
+      });
 
-      let isAnnual = false;
+      const periodText = isYearly ? '/ year' : '/ month';
+      const periods = ['periodBasic', 'periodStandard', 'periodPremium'];
+      periods.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = periodText;
+      });
+    }
 
-      function updatePricing() {
-        if (isAnnual) {
-          toggle.classList.add('annual');
-          toggle.setAttribute('aria-checked', 'true');
-          labelMonthly.classList.remove('active');
-          labelAnnual.classList.add('active');
+    if (pricingSwitch) {
+      pricingSwitch.addEventListener('click', () => toggleBilling(!isYearly));
+      labelMonthly.addEventListener('click', () => toggleBilling(false));
+      labelYearly.addEventListener('click', () => toggleBilling(true));
+    }
 
-          // Annual rates (₹990/yr = ~₹82/mo, ₹1990/yr = ~₹165/mo, ₹2990/yr = ~₹249/mo)
-          if (priceBasic) priceBasic.textContent = '990';
-          if (periodBasic) periodBasic.textContent = '/year';
-          if (noteBasic) noteBasic.textContent = '₹82.50/mo (Save ₹198/yr)';
+    // ── 2. Modal & Timer Controls ──
+    const modalBackdrop = document.getElementById('paymentModalBackdrop');
+    const closeModalBtn = document.getElementById('closePayModalBtn');
+    const cancelPayBtn = document.getElementById('cancelPayBtn');
+    const modalPlanName = document.getElementById('modalPlanName');
+    const modalPlanPrice = document.getElementById('modalPlanPrice');
+    const phonepeQrImg = document.getElementById('phonepeQrImg');
+    const qrExpiredOverlay = document.getElementById('qrExpiredOverlay');
+    const generateNewQrBtn = document.getElementById('generateNewQrBtn');
+    const qrTimerBox = document.getElementById('qrTimerBox');
+    const timerText = document.getElementById('timerText');
+    const confirmPaymentBtn = document.getElementById('confirmPaymentBtn');
+    const paymentStatusBox = document.getElementById('paymentStatusBox');
 
-          if (pricePremium) pricePremium.textContent = '1,990';
-          if (periodPremium) periodPremium.textContent = '/year';
-          if (notePremium) notePremium.textContent = '₹165.80/mo (Save ₹398/yr)';
+    function startTimer(duration = 600) {
+      if (countdownInterval) clearInterval(countdownInterval);
+      secondsLeft = duration;
+      if (qrExpiredOverlay) qrExpiredOverlay.classList.remove('active');
+      if (qrTimerBox) qrTimerBox.classList.remove('urgent');
 
-          if (priceUltimate) priceUltimate.textContent = '2,990';
-          if (periodUltimate) periodUltimate.textContent = '/year';
-          if (noteUltimate) noteUltimate.textContent = '₹249.10/mo (Save ₹598/yr)';
+      function updateDisplay() {
+        const m = Math.floor(secondsLeft / 60);
+        const s = secondsLeft % 60;
+        const formatted = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        
+        if (timerText) timerText.textContent = `Payment expires in ${formatted}`;
+        
+        if (secondsLeft <= 60 && qrTimerBox) {
+          qrTimerBox.classList.add('urgent');
+        }
+
+        if (secondsLeft <= 0) {
+          clearInterval(countdownInterval);
+          onQRExpired();
+        }
+        secondsLeft--;
+      }
+
+      updateDisplay();
+      countdownInterval = setInterval(updateDisplay, 1000);
+    }
+
+    function onQRExpired() {
+      if (qrExpiredOverlay) qrExpiredOverlay.classList.add('active');
+      if (timerText) timerText.textContent = 'Payment expired';
+      if (confirmPaymentBtn) {
+        confirmPaymentBtn.disabled = true;
+        confirmPaymentBtn.textContent = "QR Expired";
+      }
+      if (paymentStatusBox) {
+        paymentStatusBox.className = 'qr-status-box expired';
+        paymentStatusBox.innerHTML = '⌛ QR code expired. Generate a new QR to continue.';
+      }
+    }
+
+    // ── 3. Plan Selection & Dynamic Payment Order Flow ──
+    window.handlePlanSelection = async function(planName, monthlyPrice, yearlyPrice) {
+      if (window.UniVaultAuth && !window.UniVaultAuth.isAuthenticated()) {
+        window.location.href = 'landing.html';
+        return;
+      }
+
+      if (planName === 'Free') {
+        Components.showToast('You are on the Free tier.');
+        return;
+      }
+
+      selectedPlan = planName;
+      const billingCycle = isYearly ? 'yearly' : 'monthly';
+      const priceStr = isYearly ? `₹${yearlyPrice.toLocaleString()} / year` : `₹${monthlyPrice} / month`;
+
+      if (modalPlanName) modalPlanName.textContent = `${planName} Plan`;
+      if (modalPlanPrice) modalPlanPrice.textContent = priceStr;
+
+      // Reset modal UI state
+      if (paymentStatusBox) {
+        paymentStatusBox.className = 'qr-status-box waiting';
+        paymentStatusBox.innerHTML = '● Waiting for payment...';
+      }
+      if (confirmPaymentBtn) {
+        confirmPaymentBtn.disabled = false;
+        confirmPaymentBtn.textContent = "I've Completed Payment";
+        confirmPaymentBtn.style.display = 'block';
+      }
+
+      await requestNewPaymentOrder(planName, billingCycle);
+      if (modalBackdrop) modalBackdrop.classList.add('active');
+    };
+
+    async function requestNewPaymentOrder(planName, billingCycle) {
+      try {
+        const token = window.UniVaultAuth ? window.UniVaultAuth.getToken() : null;
+        const apiUrl = window.getUniVaultApiUrl ? window.getUniVaultApiUrl('/api/payment/create') : '/api/payment/create';
+        
+        const res = await fetch(apiUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ plan: planName, billing: billingCycle })
+        });
+
+        const data = await res.json();
+        if (res.ok && data.success) {
+          currentPaymentOrder = data;
+          if (phonepeQrImg && data.qrDataUrl) {
+            phonepeQrImg.src = data.qrDataUrl;
+          }
+          startTimer(data.durationSeconds || 600);
         } else {
-          toggle.classList.remove('annual');
-          toggle.setAttribute('aria-checked', 'false');
-          labelMonthly.classList.add('active');
-          labelAnnual.classList.remove('active');
+          fallbackLocalOrder(planName, billingCycle);
+        }
+      } catch (e) {
+        fallbackLocalOrder(planName, billingCycle);
+      }
+    }
 
-          if (priceBasic) priceBasic.textContent = '99';
-          if (periodBasic) periodBasic.textContent = '/month';
-          if (noteBasic) noteBasic.innerHTML = '&nbsp;';
+    function fallbackLocalOrder(planName, billingCycle) {
+      currentPaymentOrder = {
+        paymentId: `PAY_LOCAL_${Date.now()}`,
+        plan: planName,
+        billing: billingCycle,
+        upiUri: `upi://pay?pa=9389023802.wallet@phonepe&pn=UniVault&am=${planName === 'Basic' ? 99 : planName === 'Standard' ? 199 : 299}&cu=INR`
+      };
+      if (phonepeQrImg) {
+        phonepeQrImg.src = 'assets/payment/phonepe-qr-clean.png';
+      }
+      startTimer(600);
+    }
 
-          if (pricePremium) pricePremium.textContent = '199';
-          if (periodPremium) periodPremium.textContent = '/month';
-          if (notePremium) notePremium.innerHTML = '&nbsp;';
+    function hidePaymentModal() {
+      if (modalBackdrop) modalBackdrop.classList.remove('active');
+      if (countdownInterval) clearInterval(countdownInterval);
+    }
 
-          if (priceUltimate) priceUltimate.textContent = '299';
-          if (periodUltimate) periodUltimate.textContent = '/month';
-          if (noteUltimate) noteUltimate.innerHTML = '&nbsp;';
+    if (closeModalBtn) closeModalBtn.addEventListener('click', hidePaymentModal);
+    if (cancelPayBtn) cancelPayBtn.addEventListener('click', hidePaymentModal);
+    if (modalBackdrop) {
+      modalBackdrop.addEventListener('click', (e) => {
+        if (e.target === modalBackdrop) hidePaymentModal();
+      });
+    }
+
+    // ── 4. Generate New QR Action ──
+    if (generateNewQrBtn) {
+      generateNewQrBtn.addEventListener('click', async () => {
+        if (qrExpiredOverlay) qrExpiredOverlay.classList.remove('active');
+        if (paymentStatusBox) {
+          paymentStatusBox.className = 'qr-status-box waiting';
+          paymentStatusBox.innerHTML = '● Waiting for payment...';
+        }
+        if (confirmPaymentBtn) {
+          confirmPaymentBtn.disabled = false;
+          confirmPaymentBtn.textContent = "I've Completed Payment";
+        }
+        const billingCycle = isYearly ? 'yearly' : 'monthly';
+        await requestNewPaymentOrder(selectedPlan, billingCycle);
+        Components.showToast('New payment QR generated ✓');
+      });
+    }
+
+    // ── 5. Interactive UPI App Badges / Deep Links ──
+    document.querySelectorAll('.qr-app-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        if (currentPaymentOrder && currentPaymentOrder.upiUri) {
+          // On mobile devices, this triggers native UPI application intent
+          window.location.href = currentPaymentOrder.upiUri;
+        } else {
+          Components.showToast('Please scan the QR code using your UPI app.');
+        }
+      });
+    });
+
+    // ── 6. "I've Completed Payment" Verification Handler ──
+    if (confirmPaymentBtn) {
+      confirmPaymentBtn.addEventListener('click', async () => {
+        if (!currentPaymentOrder) return;
+
+        // Check local expiry
+        if (secondsLeft <= 0) {
+          onQRExpired();
+          return;
+        }
+
+        // Step 1: Set Verifying State
+        confirmPaymentBtn.disabled = true;
+        confirmPaymentBtn.textContent = 'Verifying with Backend…';
+        
+        if (paymentStatusBox) {
+          paymentStatusBox.className = 'qr-status-box verifying';
+          paymentStatusBox.innerHTML = '⟳ Verifying payment with server…';
+        }
+
+        try {
+          const token = window.UniVaultAuth ? window.UniVaultAuth.getToken() : null;
+          const verifyUrl = window.getUniVaultApiUrl ? window.getUniVaultApiUrl('/api/payment/verify') : '/api/payment/verify';
+
+          const res = await fetch(verifyUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+              paymentId: currentPaymentOrder.paymentId,
+              plan: selectedPlan
+            })
+          });
+
+          const data = await res.json();
+
+          if (res.ok && data.success) {
+            // Step 2: Successful Verification
+            if (countdownInterval) clearInterval(countdownInterval);
+            
+            if (paymentStatusBox) {
+              paymentStatusBox.className = 'qr-status-box success';
+              paymentStatusBox.innerHTML = `✓ Payment successful! Your <strong>${selectedPlan}</strong> plan is now active.`;
+            }
+
+            localStorage.setItem('univault_user_plan', selectedPlan);
+            Components.showToast(`🎉 ${selectedPlan} Subscription Activated!`);
+            syncUserPlanUI();
+
+            confirmPaymentBtn.style.display = 'none';
+            
+            // Add Start Watching button
+            const startBtn = document.createElement('a');
+            startBtn.href = 'index.html';
+            startBtn.className = 'btn-netflix btn-netflix-primary';
+            startBtn.style.width = '100%';
+            startBtn.style.textAlign = 'center';
+            startBtn.style.marginTop = '0.5rem';
+            startBtn.textContent = '▶ Start Watching';
+            paymentStatusBox.parentNode.appendChild(startBtn);
+
+          } else if (data.status === 'expired') {
+            onQRExpired();
+          } else {
+            if (paymentStatusBox) {
+              paymentStatusBox.className = 'qr-status-box failed';
+              paymentStatusBox.innerHTML = '✕ Payment could not be verified. Please try again.';
+            }
+            confirmPaymentBtn.disabled = false;
+            confirmPaymentBtn.textContent = "Retry Verification";
+          }
+
+        } catch (err) {
+          console.error('Payment verification error:', err);
+          if (paymentStatusBox) {
+            paymentStatusBox.className = 'qr-status-box failed';
+            paymentStatusBox.innerHTML = '✕ Payment could not be verified. Please try again.';
+          }
+          confirmPaymentBtn.disabled = false;
+          confirmPaymentBtn.textContent = "Retry Verification";
+        }
+      });
+    }
+
+    // ── 7. Sync User's Current Subscription Plan UI ──
+    async function syncUserPlanUI() {
+      let activePlan = localStorage.getItem('univault_user_plan') || 'Free';
+
+      if (window.UniVaultAuth && window.UniVaultAuth.isAuthenticated()) {
+        try {
+          const token = window.UniVaultAuth.getToken();
+          const subUrl = window.getUniVaultApiUrl ? window.getUniVaultApiUrl('/api/payment/subscription') : '/api/payment/subscription';
+          const res = await fetch(subUrl, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          const data = await res.json();
+          if (res.ok && data.success && data.subscription && data.subscription.plan) {
+            activePlan = data.subscription.plan;
+            localStorage.setItem('univault_user_plan', activePlan);
+          }
+        } catch (e) {
+          // Fallback to localStorage
         }
       }
 
-      if (toggle) {
-        toggle.addEventListener('click', () => {
-          isAnnual = !isAnnual;
-          updatePricing();
-        });
-      }
-      if (labelMonthly) {
-        labelMonthly.addEventListener('click', () => {
-          if (isAnnual) {
-            isAnnual = false;
-            updatePricing();
+      const plans = ['Free', 'Basic', 'Standard', 'Premium'];
+
+      plans.forEach(p => {
+        const btn = document.getElementById(`btnPlan${p}`);
+        const card = document.getElementById(`card${p}`);
+        if (!btn || !card) return;
+
+        const oldTag = card.querySelector('.plan-card-current-tag');
+        if (oldTag) oldTag.remove();
+
+        if (p === activePlan) {
+          btn.className = 'plan-cta-btn current';
+          btn.textContent = 'Current Plan ✓';
+          btn.disabled = true;
+
+          const currentTag = document.createElement('div');
+          currentTag.className = 'plan-card-current-tag';
+          currentTag.textContent = 'CURRENT PLAN';
+          card.appendChild(currentTag);
+        } else {
+          btn.disabled = false;
+          const pIdx = plans.indexOf(p);
+          const aIdx = plans.indexOf(activePlan);
+          btn.textContent = pIdx > aIdx ? `Upgrade to ${p}` : `Downgrade to ${p}`;
+          btn.className = p === 'Standard' ? 'plan-cta-btn primary' : 'plan-cta-btn secondary';
+        }
+      });
+    }
+
+    // ── 8. FAQ Accordion (Single-open) ──
+    document.querySelectorAll('.faq-item').forEach(item => {
+      const btn = item.querySelector('.faq-question-btn');
+      if (btn) {
+        btn.addEventListener('click', () => {
+          const isOpen = item.classList.contains('open');
+          document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+          if (!isOpen) {
+            item.classList.add('open');
           }
         });
       }
-      if (labelAnnual) {
-        labelAnnual.addEventListener('click', () => {
-          if (!isAnnual) {
-            isAnnual = true;
-            updatePricing();
-          }
-        });
-      }
-    })();
+    });
+
+    // ── 9. Initialize Components on Load ──
+    document.addEventListener('DOMContentLoaded', () => {
+      Components.renderNavbar();
+      Components.renderFooter();
+      syncUserPlanUI();
+    });
   </script>
 </body>
 </html>

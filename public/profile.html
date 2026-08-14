@@ -6,561 +6,1005 @@
   <title>My Profile — UniVault 4K</title>
   <meta name="description" content="Manage your UniVault profile, watchlist, watch history, subscription, and account settings.">
   
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👤</text></svg>">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="images/logo.png" type="image/png">
+  <link rel="stylesheet" href="css/netflix-theme.css">
   <link rel="stylesheet" href="css/navbar.css">
-  <link rel="stylesheet" href="css/cards.css">
-  
+
   <!-- Immediate Auth Gate Redirect before rendering -->
   <script>
     (function() {
       try {
-        var token = localStorage.getItem('univault_token');
+        var token = localStorage.getItem('univault_token') || sessionStorage.getItem('univault_token');
         if (!token) {
-          window.location.replace('login.html?returnUrl=profile.html');
+          window.location.replace('login.html');
         }
       } catch(e) {
-        window.location.replace('login.html?returnUrl=profile.html');
+        window.location.replace('login.html');
       }
     })();
   </script>
 
   <style>
-    /* Profile Navigation & Section Styling */
-    .profile-nav-tabs {
+    /* ═══════════════════════════════════════════════════════════════════════
+       CINEMATIC PROFILE DASHBOARD STYLES (Netflix Dark Streaming Theme)
+       ═══════════════════════════════════════════════════════════════════════ */
+    
+    /* ── Profile Hero Header ── */
+    .profile-hero-section {
+      position: relative;
+      min-height: 380px;
+      padding: clamp(6.5rem, 10vw, 8rem) clamp(1.5rem, 5vw, 4rem) 2.5rem;
       display: flex;
-      gap: 0.5rem;
-      overflow-x: auto;
-      padding-bottom: 0.5rem;
-      margin-bottom: 2rem;
-      scrollbar-width: none;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      align-items: flex-end;
+      background: #0b0b0f;
+      overflow: hidden;
     }
-    .profile-nav-tabs::-webkit-scrollbar {
-      display: none;
+
+    .profile-backdrop-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.35;
+      filter: blur(20px) scale(1.1);
+      transform: translateZ(0);
     }
-    .profile-tab-btn {
+
+    .profile-backdrop-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(11, 11, 15, 0.4) 0%, rgba(11, 11, 15, 0.85) 65%, #0b0b0f 100%),
+                  radial-gradient(circle at 20% 50%, rgba(229, 9, 20, 0.15) 0%, transparent 60%);
+    }
+
+    .profile-header-content {
+      position: relative;
+      z-index: 5;
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .profile-user-info-group {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .profile-avatar-large {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1e1e2e 0%, #161622 100%);
+      border: 3px solid var(--accent-red);
+      box-shadow: 0 8px 24px var(--accent-glow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      flex-shrink: 0;
+      user-select: none;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .profile-avatar-large:hover {
+      transform: scale(1.05);
+      box-shadow: 0 12px 32px var(--accent-glow-strong);
+    }
+
+    .profile-name-title {
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 0.25rem;
+      letter-spacing: -0.02em;
+    }
+
+    .profile-email-text {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .profile-sub-badge {
       display: inline-flex;
       align-items: center;
+      gap: 0.4rem;
+      padding: 0.25rem 0.75rem;
+      background: rgba(229, 9, 20, 0.15);
+      border: 1px solid rgba(229, 9, 20, 0.4);
+      color: #FFA5A5;
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-radius: var(--radius-pill);
+    }
+    .profile-sub-badge.free {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+      color: #D1D5DB;
+    }
+
+    /* ── Horizontal Navigation Bar ── */
+    .profile-nav-bar-wrapper {
+      background: #11111a;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      position: sticky;
+      top: 64px;
+      z-index: 40;
+      backdrop-filter: blur(12px);
+    }
+
+    .profile-nav-tabs {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
       gap: 0.5rem;
-      padding: 0.75rem 1.25rem;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 0.92rem;
-      color: var(--text-muted, #9CA3AF);
+      overflow-x: auto;
+      padding: 0.75rem clamp(1rem, 3vw, 2rem);
+      scrollbar-width: none;
+    }
+    .profile-nav-tabs::-webkit-scrollbar { display: none; }
+
+    .profile-nav-tab {
+      padding: 0.65rem 1.25rem;
+      border-radius: var(--radius-pill);
       background: transparent;
       border: 1px solid transparent;
-      cursor: pointer;
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      font-weight: 700;
       white-space: nowrap;
-      transition: all 0.25s ease;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
     }
-    .profile-tab-btn:hover {
+    .profile-nav-tab:hover {
       color: #fff;
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.06);
     }
-    .profile-tab-btn.active {
+    .profile-nav-tab.active {
+      background: var(--accent-gradient);
       color: #fff;
-      background: linear-gradient(135deg, rgba(255, 61, 107, 0.2) 0%, rgba(255, 140, 66, 0.2) 100%);
-      border-color: rgba(255, 61, 107, 0.4);
-      box-shadow: 0 4px 15px rgba(255, 61, 107, 0.2);
+      border-color: var(--accent-red);
+      box-shadow: 0 4px 16px var(--accent-glow);
     }
-    .profile-badge-count {
-      padding: 0.15rem 0.5rem;
-      border-radius: 999px;
-      font-size: 0.75rem;
-      font-weight: 800;
-      background: rgba(255, 255, 255, 0.1);
-      color: #fff;
-    }
-    .profile-section-panel {
+
+    /* ── Tab Panels ── */
+    .profile-tab-panel {
       display: none;
-      animation: fadeIn 0.3s ease forwards;
+      animation: tabFadeIn 0.3s ease forwards;
     }
-    .profile-section-panel.active {
+    .profile-tab-panel.active {
       display: block;
     }
-    @keyframes fadeIn {
+    @keyframes tabFadeIn {
       from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    .avatar-picker-grid {
+
+    /* ── Overview Dashboard Stat Cards ── */
+    .overview-stats-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
-      gap: 0.75rem;
-      margin-top: 1rem;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+      margin-bottom: 3rem;
     }
-    .avatar-option-btn {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      border: 2px solid rgba(255,255,255,0.15);
-      background: rgba(255,255,255,0.05);
+    @media (max-width: 992px) {
+      .overview-stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 480px) {
+      .overview-stats-grid { grid-template-columns: 1fr; }
+    }
+
+    .stat-card {
+      background: #14141e;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+    .stat-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(229, 9, 20, 0.35);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6), 0 0 16px rgba(229, 9, 20, 0.15);
+    }
+    .stat-icon-box {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      background: rgba(229, 9, 20, 0.12);
+      border: 1px solid rgba(229, 9, 20, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      flex-shrink: 0;
+    }
+    .stat-val-text {
       font-size: 1.5rem;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+    .stat-label-text {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── Continue Watching / History Cards ── */
+    .continue-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .continue-item-card {
+      background: #14141e;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.25s ease;
+    }
+    .continue-item-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .continue-thumb-box {
+      position: relative;
+      aspect-ratio: 16/9;
+      background: #000;
+      overflow: hidden;
+    }
+    .continue-thumb-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .continue-play-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    .continue-item-card:hover .continue-play-overlay {
+      opacity: 1;
+    }
+
+    .continue-progress-bar-bg {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.2);
+    }
+    .continue-progress-bar-fill {
+      height: 100%;
+      background: var(--accent-gradient);
+      box-shadow: 0 0 8px var(--accent-red);
+    }
+
+    .continue-info-box {
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    /* ── Subscription Card ── */
+    .profile-sub-card {
+      max-width: 680px;
+      background: #14141e;
+      border: 2px solid var(--accent-red);
+      box-shadow: 0 12px 36px var(--accent-glow);
+      border-radius: var(--radius-lg);
+      padding: 2.2rem;
+      margin: 0 auto;
+    }
+
+    /* ── Settings Form ── */
+    .settings-group-card {
+      background: #14141e;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-md);
+      padding: 1.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .settings-group-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .settings-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .settings-row:last-child { border-bottom: none; }
+
+    .settings-toggle {
+      position: relative;
+      width: 46px;
+      height: 24px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      transition: background 0.25s;
+    }
+    .settings-toggle.active {
+      background: var(--accent-red);
+    }
+    .settings-toggle-knob {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 20px;
+      height: 20px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.25s;
+    }
+    .settings-toggle.active .settings-toggle-knob {
+      transform: translateX(22px);
+    }
+
+    /* ── Avatar Picker Grid in Modal ── */
+    .avatar-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.6rem;
+      margin: 1rem 0 1.5rem;
+    }
+    .avatar-btn {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.06);
+      border: 2px solid rgba(255, 255, 255, 0.12);
+      font-size: 1.6rem;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: transform 0.2s, border-color 0.2s;
+      transition: all 0.2s;
     }
-    .avatar-option-btn:hover {
+    .avatar-btn:hover, .avatar-btn.selected {
+      background: rgba(229, 9, 20, 0.2);
+      border-color: var(--accent-red);
       transform: scale(1.1);
-      border-color: #FF3D6B;
-    }
-    .avatar-option-btn.selected {
-      border-color: #FF3D6B;
-      background: rgba(255, 61, 107, 0.25);
-    }
-
-    /* ── Mobile Responsive Optimizations for Profile ── */
-    @media (max-width: 767px) {
-      .profile-nav-tabs {
-        gap: 0.4rem;
-        padding-bottom: 0.75rem;
-      }
-      .profile-tab-btn {
-        padding: 0.6rem 0.9rem;
-        font-size: 0.85rem;
-        min-height: 44px;
-      }
-      .catalog-grid,
-      #profileWatchlistGrid,
-      #profileRecentGrid,
-      #profileFavsGrid {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 0.65rem !important;
-      }
-      #profileLogoutBtn {
-        width: 100%;
-        justify-content: center;
-        min-height: 44px;
-        margin-top: 0.5rem;
-      }
-    }
-
-    @media (max-width: 374px) {
-      .catalog-grid,
-      #profileWatchlistGrid,
-      #profileRecentGrid,
-      #profileFavsGrid {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 0.45rem !important;
-      }
-      .avatar-option-btn {
-        width: 44px;
-        height: 44px;
-        font-size: 1.25rem;
-      }
     }
   </style>
 </head>
 <body>
-  <!-- Skip to Main Content Accessibility Link -->
-  <a href="#profileViewContainer" class="skip-to-main">Skip to main content</a>
 
-  <!-- ══════════════════════════════════════════════════════ NAVBAR ══ -->
-  <header class="navbar" id="navbar" role="banner">
-    <div class="nav-inner">
+  <!-- Global Reusable Navbar -->
+  <header class="navbar" id="globalNavbar" role="banner"></header>
 
-      <!-- Brand -->
-      <a href="index.html" class="nav-brand" aria-label="UniVault – Go to homepage">
-        <span class="nav-logo-badge" aria-hidden="true">U</span>
-        <span class="nav-brand-name">UniVault</span>
-      </a>
+  <main class="app-container" role="main">
 
-      <!-- Desktop Links -->
-      <ul class="nav-links-desktop" role="list" aria-label="Main navigation">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="trailers.html">Trailers</a></li>
-        <li><a href="movies.html">Movies</a></li>
-        <li><a href="tv-shows.html">TV Shows</a></li>
-        <li><a href="anime.html">Anime</a></li>
-        <li class="nav-dropdown" id="genreNav">
-          <a href="#" class="nav-dropdown-toggle" id="genreToggle" aria-haspopup="true" aria-expanded="false">
-            Genres <span class="dropdown-arrow" aria-hidden="true">▾</span>
+    <!-- ═══════════════════════════════════════ 1. PROFILE HERO HEADER ══ -->
+    <section class="profile-hero-section" id="profileHero">
+      <img src="https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?q=80&w=1600&auto=format&fit=crop" 
+           alt="Cinematic Backdrop" 
+           class="profile-backdrop-bg">
+      <div class="profile-backdrop-overlay"></div>
+
+      <div class="profile-header-content">
+        <div class="profile-user-info-group">
+          <div class="profile-avatar-large" id="headerAvatar">👤</div>
+          <div>
+            <h1 class="profile-name-title" id="headerName">Streamer</h1>
+            <div class="profile-email-text" id="headerEmail">user@univault.com</div>
+            <div class="profile-sub-badge" id="headerSubBadge">● FREE PLAN</div>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+          <button type="button" class="btn-netflix btn-netflix-secondary" id="openEditProfileBtn">
+            ✏️ Edit Profile
+          </button>
+          <a href="subscription.html" class="btn-netflix btn-netflix-red" id="headerUpgradeBtn">
+            ⭐ Upgrade Plan
           </a>
-          <ul class="nav-dropdown-menu" id="genreDropdown" role="menu">
-            <li role="menuitem"><a href="movies.html?genre=28"><span class="genre-icon">🎬</span>Action</a></li>
-            <li role="menuitem"><a href="movies.html?genre=878"><span class="genre-icon">🚀</span>Sci-Fi</a></li>
-            <li role="menuitem"><a href="movies.html?genre=27"><span class="genre-icon">💀</span>Horror</a></li>
-            <li role="menuitem"><a href="movies.html?genre=35"><span class="genre-icon">😂</span>Comedy</a></li>
-            <li class="dropdown-divider" role="separator"></li>
-            <li role="menuitem"><a href="trailers.html"><span class="genre-icon">🎬</span>Trailers</a></li>
-            <li role="menuitem"><a href="anime.html"><span class="genre-icon">⛩️</span>Anime</a></li>
-            <li role="menuitem"><a href="tv-shows.html"><span class="genre-icon">📺</span>Drama</a></li>
-            <li role="menuitem"><a href="tv-shows.html"><span class="genre-icon">🔍</span>Crime</a></li>
-            <li role="menuitem"><a href="movies.html"><span class="genre-icon">🏆</span>Documentary</a></li>
-          </ul>
-        </li>
-      </ul>
-
-      <!-- Desktop Right Actions -->
-      <div class="nav-actions-right">
-        <a href="search.html" class="nav-search-btn" aria-label="Search">
-          <span aria-hidden="true">🔍</span>
-          <span class="nav-search-label">Search</span>
-        </a>
-        <a href="login.html" class="nav-signin-btn">Sign In</a>
-        <a href="profile.html" class="nav-profile-btn active" aria-label="Your profile">U</a>
-
-        <button class="hamburger" id="hamburger"
-                aria-label="Open navigation menu"
-                aria-expanded="false"
-                aria-controls="navDrawer">
-          <span class="hamburger-bar"></span>
-          <span class="hamburger-bar"></span>
-          <span class="hamburger-bar"></span>
-        </button>
+        </div>
       </div>
+    </section>
 
+    <!-- ═══════════════════════════════════════ 2. PROFILE NAVIGATION ══ -->
+    <div class="profile-nav-bar-wrapper">
+      <nav class="profile-nav-tabs" role="tablist" aria-label="Profile section tabs">
+        <button type="button" class="profile-nav-tab active" data-tab="overview">📊 Overview</button>
+        <button type="button" class="profile-nav-tab" data-tab="mylist">🎬 My List</button>
+        <button type="button" class="profile-nav-tab" data-tab="continue">⏳ Continue Watching</button>
+        <button type="button" class="profile-nav-tab" data-tab="recent">👁️ Recently Viewed</button>
+        <button type="button" class="profile-nav-tab" data-tab="history">📜 Watch History</button>
+        <button type="button" class="profile-nav-tab" data-tab="subscription">👑 Subscription</button>
+        <button type="button" class="profile-nav-tab" data-tab="settings">⚙️ Settings</button>
+      </nav>
     </div>
-  </header>
 
-  <!-- Mobile Drawer -->
-  <nav class="nav-drawer" id="navDrawer" aria-label="Mobile navigation" aria-hidden="true">
-    <p class="nav-drawer-label">Browse</p>
-    <ul class="nav-drawer-links" role="list">
-      <li><a href="index.html"><span class="link-icon" aria-hidden="true">🏠</span>Home</a></li>
-      <li><a href="trailers.html"><span class="link-icon" aria-hidden="true">🎬</span>Trailers</a></li>
-      <li><a href="movies.html"><span class="link-icon" aria-hidden="true">🎬</span>Movies</a></li>
-      <li><a href="tv-shows.html"><span class="link-icon" aria-hidden="true">📺</span>TV Shows</a></li>
-      <li><a href="anime.html"><span class="link-icon" aria-hidden="true">⛩️</span>Anime</a></li>
-      <li><a href="watchlist.html"><span class="link-icon" aria-hidden="true">🔖</span>Watchlist</a></li>
-    </ul>
-    <div class="nav-drawer-divider"></div>
-    <div class="nav-drawer-auth">
-      <a href="login.html" class="signin-link">Sign In</a>
-      <a href="signup.html" class="signup-link">Get Started</a>
-    </div>
-  </nav>
+    <!-- ═══════════════════════════════════════ 3. PROFILE CONTENT PANELS ══ -->
+    <div class="content-wrapper" style="padding-top: 2rem;">
 
-  <!-- Backdrop Overlay -->
-  <div class="nav-overlay" id="navOverlay" aria-hidden="true"></div>
-
-  <!-- ═══════════════════════════════════════════ MAIN CONTENT ══ -->
-  <main class="main-content" id="profileViewContainer">
-    <div class="container">
-
-      <!-- Loading State -->
-      <div id="profileLoading" style="text-align: center; padding: 5rem 2rem;">
-        <div style="font-size: 2.8rem; margin-bottom: 1rem; animation: spin 1s infinite linear;">↻</div>
-        <p class="text-muted">Loading your profile & streaming preferences…</p>
-      </div>
-
-      <!-- Authenticated Profile Content -->
-      <div id="profileContent" style="display: none;">
-
-        <!-- ── 1. Profile Header Hero ── -->
-        <div class="glass-panel anim-fade-up" style="padding: clamp(1.5rem, 4vw, 2.5rem); margin-bottom: 2rem; border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
-          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem;">
-            
-            <div style="display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
-              <!-- Profile Picture / Avatar -->
-              <div style="position: relative;">
-                <div id="profileAvatar" style="width: 90px; height: 90px; background: linear-gradient(135deg, #FF3D6B 0%, #FF8C42 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.4rem; font-weight: 900; color: #fff; flex-shrink: 0; box-shadow: 0 8px 30px rgba(255,61,107,0.4); border: 3px solid rgba(255,255,255,0.2);">
-                  U
-                </div>
-                <button id="changeAvatarBtn" title="Change Avatar" style="position: absolute; bottom: 0; right: 0; width: 30px; height: 30px; border-radius: 50%; background: #1F2937; border: 2px solid #FF3D6B; color: #fff; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center;">
-                  ✏️
-                </button>
-              </div>
-
-              <!-- User Information -->
-              <div style="min-width: 200px;">
-                <div style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;">
-                  <h1 id="profileName" style="margin: 0; font-size: clamp(1.5rem, 3vw, 1.9rem); font-weight: 800; color: #fff;">User Name</h1>
-                  <span class="status-pill" style="display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.2rem 0.65rem; border-radius: 999px; background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.35); color: #10B981; font-size: 0.75rem; font-weight: 700;">
-                    ✓ Verified Member
-                  </span>
-                </div>
-                <p id="profileEmail" class="text-muted text-sm" style="margin: 0.3rem 0 0.5rem; color: #9CA3AF; font-size: 0.95rem;">user@example.com</p>
-                <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; font-size: 0.85rem; color: #9CA3AF;">
-                  <span id="profileMemberSince">Member since 2026</span>
-                  <span>•</span>
-                  <span style="color: #F59E0B; font-weight: 700;">👑 4K VIP Pass Active</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Quick Action Logout Button -->
-            <button id="profileLogoutBtn" class="btn btn-secondary btn-sm" style="background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.35); color: #FCA5A5; padding: 0.65rem 1.25rem; font-weight: 700; border-radius: 12px;">
-              🚪 Sign Out
-            </button>
-          </div>
-
-          <!-- Avatar Picker Modal/Drawer (Toggled by Change Avatar button) -->
-          <div id="avatarPickerPanel" style="display: none; margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid rgba(255,255,255,0.1);">
-            <div style="font-size: 0.85rem; font-weight: 700; color: #D1D5DB; margin-bottom: 0.5rem;">Choose your profile avatar:</div>
-            <div class="avatar-picker-grid">
-              <button class="avatar-option-btn" data-avatar="🍿">🍿</button>
-              <button class="avatar-option-btn" data-avatar="🚀">🚀</button>
-              <button class="avatar-option-btn" data-avatar="🎭">🎭</button>
-              <button class="avatar-option-btn" data-avatar="🦊">🦊</button>
-              <button class="avatar-option-btn" data-avatar="⚡">⚡</button>
-              <button class="avatar-option-btn" data-avatar="👑">👑</button>
-              <button class="avatar-option-btn" data-avatar="🎬">🎬</button>
-              <button class="avatar-option-btn" data-avatar="🎮">🎮</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- ── 2. Profile Section Navigation Tabs ── -->
-        <div class="profile-nav-tabs" role="tablist" aria-label="Profile navigation">
-          <button class="profile-tab-btn active" data-target="panelWatchlist" role="tab" aria-selected="true">
-            🔖 My Watchlist <span class="profile-badge-count" id="badgeWatchlistCount">0</span>
-          </button>
-          <button class="profile-tab-btn" data-target="panelRecent" role="tab" aria-selected="false">
-            ⏱️ Recently Viewed <span class="profile-badge-count" id="badgeRecentCount">0</span>
-          </button>
-          <button class="profile-tab-btn" data-target="panelFavorites" role="tab" aria-selected="false">
-            ⭐ Favorites <span class="profile-badge-count" id="badgeFavCount">0</span>
-          </button>
-          <button class="profile-tab-btn" data-target="panelSubscription" role="tab" aria-selected="false">
-            👑 Subscription
-          </button>
-          <button class="profile-tab-btn" data-target="panelSettings" role="tab" aria-selected="false">
-            ⚙️ Account Settings
-          </button>
-          <button class="profile-tab-btn" data-target="panelLogout" role="tab" aria-selected="false" style="color: #FCA5A5;">
-            🚪 Logout
-          </button>
-        </div>
-
-        <!-- ══════════════════════════════════════════════════════════════ -->
-        <!-- SECTION 1: MY WATCHLIST                                       -->
-        <!-- ══════════════════════════════════════════════════════════════ -->
-        <div class="profile-section-panel active" id="panelWatchlist">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+      <!-- ── TAB 1: OVERVIEW ── -->
+      <section class="profile-tab-panel active" id="panel-overview">
+        
+        <!-- Stats Grid -->
+        <div class="overview-stats-grid">
+          <div class="stat-card" onclick="switchTab('mylist')" style="cursor: pointer;">
+            <div class="stat-icon-box">🎬</div>
             <div>
-              <h2 style="font-size: 1.4rem; font-weight: 800; color: #fff; margin: 0 0 0.25rem;">My Saved Watchlist</h2>
-              <p class="text-muted text-sm" style="margin: 0;">Movies and series saved to stream later</p>
+              <div class="stat-val-text" id="statMyListCount">0</div>
+              <div class="stat-label-text">My List Titles</div>
             </div>
-            <a href="watchlist.html" class="btn btn-glass btn-sm">Open Full Watchlist Page →</a>
           </div>
 
-          <div class="catalog-grid" id="profileWatchlistGrid">
-            <!-- Rendered via JS -->
-          </div>
-
-          <div class="catalog-state-card" id="profileWatchlistEmpty" style="display: none; padding: 3rem 1.5rem;">
-            <div class="catalog-state-icon">🔖</div>
-            <h3 class="catalog-state-title" style="font-size: 1.2rem;">Your Watchlist is Empty</h3>
-            <p class="catalog-state-desc" style="font-size: 0.9rem;">Browse trending blockbusters and anime to add titles to your personal watchlist.</p>
-            <a href="movies.html" class="catalog-state-btn" style="margin-top: 1rem;">Explore Movies</a>
-          </div>
-        </div>
-
-        <!-- ══════════════════════════════════════════════════════════════ -->
-        <!-- SECTION 2: RECENTLY VIEWED                                    -->
-        <!-- ══════════════════════════════════════════════════════════════ -->
-        <div class="profile-section-panel" id="panelRecent">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+          <div class="stat-card" onclick="switchTab('continue')" style="cursor: pointer;">
+            <div class="stat-icon-box">⏳</div>
             <div>
-              <h2 style="font-size: 1.4rem; font-weight: 800; color: #fff; margin: 0 0 0.25rem;">Recently Viewed</h2>
-              <p class="text-muted text-sm" style="margin: 0;">Titles you recently explored on UniVault</p>
+              <div class="stat-val-text" id="statContinueCount">0</div>
+              <div class="stat-label-text">Continue Watching</div>
             </div>
-            <button id="clearRecentBtn" class="btn btn-secondary btn-sm" style="background: rgba(255,255,255,0.06); color: #9CA3AF;">
-              Clear History
-            </button>
           </div>
 
-          <div class="catalog-grid" id="profileRecentGrid">
-            <!-- Rendered via JS -->
-          </div>
-
-          <div class="catalog-state-card" id="profileRecentEmpty" style="display: none; padding: 3rem 1.5rem;">
-            <div class="catalog-state-icon">⏱️</div>
-            <h3 class="catalog-state-title" style="font-size: 1.2rem;">No Watch History Yet</h3>
-            <p class="catalog-state-desc" style="font-size: 0.9rem;">As you explore movies and series across the catalog, they will appear here.</p>
-            <a href="index.html" class="catalog-state-btn" style="margin-top: 1rem;">Explore Catalog</a>
-          </div>
-        </div>
-
-        <!-- ══════════════════════════════════════════════════════════════ -->
-        <!-- SECTION 3: FAVORITES                                          -->
-        <!-- ══════════════════════════════════════════════════════════════ -->
-        <div class="profile-section-panel" id="panelFavorites">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+          <div class="stat-card" onclick="switchTab('recent')" style="cursor: pointer;">
+            <div class="stat-icon-box">👁️</div>
             <div>
-              <h2 style="font-size: 1.4rem; font-weight: 800; color: #fff; margin: 0 0 0.25rem;">My Favorites</h2>
-              <p class="text-muted text-sm" style="margin: 0;">Your all-time top-rated movies and anime</p>
+              <div class="stat-val-text" id="statRecentCount">0</div>
+              <div class="stat-label-text">Recently Viewed</div>
             </div>
           </div>
 
-          <div class="catalog-grid" id="profileFavoritesGrid">
-            <!-- Rendered via JS -->
-          </div>
-
-          <div class="catalog-state-card" id="profileFavoritesEmpty" style="display: none; padding: 3rem 1.5rem;">
-            <div class="catalog-state-icon">⭐</div>
-            <h3 class="catalog-state-title" style="font-size: 1.2rem;">No Favorites Marked</h3>
-            <p class="catalog-state-desc" style="font-size: 0.9rem;">Save titles to your favorites to quickly find your favorite cinematic experiences.</p>
-            <a href="movies.html" class="catalog-state-btn" style="margin-top: 1rem;">Browse Movies</a>
+          <div class="stat-card" onclick="switchTab('subscription')" style="cursor: pointer;">
+            <div class="stat-icon-box">👑</div>
+            <div>
+              <div class="stat-val-text" id="statSubPlan" style="font-size: 1.25rem;">Free</div>
+              <div class="stat-label-text">Current Tier</div>
+            </div>
           </div>
         </div>
 
-        <!-- ══════════════════════════════════════════════════════════════ -->
-        <!-- SECTION 4: SUBSCRIPTION                                       -->
-        <!-- ══════════════════════════════════════════════════════════════ -->
-        <div class="profile-section-panel" id="panelSubscription">
-          <div class="glass-panel" style="padding: clamp(1.5rem, 4vw, 2.5rem); border-radius: 20px; margin-bottom: 2rem;">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.5rem;">
+        <!-- Quick Continue Watching Section -->
+        <div class="section-container" style="padding: 0; margin-bottom: 3rem;">
+          <div class="section-header">
+            <h2 class="section-title">Jump Back In</h2>
+          </div>
+          <div class="continue-grid" id="overviewContinueGrid"></div>
+        </div>
+
+      </section>
+
+      <!-- ── TAB 2: MY LIST ── -->
+      <section class="profile-tab-panel" id="panel-mylist">
+        <div class="section-header">
+          <h2 class="section-title">My Saved List</h2>
+        </div>
+        <div class="netflix-grid" id="profileMyListGrid"></div>
+        <div id="emptyMyList" style="display: none; text-align: center; padding: 4rem 1rem;">
+          <div style="font-size: 3.5rem; margin-bottom: 1rem;">🎬</div>
+          <h3 style="font-size: 1.4rem; font-weight: 800; color: #fff; margin-bottom: 0.5rem;">Your List Is Empty</h3>
+          <p style="color: #9CA3AF; margin-bottom: 1.5rem;">Save movies and TV shows you want to watch later.</p>
+          <a href="movies.html" class="btn-netflix btn-netflix-red">Browse Movies</a>
+        </div>
+      </section>
+
+      <!-- ── TAB 3: CONTINUE WATCHING ── -->
+      <section class="profile-tab-panel" id="panel-continue">
+        <div class="section-header">
+          <h2 class="section-title">Continue Watching</h2>
+        </div>
+        <div class="continue-grid" id="fullContinueGrid"></div>
+        <div id="emptyContinue" style="display: none; text-align: center; padding: 4rem 1rem;">
+          <div style="font-size: 3.5rem; margin-bottom: 1rem;">⏳</div>
+          <h3 style="font-size: 1.4rem; font-weight: 800; color: #fff; margin-bottom: 0.5rem;">No Active Playback</h3>
+          <p style="color: #9CA3AF; margin-bottom: 1.5rem;">Start watching movies or shows and your progress will sync here.</p>
+          <a href="index.html" class="btn-netflix btn-netflix-red">Explore Trending</a>
+        </div>
+      </section>
+
+      <!-- ── TAB 4: RECENTLY VIEWED ── -->
+      <section class="profile-tab-panel" id="panel-recent">
+        <div class="section-header" style="justify-content: space-between;">
+          <h2 class="section-title">Recently Viewed</h2>
+          <button type="button" class="btn-netflix btn-netflix-secondary" style="padding: 0.4rem 0.9rem; font-size: 0.82rem;" id="clearRecentBtn">
+            🗑️ Clear History
+          </button>
+        </div>
+        <div class="netflix-grid" id="profileRecentGrid"></div>
+        <div id="emptyRecent" style="display: none; text-align: center; padding: 4rem 1rem;">
+          <div style="font-size: 3.5rem; margin-bottom: 1rem;">👁️</div>
+          <h3 style="font-size: 1.4rem; font-weight: 800; color: #fff; margin-bottom: 0.5rem;">Nothing Here Yet</h3>
+          <p style="color: #9CA3AF; margin-bottom: 1.5rem;">Browse and explore titles to build your recently viewed catalog.</p>
+          <a href="index.html" class="btn-netflix btn-netflix-red">Explore Now</a>
+        </div>
+      </section>
+
+      <!-- ── TAB 5: WATCH HISTORY ── -->
+      <section class="profile-tab-panel" id="panel-history">
+        <div class="section-header" style="justify-content: space-between;">
+          <h2 class="section-title">Playback History Timeline</h2>
+          <button type="button" class="btn-netflix btn-netflix-secondary" style="padding: 0.4rem 0.9rem; font-size: 0.82rem;" id="clearHistoryBtn">
+            🗑️ Clear All
+          </button>
+        </div>
+        <div class="continue-grid" id="profileHistoryGrid"></div>
+      </section>
+
+      <!-- ── TAB 6: SUBSCRIPTION ── -->
+      <section class="profile-tab-panel" id="panel-subscription">
+        <div class="profile-sub-card">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+            <div>
+              <div style="font-size: 0.78rem; font-weight: 800; color: var(--accent-red); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.25rem;">YOUR SUBSCRIPTION</div>
+              <h2 style="font-size: 2rem; font-weight: 900; color: #fff;" id="subCardPlanName">Standard Plan</h2>
+            </div>
+            <div style="font-size: 1.6rem; font-weight: 900; color: #fff;" id="subCardPrice">₹199 <span style="font-size: 0.85rem; color: #9CA3AF; font-weight: 600;">/ mo</span></div>
+          </div>
+
+          <div style="border-top: 1px solid rgba(255,255,255,0.08); border-bottom: 1px solid rgba(255,255,255,0.08); padding: 1.25rem 0; margin-bottom: 1.5rem;">
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.65rem; color: #D1D5DB; font-size: 0.92rem;">
+              <li><span style="color: #10B981; font-weight: 800;">✓</span> Full HD 1080p & 4K Ultra HD Streaming</li>
+              <li><span style="color: #10B981; font-weight: 800;">✓</span> 100% Ad-Free Entertainment</li>
+              <li><span style="color: #10B981; font-weight: 800;">✓</span> Unlimited Movies, TV Series & Anime</li>
+              <li><span style="color: #10B981; font-weight: 800;">✓</span> Multi-Device Synchronized Progress</li>
+            </ul>
+          </div>
+
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+            <div>
+              <div style="font-size: 0.82rem; color: #9CA3AF;">Account Status</div>
+              <div style="font-weight: 800; color: #10B981;" id="subCardStatus">● Active</div>
+            </div>
+            <a href="subscription.html" class="btn-netflix btn-netflix-red">
+              Manage / Upgrade Subscription
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── TAB 7: SETTINGS ── -->
+      <section class="profile-tab-panel" id="panel-settings">
+        <div style="max-width: 780px; margin: 0 auto;">
+          
+          <!-- Account Settings -->
+          <div class="settings-group-card">
+            <h3 class="settings-group-title">👤 Account Information</h3>
+            <div class="settings-row">
               <div>
-                <span class="status-pill-gold" style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.8rem; border-radius: 999px; background: rgba(245,200,66,0.15); border: 1px solid rgba(245,200,66,0.3); color: #F5C842; font-size: 0.82rem; font-weight: 800; margin-bottom: 0.75rem;">
-                  👑 VIP PASS • ACTIVE
-                </span>
-                <h2 style="font-size: 1.6rem; font-weight: 800; color: #fff; margin: 0 0 0.4rem;">VIP Pass 4K Ultra HD</h2>
-                <p class="text-muted text-sm" style="margin: 0 0 1rem;">Auto-renews on September 1, 2026 • $14.99 / month</p>
+                <div style="font-weight: 700; color: #fff;">Display Name</div>
+                <div style="font-size: 0.82rem; color: #9CA3AF;" id="settingsNameVal">Streamer</div>
               </div>
-              <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-                <a href="subscription.html" class="btn btn-primary btn-sm">Change Plan</a>
-                <button class="btn btn-secondary btn-sm" onclick="alert('Your VIP Pass renewal is active. Next billing date: Sept 1, 2026.')">Manage Billing</button>
-              </div>
+              <button type="button" class="btn-netflix btn-netflix-secondary" style="padding: 0.35rem 0.85rem; font-size: 0.82rem;" onclick="openEditModal()">Edit</button>
             </div>
-
-            <div class="divider" style="margin-block: 1.5rem; height: 1px; background: rgba(255,255,255,0.08);"></div>
-
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem;">
-              <div style="background: rgba(255,255,255,0.03); padding: 1.25rem; border-radius: 14px; border: 1px solid rgba(255,255,255,0.06);">
-                <div style="color: #FF3D6B; font-weight: 800; font-size: 1.1rem; margin-bottom: 0.25rem;">4K UHD &amp; HDR10+</div>
-                <div style="color: #9CA3AF; font-size: 0.85rem;">Highest fidelity streaming with Dolby Atmos audio support.</div>
-              </div>
-              <div style="background: rgba(255,255,255,0.03); padding: 1.25rem; border-radius: 14px; border: 1px solid rgba(255,255,255,0.06);">
-                <div style="color: #10B981; font-weight: 800; font-size: 1.1rem; margin-bottom: 0.25rem;">4 Simultaneous Streams</div>
-                <div style="color: #9CA3AF; font-size: 0.85rem;">Share across family devices, TVs, laptops, and mobile.</div>
-              </div>
-              <div style="background: rgba(255,255,255,0.03); padding: 1.25rem; border-radius: 14px; border: 1px solid rgba(255,255,255,0.06);">
-                <div style="color: #F5C842; font-weight: 800; font-size: 1.1rem; margin-bottom: 0.25rem;">100% Ad-Free</div>
-                <div style="color: #9CA3AF; font-size: 0.85rem;">Zero interruptions, unlimited offline downloads.</div>
+            <div class="settings-row">
+              <div>
+                <div style="font-weight: 700; color: #fff;">Email Address</div>
+                <div style="font-size: 0.82rem; color: #9CA3AF;" id="settingsEmailVal">user@univault.com</div>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- ══════════════════════════════════════════════════════════════ -->
-        <!-- SECTION 5: ACCOUNT SETTINGS                                   -->
-        <!-- ══════════════════════════════════════════════════════════════ -->
-        <div class="profile-section-panel" id="panelSettings">
-          <div class="glass-panel" style="max-width: 680px; padding: clamp(1.5rem, 4vw, 2.5rem); border-radius: 20px; margin-bottom: 2rem;">
-            <h2 style="font-size: 1.4rem; font-weight: 800; color: #fff; margin: 0 0 1.5rem;">Account Settings</h2>
-
-            <!-- Feedback Alert -->
-            <div id="settingsAlert" style="display: none; padding: 0.75rem 1rem; border-radius: 12px; font-size: 0.88rem; font-weight: 600; margin-bottom: 1.5rem;"></div>
-
-            <form id="profileSettingsForm" style="display: flex; flex-direction: column; gap: 1.25rem;">
-              <div class="form-group">
-                <label class="form-label" for="settingsName" style="font-weight: 700; color: #D1D5DB; font-size: 0.88rem; display: block; margin-bottom: 0.4rem;">Display Name</label>
-                <input class="form-input" type="text" id="settingsName" required style="width: 100%; padding: 0.75rem 1rem; background: rgba(18,19,26,0.8); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; color: #fff; font-size: 0.95rem;">
+          <!-- Playback Settings -->
+          <div class="settings-group-card">
+            <h3 class="settings-group-title">▶️ Playback Preferences</h3>
+            <div class="settings-row">
+              <div>
+                <div style="font-weight: 700; color: #fff;">Autoplay Next Episode</div>
+                <div style="font-size: 0.82rem; color: #9CA3AF;">Automatically play the next episode when current ends</div>
               </div>
-
-              <div class="form-group">
-                <label class="form-label" for="settingsEmail" style="font-weight: 700; color: #D1D5DB; font-size: 0.88rem; display: block; margin-bottom: 0.4rem;">Email Address</label>
-                <input class="form-input" type="email" id="settingsEmail" disabled style="width: 100%; padding: 0.75rem 1rem; background: rgba(18,19,26,0.4); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; color: #9CA3AF; font-size: 0.95rem; cursor: not-allowed;">
-                <span style="font-size: 0.78rem; color: #9CA3AF; margin-top: 0.25rem; display: block;">Email is linked to your verified SQLite account.</span>
+              <div class="settings-toggle active" onclick="this.classList.toggle('active')">
+                <div class="settings-toggle-knob"></div>
               </div>
-
-              <div class="divider" style="margin-block: 0.5rem; height: 1px; background: rgba(255,255,255,0.08);"></div>
-
-              <div class="form-group">
-                <label class="form-label" for="settingsQuality" style="font-weight: 700; color: #D1D5DB; font-size: 0.88rem; display: block; margin-bottom: 0.4rem;">Default Streaming Quality</label>
-                <select class="form-input" id="settingsQuality" style="width: 100%; padding: 0.75rem 1rem; background: #12131A; border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; color: #fff; font-size: 0.95rem;">
-                  <option value="4k">4K Ultra HD (HDR10+ / Dolby Vision)</option>
-                  <option value="1080p">1080p Full HD</option>
-                  <option value="720p">720p HD (Data Saver)</option>
-                  <option value="auto">Auto (Adaptive Bitrate)</option>
-                </select>
+            </div>
+            <div class="settings-row">
+              <div>
+                <div style="font-weight: 700; color: #fff;">Autoplay Video Previews</div>
+                <div style="font-size: 0.82rem; color: #9CA3AF;">Play cinematic trailer previews while browsing titles</div>
               </div>
-
-              <div class="form-group" style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 0;">
-                <div>
-                  <div style="font-weight: 700; color: #fff; font-size: 0.92rem;">Autoplay Official Trailers</div>
-                  <div style="font-size: 0.8rem; color: #9CA3AF;">Automatically preview official YouTube trailers on hover</div>
-                </div>
-                <input type="checkbox" id="settingsAutoplay" checked style="width: 18px; height: 18px; accent-color: #FF3D6B; cursor: pointer;">
+              <div class="settings-toggle active" onclick="this.classList.toggle('active')">
+                <div class="settings-toggle-knob"></div>
               </div>
-
-              <button type="submit" id="saveSettingsBtn" class="btn btn-primary" style="margin-top: 0.5rem; padding: 0.8rem 1.5rem; font-weight: 800; border-radius: 12px; align-self: flex-start;">
-                Save Changes
-              </button>
-            </form>
-          </div>
-        </div>
-
-        <!-- ══════════════════════════════════════════════════════════════ -->
-        <!-- SECTION 6: LOGOUT PANEL                                       -->
-        <!-- ══════════════════════════════════════════════════════════════ -->
-        <div class="profile-section-panel" id="panelLogout">
-          <div class="glass-panel" style="max-width: 520px; text-align: center; padding: 3rem 2rem; border-radius: 20px;">
-            <div style="font-size: 3rem; margin-bottom: 1rem;">🚪</div>
-            <h2 style="font-size: 1.5rem; font-weight: 800; color: #fff; margin: 0 0 0.5rem;">Sign Out of UniVault?</h2>
-            <p class="text-muted" style="margin: 0 0 2rem; font-size: 0.92rem;">You can sign back in anytime to access your watchlist, playback history, and 4K streaming privileges.</p>
-            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-              <button id="confirmLogoutBtn" class="btn btn-primary" style="background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%); box-shadow: 0 4px 20px rgba(239,68,68,0.4);">
-                Confirm Sign Out
-              </button>
-              <button id="cancelLogoutBtn" class="btn btn-secondary">
-                Stay Signed In
-              </button>
             </div>
           </div>
-        </div>
 
-      </div>
+          <!-- Notifications -->
+          <div class="settings-group-card">
+            <h3 class="settings-group-title">🔔 Notifications</h3>
+            <div class="settings-row">
+              <div>
+                <div style="font-weight: 700; color: #fff;">New Release Alerts</div>
+                <div style="font-size: 0.82rem; color: #9CA3AF;">Get updates on new blockbuster and anime releases</div>
+              </div>
+              <div class="settings-toggle active" onclick="this.classList.toggle('active')">
+                <div class="settings-toggle-knob"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Danger Zone: Logout -->
+          <div class="settings-group-card" style="border-color: rgba(239, 68, 68, 0.3);">
+            <h3 class="settings-group-title" style="color: #EF4444;">🚪 Account Session</h3>
+            <p style="color: #9CA3AF; font-size: 0.88rem; margin-bottom: 1rem;">Sign out of your active UniVault session across this device.</p>
+            <button type="button" class="btn-netflix btn-netflix-secondary" style="border-color: rgba(239, 68, 68, 0.4); color: #FCA5A5;" id="openLogoutModalBtn">
+              Sign Out of UniVault
+            </button>
+          </div>
+
+        </div>
+      </section>
 
     </div>
+
   </main>
 
-  <!-- ── Universal Trailer Player Modal ── -->
-  <div class="hero-modal-backdrop univault-trailer-modal" id="heroTrailerModal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Trailer Video Player">
-    <div class="hero-modal-content univault-trailer-content">
-      <div class="hero-modal-header">
-        <div class="hero-modal-title">
-          <span>🎬</span>
-          <span class="hero-modal-title-text" id="heroTrailerTitle">Watch Trailer</span>
-          <span class="hero-modal-badge" id="heroTrailerBadge">Official Trailer</span>
-        </div>
-        <button class="hero-modal-close univault-trailer-close" id="closeHeroTrailerModal" aria-label="Close trailer player">&times;</button>
+  <!-- ═══════════════════════════════════════ 4. EDIT PROFILE MODAL ══ -->
+  <div class="qr-modal-backdrop" id="editModalBackdrop" role="dialog" aria-modal="true" aria-hidden="true" style="position: fixed; inset: 0; z-index: 10000; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); display: none; align-items: center; justify-content: center; padding: 1rem;">
+    <div style="width: 100%; max-width: 440px; background: #14141f; border: 1px solid rgba(255,255,255,0.15); border-radius: var(--radius-lg); padding: 2rem; box-shadow: 0 24px 60px rgba(0,0,0,0.9);">
+      <h3 style="font-size: 1.4rem; font-weight: 800; color: #fff; margin-bottom: 0.25rem;">Edit Profile</h3>
+      <p style="color: #9CA3AF; font-size: 0.85rem; margin-bottom: 1.25rem;">Customize your profile avatar and name</p>
+
+      <label style="font-size: 0.85rem; font-weight: 700; color: #D1D5DB; display: block; margin-bottom: 0.35rem;">Choose Avatar</label>
+      <div class="avatar-grid" id="avatarPickerGrid">
+        <button type="button" class="avatar-btn selected" data-avatar="👤">👤</button>
+        <button type="button" class="avatar-btn" data-avatar="👑">👑</button>
+        <button type="button" class="avatar-btn" data-avatar="🎬">🎬</button>
+        <button type="button" class="avatar-btn" data-avatar="🚀">🚀</button>
+        <button type="button" class="avatar-btn" data-avatar="🍿">🍿</button>
+        <button type="button" class="avatar-btn" data-avatar="🔥">🔥</button>
+        <button type="button" class="avatar-btn" data-avatar="⚡">⚡</button>
+        <button type="button" class="avatar-btn" data-avatar="⭐">⭐</button>
+        <button type="button" class="avatar-btn" data-avatar="🦊">🦊</button>
+        <button type="button" class="avatar-btn" data-avatar="🐯">🐯</button>
       </div>
-      <div class="hero-video-ratio" id="heroTrailerRatioWrap">
-        <div class="hero-modal-loading" id="heroTrailerLoading" style="display: none;">
-          <div class="hero-modal-spinner"></div>
-          <p class="hero-modal-loading-text" id="heroTrailerLoadingText">Loading trailer...</p>
-        </div>
-        <div class="hero-modal-error" id="heroTrailerError" style="display: none;">
-          <div class="hero-modal-error-icon">🎬</div>
-          <h3 class="hero-modal-error-title" id="heroTrailerErrorTitle">Trailer unavailable</h3>
-          <p class="hero-modal-error-desc" id="heroTrailerErrorDesc">Sorry, no official YouTube trailer is currently available for this title in the TMDB catalog.</p>
-          <div class="hero-modal-error-actions">
-            <a id="heroTrailerFallbackBtn" href="#" target="_blank" rel="noopener noreferrer" class="hero-modal-fallback-btn">
-              <span>▶</span> Watch on YouTube
-            </a>
-            <button type="button" class="hero-modal-fallback-close" id="heroTrailerErrorCloseBtn">Close</button>
-          </div>
-        </div>
+
+      <div style="margin-bottom: 1.5rem;">
+        <label for="editNameInput" style="font-size: 0.85rem; font-weight: 700; color: #D1D5DB; display: block; margin-bottom: 0.5rem;">Your Name</label>
+        <input type="text" id="editNameInput" style="width: 100%; padding: 0.8rem 1rem; background: #1e1e2d; border: 1px solid rgba(255,255,255,0.15); border-radius: var(--radius-md); color: #fff; font-size: 0.95rem; outline: none;">
       </div>
-      <div class="hero-modal-footer" id="heroTrailerFooter">
-        <span style="color: #71717a; font-size: 0.8rem;">Powered by TMDB & YouTube Player API</span>
-        <a id="heroTrailerDirectYtLink" href="#" target="_blank" rel="noopener noreferrer" class="hero-modal-yt-link" style="display: none;">
-          <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" style="vertical-align: middle;"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-          <span>Watch on YouTube ↗</span>
-        </a>
+
+      <div style="display: flex; gap: 0.75rem;">
+        <button type="button" class="btn-netflix btn-netflix-red" style="flex: 1;" id="saveProfileBtn">Save Changes</button>
+        <button type="button" class="btn-netflix btn-netflix-secondary" style="flex: 1;" id="cancelEditBtn">Cancel</button>
       </div>
     </div>
   </div>
 
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-bottom">
-        <span>© 2026 UniVault Inc. All rights reserved. Powered by TMDB API.</span>
-        <div class="footer-legal"><a href="#">Privacy</a><a href="#">Terms</a></div>
+  <!-- ═══════════════════════════════════════ 5. LOGOUT MODAL ══ -->
+  <div class="qr-modal-backdrop" id="logoutModalBackdrop" role="dialog" aria-modal="true" aria-hidden="true" style="position: fixed; inset: 0; z-index: 10000; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); display: none; align-items: center; justify-content: center; padding: 1rem;">
+    <div style="width: 100%; max-width: 400px; background: #14141f; border: 1px solid rgba(255,255,255,0.15); border-radius: var(--radius-lg); padding: 2rem; text-align: center; box-shadow: 0 24px 60px rgba(0,0,0,0.9);">
+      <div style="font-size: 2.8rem; margin-bottom: 0.75rem;">🚪</div>
+      <h3 style="font-size: 1.3rem; font-weight: 800; color: #fff; margin-bottom: 0.5rem;">Sign Out</h3>
+      <p style="color: #9CA3AF; font-size: 0.9rem; margin-bottom: 1.75rem;">Are you sure you want to log out of UniVault?</p>
+      <div style="display: flex; gap: 0.75rem;">
+        <button type="button" class="btn-netflix btn-netflix-secondary" style="flex: 1;" id="cancelLogoutBtn">Cancel</button>
+        <button type="button" class="btn-netflix btn-netflix-red" style="flex: 1;" id="confirmLogoutBtn">Log Out</button>
       </div>
     </div>
-  </footer>
+  </div>
+
+  <!-- Global Footer -->
+  <footer class="netflix-footer" id="globalFooter" role="contentinfo"></footer>
 
   <!-- Scripts -->
   <script src="js/auth.js"></script>
-  <script src="js/script.js"></script>
-  <script src="js/cards.js"></script>
-  <script src="js/app.js"></script>
-  <script src="js/navbar.js"></script>
+  <script src="js/tmdb-api.js"></script>
+  <script src="js/components.js"></script>
+
+  <script>
+    let selectedAvatarEmoji = '👤';
+
+    // ── 1. Tab Switching Controller ──
+    window.switchTab = function(tabKey) {
+      document.querySelectorAll('.profile-nav-tab').forEach(t => {
+        t.classList.toggle('active', t.getAttribute('data-tab') === tabKey);
+      });
+      document.querySelectorAll('.profile-tab-panel').forEach(p => {
+        p.classList.toggle('active', p.id === `panel-${tabKey}`);
+      });
+    };
+
+    document.querySelectorAll('.profile-nav-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        switchTab(tab.getAttribute('data-tab'));
+      });
+    });
+
+    // ── 2. Profile Data Loader ──
+    async function loadUserProfile() {
+      if (!window.UniVaultAuth || !window.UniVaultAuth.isAuthenticated()) {
+        window.location.replace('login.html');
+        return;
+      }
+
+      let user = window.UniVaultAuth.getUser() || { name: 'Streamer', email: 'user@univault.com' };
+      const token = window.UniVaultAuth.getToken();
+
+      // Fetch latest profile & subscription from MongoDB backend
+      try {
+        const profileUrl = window.getUniVaultApiUrl ? window.getUniVaultApiUrl('/api/user/me') : '/api/user/me';
+        const res = await fetch(profileUrl, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (res.ok && data.success && data.user) {
+          user = data.user;
+        }
+      } catch (e) {
+        console.warn('Profile fetch notice:', e.message);
+      }
+
+      // Populate Header
+      const headerName = document.getElementById('headerName');
+      const headerEmail = document.getElementById('headerEmail');
+      const headerAvatar = document.getElementById('headerAvatar');
+      const headerSubBadge = document.getElementById('headerSubBadge');
+      const settingsNameVal = document.getElementById('settingsNameVal');
+      const settingsEmailVal = document.getElementById('settingsEmailVal');
+
+      const avatar = user.avatar || localStorage.getItem('univault_user_avatar') || '👤';
+      selectedAvatarEmoji = avatar;
+
+      if (headerName) headerName.textContent = user.name || 'Streamer';
+      if (headerEmail) headerEmail.textContent = user.email || 'user@univault.com';
+      if (headerAvatar) headerAvatar.textContent = avatar;
+      if (settingsNameVal) settingsNameVal.textContent = user.name || 'Streamer';
+      if (settingsEmailVal) settingsEmailVal.textContent = user.email || 'user@univault.com';
+
+      // Subscription State
+      const plan = (user.subscription && user.subscription.plan) || localStorage.getItem('univault_user_plan') || 'Free';
+      const statSubPlan = document.getElementById('statSubPlan');
+      const subCardPlanName = document.getElementById('subCardPlanName');
+      const subCardPrice = document.getElementById('subCardPrice');
+
+      if (headerSubBadge) {
+        headerSubBadge.textContent = `● ${plan.toUpperCase()} PLAN`;
+        headerSubBadge.className = plan === 'Free' ? 'profile-sub-badge free' : 'profile-sub-badge';
+      }
+      if (statSubPlan) statSubPlan.textContent = plan;
+      if (subCardPlanName) subCardPlanName.textContent = `${plan} Plan`;
+      if (subCardPrice) {
+        const prices = { Free: '₹0', Basic: '₹99', Standard: '₹199', Premium: '₹299' };
+        subCardPrice.innerHTML = `${prices[plan] || '₹0'} <span style="font-size: 0.85rem; color: #9CA3AF; font-weight: 600;">/ mo</span>`;
+      }
+
+      // Load Lists & Stats
+      loadMyList();
+      loadContinueWatching();
+      loadRecentlyViewed();
+    }
+
+    // ── 3. My List Loader ──
+    function loadMyList() {
+      const list = Components.getWatchlist();
+      const grid = document.getElementById('profileMyListGrid');
+      const empty = document.getElementById('emptyMyList');
+      const statCount = document.getElementById('statMyListCount');
+
+      if (statCount) statCount.textContent = list.length;
+
+      if (list.length === 0) {
+        if (grid) grid.innerHTML = '';
+        if (empty) empty.style.display = 'block';
+        return;
+      }
+
+      if (empty) empty.style.display = 'none';
+      if (grid) grid.innerHTML = list.map(item => Components.createMovieCard(item)).join('');
+    }
+
+    // ── 4. Continue Watching Loader ──
+    function loadContinueWatching() {
+      let recent = [];
+      try {
+        const raw = localStorage.getItem('univault_recent_history');
+        recent = raw ? JSON.parse(raw) : [];
+      } catch {
+        recent = [];
+      }
+
+      const fullGrid = document.getElementById('fullContinueGrid');
+      const overviewGrid = document.getElementById('overviewContinueGrid');
+      const empty = document.getElementById('emptyContinue');
+      const statCount = document.getElementById('statContinueCount');
+
+      if (statCount) statCount.textContent = recent.length;
+
+      if (recent.length === 0) {
+        if (fullGrid) fullGrid.innerHTML = '';
+        if (overviewGrid) overviewGrid.innerHTML = '<div style="color: #9CA3AF; padding: 1.5rem 0;">No active playback titles found.</div>';
+        if (empty) empty.style.display = 'block';
+        return;
+      }
+
+      if (empty) empty.style.display = 'none';
+
+      const cardsHtml = recent.map(item => Components.createContinueCard(item)).join('');
+      if (fullGrid) fullGrid.innerHTML = cardsHtml;
+      if (overviewGrid) overviewGrid.innerHTML = recent.slice(0, 4).map(item => Components.createContinueCard(item)).join('');
+    }
+
+    // ── 5. Recently Viewed & History Loader ──
+    async function loadRecentlyViewed() {
+      let items = [];
+      try {
+        const raw = localStorage.getItem('univault_recent_history');
+        items = raw ? JSON.parse(raw) : [];
+      } catch {
+        items = [];
+      }
+
+      const recentGrid = document.getElementById('profileRecentGrid');
+      const historyGrid = document.getElementById('profileHistoryGrid');
+      const emptyRecent = document.getElementById('emptyRecent');
+      const statRecentCount = document.getElementById('statRecentCount');
+
+      if (statRecentCount) statRecentCount.textContent = items.length;
+
+      if (items.length === 0) {
+        if (recentGrid) recentGrid.innerHTML = '';
+        if (historyGrid) historyGrid.innerHTML = '<div style="color: #9CA3AF; padding: 2rem;">No watch history recorded.</div>';
+        if (emptyRecent) emptyRecent.style.display = 'block';
+        return;
+      }
+
+      if (emptyRecent) emptyRecent.style.display = 'none';
+      if (recentGrid) recentGrid.innerHTML = items.map(item => Components.createMovieCard(item)).join('');
+      if (historyGrid) historyGrid.innerHTML = items.map(item => Components.createContinueCard(item)).join('');
+    }
+
+    // ── 6. Clear History Actions ──
+    const clearRecentBtn = document.getElementById('clearRecentBtn');
+    const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+
+    function handleClearHistory() {
+      if (confirm('Are you sure you want to clear your entire watch history?')) {
+        localStorage.removeItem('univault_recent_history');
+        
+        // Sync with backend
+        if (window.UniVaultAuth && window.UniVaultAuth.isAuthenticated()) {
+          const token = window.UniVaultAuth.getToken();
+          const deleteUrl = window.getUniVaultApiUrl ? window.getUniVaultApiUrl('/api/user/recently-viewed') : '/api/user/recently-viewed';
+          fetch(deleteUrl, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } }).catch(() => {});
+        }
+
+        Components.showToast('Watch history cleared ✓');
+        loadContinueWatching();
+        loadRecentlyViewed();
+      }
+    }
+
+    if (clearRecentBtn) clearRecentBtn.addEventListener('click', handleClearHistory);
+    if (clearHistoryBtn) clearHistoryBtn.addEventListener('click', handleClearHistory);
+
+    // ── 7. Edit Profile Modal ──
+    const editModal = document.getElementById('editModalBackdrop');
+    const openEditBtn = document.getElementById('openEditProfileBtn');
+    const cancelEditBtn = document.getElementById('cancelEditBtn');
+    const saveProfileBtn = document.getElementById('saveProfileBtn');
+    const editNameInput = document.getElementById('editNameInput');
+
+    window.openEditModal = function() {
+      const user = window.UniVaultAuth ? window.UniVaultAuth.getUser() : {};
+      if (editNameInput) editNameInput.value = user.name || '';
+      if (editModal) editModal.style.display = 'flex';
+    };
+
+    if (openEditBtn) openEditBtn.addEventListener('click', openEditModal);
+    if (cancelEditBtn && editModal) cancelEditBtn.addEventListener('click', () => editModal.style.display = 'none');
+
+    document.querySelectorAll('.avatar-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.avatar-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selectedAvatarEmoji = btn.getAttribute('data-avatar');
+      });
+    });
+
+    if (saveProfileBtn) {
+      saveProfileBtn.addEventListener('click', async () => {
+        const newName = editNameInput ? editNameInput.value.trim() : '';
+        if (!newName) {
+          Components.showToast('Please enter a valid name');
+          return;
+        }
+
+        try {
+          const token = window.UniVaultAuth ? window.UniVaultAuth.getToken() : null;
+          const updateUrl = window.getUniVaultApiUrl ? window.getUniVaultApiUrl('/api/user/profile') : '/api/user/profile';
+
+          const res = await fetch(updateUrl, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ name: newName, avatar: selectedAvatarEmoji })
+          });
+
+          const data = await res.json();
+          if (res.ok && data.success) {
+            localStorage.setItem('univault_user_avatar', selectedAvatarEmoji);
+            const cur = window.UniVaultAuth.getUser() || {};
+            cur.name = newName;
+            cur.avatar = selectedAvatarEmoji;
+            localStorage.setItem('univault_user', JSON.stringify(cur));
+
+            Components.showToast('Profile updated successfully ✓');
+            if (editModal) editModal.style.display = 'none';
+            loadUserProfile();
+          } else {
+            Components.showToast(data.message || 'Failed to update profile');
+          }
+        } catch (e) {
+          Components.showToast('Profile updated locally ✓');
+          localStorage.setItem('univault_user_avatar', selectedAvatarEmoji);
+          if (editModal) editModal.style.display = 'none';
+          loadUserProfile();
+        }
+      });
+    }
+
+    // ── 8. Logout Confirmation Modal ──
+    const logoutModal = document.getElementById('logoutModalBackdrop');
+    const openLogoutBtn = document.getElementById('openLogoutModalBtn');
+    const cancelLogoutBtn = document.getElementById('cancelLogoutBtn');
+    const confirmLogoutBtn = document.getElementById('confirmLogoutBtn');
+
+    if (openLogoutBtn && logoutModal) {
+      openLogoutBtn.addEventListener('click', () => logoutModal.style.display = 'flex');
+    }
+    if (cancelLogoutBtn && logoutModal) {
+      cancelLogoutBtn.addEventListener('click', () => logoutModal.style.display = 'none');
+    }
+    if (confirmLogoutBtn) {
+      confirmLogoutBtn.addEventListener('click', () => {
+        if (window.UniVaultAuth) {
+          window.UniVaultAuth.logout();
+        } else {
+          localStorage.clear();
+          window.location.href = 'login.html';
+        }
+      });
+    }
+
+    // ── 9. Initialize Page on Load ──
+    document.addEventListener('DOMContentLoaded', () => {
+      Components.renderNavbar('profile');
+      Components.renderFooter();
+      loadUserProfile();
+    });
+  </script>
 </body>
 </html>

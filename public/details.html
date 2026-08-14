@@ -4,329 +4,69 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Title Details — UniVault 4K</title>
-  <meta name="description" content="Watch trailers, cast information, synopsis, and details in 4K Ultra HD on UniVault.">
+  <meta name="description" content="View synopsis, cast, trailers, episodes, and similar titles in 4K on UniVault.">
   
-  <!-- Favicon -->
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
-  
-  <!-- CSS Stylesheets -->
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="images/logo.png" type="image/png">
+  <link rel="stylesheet" href="css/netflix-theme.css">
   <link rel="stylesheet" href="css/navbar.css">
-  <link rel="stylesheet" href="css/cards.css">
+  <style>
+    .details-hero {
+      position: relative;
+      min-height: clamp(520px, 75vh, 780px);
+      display: flex;
+      align-items: flex-end;
+      padding: clamp(2rem, 5vw, 4rem);
+      padding-bottom: 3.5rem;
+      background: var(--bg-canvas);
+    }
+  </style>
 </head>
 <body>
-  <!-- Skip to Main Content Accessibility Link -->
-  <a href="#mainContent" class="skip-to-main">Skip to main content</a>
 
-  <!-- ══════════════════════════════════════════════════════ NAVBAR ══ -->
-  <header class="navbar" id="navbar" role="banner">
-    <div class="nav-inner">
+  <!-- Global Navbar -->
+  <header class="navbar" id="globalNavbar" role="banner"></header>
 
-      <!-- Brand -->
-      <a href="index.html" class="nav-brand" aria-label="UniVault – Go to homepage">
-        <span class="nav-logo-badge" aria-hidden="true">U</span>
-        <span class="nav-brand-name">UniVault</span>
-      </a>
+  <main class="app-container" role="main">
 
-      <!-- Desktop Links -->
-      <ul class="nav-links-desktop" role="list" aria-label="Main navigation">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="trailers.html">Trailers</a></li>
-        <li><a href="movies.html">Movies</a></li>
-        <li><a href="tv-shows.html">TV Shows</a></li>
-        <li><a href="anime.html">Anime</a></li>
-        <li class="nav-dropdown" id="genreNav">
-          <a href="#" class="nav-dropdown-toggle" id="genreToggle" aria-haspopup="true" aria-expanded="false">
-            Genres <span class="dropdown-arrow" aria-hidden="true">▾</span>
-          </a>
-          <ul class="nav-dropdown-menu" id="genreDropdown" role="menu">
-            <li role="menuitem"><a href="movies.html?genre=28"><span class="genre-icon">🎬</span>Action</a></li>
-            <li role="menuitem"><a href="movies.html?genre=878"><span class="genre-icon">🚀</span>Sci-Fi</a></li>
-            <li role="menuitem"><a href="movies.html?genre=27"><span class="genre-icon">💀</span>Horror</a></li>
-            <li role="menuitem"><a href="movies.html?genre=35"><span class="genre-icon">😂</span>Comedy</a></li>
-            <li class="dropdown-divider" role="separator"></li>
-            <li role="menuitem"><a href="trailers.html"><span class="genre-icon">🎬</span>Trailers</a></li>
-            <li role="menuitem"><a href="anime.html"><span class="genre-icon">⛩️</span>Anime</a></li>
-            <li role="menuitem"><a href="tv-shows.html"><span class="genre-icon">📺</span>Drama</a></li>
-            <li role="menuitem"><a href="tv-shows.html"><span class="genre-icon">🔍</span>Crime</a></li>
-            <li role="menuitem"><a href="movies.html"><span class="genre-icon">🏆</span>Documentary</a></li>
-          </ul>
-        </li>
-      </ul>
+    <!-- Details Main Hero & Synopsis -->
+    <section class="details-hero" id="detailsHero" aria-label="Media Details">
+      <div class="skeleton-shimmer skeleton-hero"></div>
+    </section>
 
-      <!-- Desktop Right Actions -->
-      <div class="nav-actions-right">
-        <a href="search.html" class="nav-search-btn" aria-label="Search">
-          <span aria-hidden="true">🔍</span>
-          <span class="nav-search-label">Search</span>
-        </a>
-        <a href="login.html" class="nav-signin-btn">Sign In</a>
-        <a href="profile.html" class="nav-profile-btn" aria-label="Your profile">A</a>
+    <div class="content-wrapper">
 
-        <button class="hamburger" id="hamburger"
-                aria-label="Open navigation menu"
-                aria-expanded="false"
-                aria-controls="navDrawer">
-          <span class="hamburger-bar"></span>
-          <span class="hamburger-bar"></span>
-          <span class="hamburger-bar"></span>
-        </button>
-      </div>
+      <!-- Top Billed Cast Section -->
+      <section class="section-container" id="detailsCastSection">
+        <div class="section-header">
+          <h2 class="section-title">Top Billed Cast</h2>
+        </div>
+        <div class="netflix-carousel-wrapper">
+          <div class="netflix-carousel-track" id="detailsCastTrack" style="gap: 1.25rem; padding-bottom: 1rem;">
+            <!-- Cast populated dynamically -->
+          </div>
+        </div>
+      </section>
+
+      <!-- TV Seasons & Episodes Section (TV Only) -->
+      <section class="section-container" id="tvEpisodesSection" style="display: none;"></section>
+
+      <!-- Similar Titles Carousel -->
+      <section id="carouselSimilar" aria-label="Similar Titles"></section>
+
+      <!-- Recommendations Carousel -->
+      <section id="carouselRecommendations" aria-label="More Like This"></section>
 
     </div>
-  </header>
 
-  <!-- Mobile Drawer -->
-  <nav class="nav-drawer" id="navDrawer" aria-label="Mobile navigation" aria-hidden="true">
-    <p class="nav-drawer-label">Browse</p>
-    <ul class="nav-drawer-links" role="list">
-      <li><a href="index.html"><span class="link-icon" aria-hidden="true">🏠</span>Home</a></li>
-      <li><a href="trailers.html"><span class="link-icon" aria-hidden="true">🎬</span>Trailers</a></li>
-      <li><a href="movies.html"><span class="link-icon" aria-hidden="true">🎬</span>Movies</a></li>
-      <li><a href="tv-shows.html"><span class="link-icon" aria-hidden="true">📺</span>TV Shows</a></li>
-      <li><a href="anime.html"><span class="link-icon" aria-hidden="true">⛩️</span>Anime</a></li>
-      <li><a href="watchlist.html"><span class="link-icon" aria-hidden="true">🔖</span>Watchlist</a></li>
-    </ul>
-    <div class="nav-drawer-divider"></div>
-    <div class="nav-drawer-auth">
-      <a href="login.html" class="signin-link">Sign In</a>
-      <a href="signup.html" class="signup-link">Get Started</a>
-    </div>
-  </nav>
-
-  <!-- Backdrop Overlay -->
-  <div class="nav-overlay" id="navOverlay" aria-hidden="true"></div>
-
-  <!-- ═══════════════════════════════════════════ MAIN CONTENT ══ -->
-  <main class="main-content" id="mainContent">
-    <div class="container" id="detailsContainer">
-
-      <!-- 1. Cinematic Hero Section -->
-      <section class="details-hero" id="detailsHeroSection">
-        <div class="details-backdrop-layer" id="detailsBackdrop"></div>
-        <div class="details-gradient-layer"></div>
-
-        <div class="details-hero-inner">
-          <!-- Breadcrumbs -->
-          <nav class="details-breadcrumbs" aria-label="Breadcrumbs">
-            <a href="index.html">Home</a>
-            <span class="details-breadcrumbs-sep">/</span>
-            <a href="movies.html" id="breadcrumbCatalog">Catalog</a>
-            <span class="details-breadcrumbs-sep">/</span>
-            <span id="breadcrumbTitle" style="color: #ffffff;">Loading…</span>
-          </nav>
-
-          <!-- Main Details Layout Grid -->
-          <div class="details-content-grid">
-            <!-- Poster -->
-            <div class="details-poster-wrap" id="detailsPosterWrap">
-              <div class="skeleton" style="width: 100%; height: 100%;" id="detailsPosterSkeleton"></div>
-              <img src="" alt="Poster" class="details-poster-img" id="detailsPoster" style="display: none;">
-            </div>
-
-            <!-- Details Info Column -->
-            <div class="details-info-column">
-              <div class="details-badge-row">
-                <span class="card-badge badge-accent" id="detailsTypeBadge">MEDIA</span>
-                <span class="status-pill" id="detailsStatusPill"><span class="dot-indicator"></span> 4K Ultra HD</span>
-              </div>
-
-              <h1 class="details-main-title" id="detailsTitle">Loading Title…</h1>
-              <div class="details-original-title" id="detailsOriginalTitle" style="display: none;"></div>
-              <p class="details-tagline" id="detailsTagline" style="display: none;"></p>
-
-              <!-- Meta Chips (Rating, Votes, Year, Runtime) -->
-              <div class="details-meta-chips">
-                <div class="details-rating-box">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="#F5C842" stroke="none">
-                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-                  </svg>
-                  <span id="detailsRating">—</span>
-                  <span class="details-vote-count" id="detailsVoteCount"></span>
-                </div>
-                <span class="details-year-chip" id="detailsYear">—</span>
-                <span class="details-runtime-chip" id="detailsRuntime">—</span>
-              </div>
-
-              <!-- Overview Paragraph -->
-              <p class="details-overview-text" id="detailsOverview">
-                Fetching synopsis and production metadata from TMDB…
-              </p>
-
-              <!-- Action Buttons -->
-              <div class="details-actions-row">
-                <button class="btn-details-play" id="detailsPlayBtn">
-                  <span>▶</span> Watch Trailer
-                </button>
-                <button class="btn-details-watchlist" id="detailsWatchlistBtn">
-                  <span class="btn-icon">🔖</span>
-                  <span class="btn-text">Add to Watchlist</span>
-                </button>
-                <button class="btn-details-share" id="detailsShareBtn" aria-label="Share title">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
-                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
-                  </svg>
-                  <span>Share</span>
-                </button>
-              </div>
-
-              <!-- Facts Meta Grid (Genres, Languages, Countries, Production) -->
-              <div class="details-facts-grid">
-                <div class="details-fact-item">
-                  <span class="details-fact-label">Genres</span>
-                  <div class="details-genre-pills" id="detailsGenres">
-                    <span class="details-fact-value">—</span>
-                  </div>
-                </div>
-                <div class="details-fact-item">
-                  <span class="details-fact-label">Languages</span>
-                  <span class="details-fact-value" id="detailsLanguages">—</span>
-                </div>
-                <div class="details-fact-item">
-                  <span class="details-fact-label">Countries</span>
-                  <span class="details-fact-value" id="detailsCountries">—</span>
-                </div>
-                <div class="details-fact-item">
-                  <span class="details-fact-label">Release Date</span>
-                  <span class="details-fact-value" id="detailsReleaseDate">—</span>
-                </div>
-              </div>
-
-              <!-- Production Companies -->
-              <div id="detailsCompaniesWrap" style="display: none; margin-top: 0.5rem;">
-                <span class="details-fact-label" style="display: block; margin-bottom: 0.5rem;">Production Companies</span>
-                <div class="details-companies-row" id="detailsCompanies"></div>
-              </div>
-
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 2. Cast Section -->
-      <section class="content-section anim-fade-up" id="castSection" style="margin-bottom: 3.5rem;">
-        <div class="section-header">
-          <div class="section-heading">
-            <h2 class="section-title">🎭 Top Billed Cast</h2>
-            <p class="section-subtitle">Lead stars and performers</p>
-          </div>
-        </div>
-        <div class="cast-track" id="detailsCastTrack">
-          <!-- Populated dynamically with cast cards -->
-        </div>
-      </section>
-
-      <!-- 3. Key Crew Section -->
-      <section class="content-section anim-fade-up" id="crewSection" style="margin-bottom: 3.5rem;">
-        <div class="section-header">
-          <div class="section-heading">
-            <h2 class="section-title">🎬 Key Crew & Directors</h2>
-            <p class="section-subtitle">The creative minds behind the production</p>
-          </div>
-        </div>
-        <div class="crew-grid" id="detailsCrewGrid">
-          <!-- Populated dynamically with crew cards -->
-        </div>
-      </section>
-
-      <!-- 4. Similar Titles Section -->
-      <section class="content-section anim-fade-up" id="similarSection" style="margin-bottom: 3.5rem;">
-        <div class="section-header">
-          <div class="section-heading">
-            <h2 class="section-title">✨ Similar Titles</h2>
-            <p class="section-subtitle">You might also enjoy these related productions</p>
-          </div>
-          <div class="carousel-nav-controls">
-            <button class="carousel-btn carousel-prev" data-target="detailsSimilarTrack" aria-label="Previous">‹</button>
-            <button class="carousel-btn carousel-next" data-target="detailsSimilarTrack" aria-label="Next">›</button>
-          </div>
-        </div>
-        <div class="carousel-track" id="detailsSimilarTrack">
-          <!-- Populated dynamically with reusable cards -->
-        </div>
-      </section>
-
-      <!-- 5. Recommendations Section -->
-      <section class="content-section anim-fade-up" id="recommendationsSection" style="margin-bottom: 3.5rem;">
-        <div class="section-header">
-          <div class="section-heading">
-            <h2 class="section-title">🎯 Recommended for You</h2>
-            <p class="section-subtitle">Handpicked recommendations based on this title</p>
-          </div>
-          <div class="carousel-nav-controls">
-            <button class="carousel-btn carousel-prev" data-target="detailsRecsTrack" aria-label="Previous">‹</button>
-            <button class="carousel-btn carousel-next" data-target="detailsRecsTrack" aria-label="Next">›</button>
-          </div>
-        </div>
-        <div class="carousel-track" id="detailsRecsTrack">
-          <!-- Populated dynamically with reusable cards -->
-        </div>
-      </section>
-
-    </div>
   </main>
 
-  <!-- ── Universal Trailer Player Modal ── -->
-  <div class="hero-modal-backdrop univault-trailer-modal" id="heroTrailerModal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Trailer Video Player">
-    <div class="hero-modal-content univault-trailer-content">
-      <div class="hero-modal-header">
-        <div class="hero-modal-title">
-          <span>🎬</span>
-          <span class="hero-modal-title-text" id="heroTrailerTitle">Watch Trailer</span>
-          <span class="hero-modal-badge" id="heroTrailerBadge">Official Trailer</span>
-        </div>
-        <button class="hero-modal-close univault-trailer-close" id="closeHeroTrailerModal" aria-label="Close trailer player">&times;</button>
-      </div>
-      <div class="hero-video-ratio" id="heroTrailerRatioWrap">
-        <div class="hero-modal-loading" id="heroTrailerLoading" style="display: none;">
-          <div class="hero-modal-spinner"></div>
-          <p class="hero-modal-loading-text" id="heroTrailerLoadingText">Loading trailer...</p>
-        </div>
-        <div class="hero-modal-error" id="heroTrailerError" style="display: none;">
-          <div class="hero-modal-error-icon">🎬</div>
-          <h3 class="hero-modal-error-title" id="heroTrailerErrorTitle">Trailer unavailable</h3>
-          <p class="hero-modal-error-desc" id="heroTrailerErrorDesc">Sorry, no official YouTube trailer is currently available for this title in the TMDB catalog.</p>
-          <div class="hero-modal-error-actions">
-            <a id="heroTrailerFallbackBtn" href="#" target="_blank" rel="noopener noreferrer" class="hero-modal-fallback-btn">
-              <span>▶</span> Watch on YouTube
-            </a>
-            <button type="button" class="hero-modal-fallback-close" id="heroTrailerErrorCloseBtn">Close</button>
-          </div>
-        </div>
-      </div>
-      <div class="hero-modal-footer" id="heroTrailerFooter">
-        <span style="color: #71717a; font-size: 0.8rem;">Powered by TMDB & YouTube Player API</span>
-        <a id="heroTrailerDirectYtLink" href="#" target="_blank" rel="noopener noreferrer" class="hero-modal-yt-link" style="display: none;">
-          <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" style="vertical-align: middle;"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-          <span>Watch on YouTube ↗</span>
-        </a>
-      </div>
-    </div>
-  </div>
-
-  <!-- ── Toast Notification ── -->
-  <div class="details-toast" id="shareToast">
-    <span>✓</span> Link copied to clipboard!
-  </div>
-
-  <!-- ══════════════════════════════════════════════════════ FOOTER ══ -->
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-bottom">
-        <span>© 2026 UniVault Inc. All rights reserved. Powered by TMDB API.</span>
-        <div class="footer-legal">
-          <a href="#">Privacy</a><a href="#">Terms</a>
-        </div>
-      </div>
-    </div>
-  </footer>
+  <!-- Global Footer -->
+  <footer class="netflix-footer" id="globalFooter" role="contentinfo"></footer>
 
   <!-- Scripts -->
   <script src="js/auth.js"></script>
-  <script src="js/script.js"></script>
-  <script src="js/cards.js"></script>
+  <script src="js/tmdb-api.js"></script>
+  <script src="js/components.js"></script>
   <script src="js/app.js"></script>
-  <script src="js/navbar.js"></script>
 </body>
 </html>

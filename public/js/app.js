@@ -1,23 +1,791 @@
 /**
- * UniVault — Core Application Script (app.js)
- * Navigation logic lives in navbar.js — do not duplicate here.
+ * ===========================================================================
+ * UniVault — Main Platform Application Controller (app.js)
+ * ===========================================================================
+ * Orchestrates pages, data loading from TMDB_API, and rendering via Components.
  */
 
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('✨ [UniVault] App initialized');
-    pingHealth();
-});
+(function (global) {
+  'use strict';
 
-/** Ping backend health endpoint */
-async function pingHealth() {
-    try {
-        const apiUrl = (typeof getUniVaultApiUrl === 'function') ? getUniVaultApiUrl('/api/health') : '/api/health';
-        const res = await fetch(apiUrl);
-        if (res.ok) {
-            const data = await res.json();
-            console.log('🟢 [UniVault API]:', data.status, '@', data.timestamp);
-        }
-    } catch {
-        console.warn('⚠️ [UniVault]: Running in static/offline mode.');
+  document.addEventListener('DOMContentLoaded', async () => {
+    const path = window.location.pathname.toLowerCase();
+    const page = path.split('/').filter(Boolean).pop() || 'index.html';
+
+    // ── 1. Route Dispatcher ──────────────────────────────────────────────────
+    if (page === 'index.html' || page === '' || page === '/') {
+      initHomePage();
+    } else if (page === 'movies.html') {
+      initMoviesPage();
+    } else if (page === 'tv-shows.html') {
+      initTVShowsPage();
+    } else if (page === 'anime.html') {
+      initAnimePage();
+    } else if (page === 'search.html') {
+      initSearchPage();
+    } else if (page === 'details.html') {
+      initDetailsPage();
+    } else if (page === 'watchlist.html') {
+      initWatchlistPage();
+    } else if (page === 'trailers.html' || page === 'trending.html') {
+      initTrendingPage();
     }
-}
+  });
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // 1. HOMEPAGE CONTROLLER
+  // ═══════════════════════════════════════════════════════════════════════════
+  async function initHomePage() {
+    Components.renderNavbar('home');
+    Components.renderCategory3BarNav('category3BarNav', 'home');
+    Components.renderFooter();
+
+    // Show initial skeleton loaders
+    Components.createSkeletonCarousel('carouselTrending', 6);
+    Components.createSkeletonCarousel('carouselPopularMovies', 6);
+    Components.createSkeletonCarousel('carouselPopularTV', 6);
+    Components.createSkeletonCarousel('carouselTopRated', 6);
+    Components.createSkeletonCarousel('carouselAnime', 6);
+
+    try {
+      // 1. Fetch Trending Items & Hero
+      const trending = await TMDB_API.getTrending('all', 'day');
+      if (trending && trending.length > 0) {
+        setupHeroBanner(trending[0]);
+        // Trending Top 10 Ranked Row
+        Components.createCarousel('carouselTrending', 'Trending Now', trending.slice(0, 10), true);
+      }
+
+      // 2. Continue Watching Row (from recent views)
+      setupContinueWatchingRow();
+
+      // 3. Parallel Fetch for All Sections
+      const [popularMovies, popularTV, topRated, anime, nowPlaying, actionMovies, comedyMovies, horrorMovies, scifiMovies] = await Promise.all([
+        TMDB_API.getPopularMovies(1),
+        TMDB_API.getPopularTV(1),
+        TMDB_API.getTopRatedMovies(1),
+        TMDB_API.getAnime('popular', 1),
+        TMDB_API.getNowPlayingMovies(1),
+        TMDB_API.getGenreContent('movie', 28, 1),
+        TMDB_API.getGenreContent('movie', 35, 1),
+        TMDB_API.getGenreContent('movie', 27, 1),
+        TMDB_API.getGenreContent('movie', 878, 1)
+      ]);
+
+      Components.createCarousel('carouselPopularMovies', 'Popular Movies', popularMovies, false, 'movies.html');
+      Components.createCarousel('carouselPopularTV', 'Popular TV Shows', popularTV, false, 'tv-shows.html');
+      Components.createCarousel('carouselAnime', 'Anime Spotlight', anime, false, 'anime.html');
+      Components.createCarousel('carouselTopRated', 'Top Rated on UniVault', topRated, false);
+      Components.createCarousel('carouselNewReleases', 'New Releases', nowPlaying, false);
+      Components.createCarousel('carouselAction', 'High-Octane Action', actionMovies, false);
+      Components.createCarousel('carouselComedy', 'Comedy & Laughs', comedyMovies, false);
+      Components.createCarousel('carouselHorror', 'Thrills & Chills', horrorMovies, false);
+      Components.createCarousel('carouselSciFi', 'Sci-Fi & Cyberpunk', scifiMovies, false);
+
+    } catch (err) {
+      console.error('[HomePage Init Error]:', err);
+    }
+  }
+
+  function setupHeroBanner(item) {
+    const heroEl = document.getElementById('netflixHero');
+    if (!heroEl || !item) return;
+
+    const id = item.id;
+    const mediaType = item.media_type || 'movie';
+    const title = item.title || item.name || 'Featured Title';
+    const overview = item.overview || 'Stream this title in 4K Ultra HD on UniVault.';
+    const rating = TMDB_API.formatRating(item.vote_average);
+    const year = TMDB_API.formatYear(item.release_date || item.first_air_date);
+    const backdrop = TMDB_API.getBackdropUrl(item.backdrop_path, 'original');
+    const genres = TMDB_API.getGenreNames(item.genre_ids, mediaType).slice(0, 3).join(' • ') || 'Action • 4K';
+    const isSaved = Components.isInWatchlist(id, mediaType);
+
+    heroEl.innerHTML = `
+      <div class="hero-backdrop-wrapper">
+        <img src="${backdrop}" alt="${escapeHTML(title)}" class="hero-backdrop-img" id="heroBackdropImg">
+        <div class="hero-gradient-overlay"></div>
+      </div>
+      <div class="hero-content">
+        <div class="hero-pill-tag">🔥 Featured on UniVault</div>
+        <h1 class="hero-title">${escapeHTML(title)}</h1>
+        <div class="hero-meta-row">
+          <span class="hero-rating-badge">★ ${rating}</span>
+          <span class="hero-quality-badge">4K ULTRA HD</span>
+          <span class="hero-quality-badge">HDR10+</span>
+          <span>${year}</span>
+          <span>•</span>
+          <span>${genres}</span>
+        </div>
+        <p class="hero-overview">${escapeHTML(overview)}</p>
+        <div class="hero-actions">
+          <button 
+            type="button" 
+            class="btn-netflix btn-netflix-primary" 
+            id="heroWatchBtn"
+            onclick="Components.openTrailerModal('${mediaType}', ${id}, '${escapeQuotes(title)}')"
+          >
+            ▶ Watch Trailer
+          </button>
+          <button 
+            type="button" 
+            class="btn-netflix btn-netflix-secondary" 
+            id="heroListBtn"
+          >
+            ${isSaved ? '✓ In My List' : '+ My List'}
+          </button>
+          <a href="details.html?type=${mediaType}&id=${id}" class="btn-netflix btn-netflix-secondary">
+            ℹ More Info
+          </a>
+        </div>
+      </div>
+    `;
+
+    const heroListBtn = document.getElementById('heroListBtn');
+    if (heroListBtn) {
+      heroListBtn.addEventListener('click', () => {
+        Components.toggleWatchlistButton(null, item);
+        const nowSaved = Components.isInWatchlist(id, mediaType);
+        heroListBtn.textContent = nowSaved ? '✓ In My List' : '+ My List';
+      });
+    }
+  }
+
+  function setupContinueWatchingRow() {
+    const container = document.getElementById('carouselContinueWatching');
+    if (!container) return;
+
+    let recent = [];
+    try {
+      const raw = localStorage.getItem('univault_recent_history');
+      recent = raw ? JSON.parse(raw) : [];
+    } catch {
+      recent = [];
+    }
+
+    if (!recent || recent.length === 0) {
+      container.style.display = 'none';
+      return;
+    }
+
+    container.style.display = 'block';
+    container.className = 'section-container';
+    container.innerHTML = `
+      <div class="section-header">
+        <h2 class="section-title">Continue Watching for You</h2>
+      </div>
+      <div class="netflix-carousel-wrapper">
+        <button type="button" class="carousel-btn left">‹</button>
+        <div class="netflix-carousel-track" id="continue_track">
+          ${recent.slice(0, 8).map(item => Components.createContinueCard(item)).join('')}
+        </div>
+        <button type="button" class="carousel-btn right">›</button>
+      </div>
+    `;
+
+    const track = document.getElementById('continue_track');
+    const leftBtn = container.querySelector('.carousel-btn.left');
+    const rightBtn = container.querySelector('.carousel-btn.right');
+    if (track && leftBtn && rightBtn) {
+      leftBtn.addEventListener('click', () => track.scrollBy({ left: -track.clientWidth * 0.75, behavior: 'smooth' }));
+      rightBtn.addEventListener('click', () => track.scrollBy({ left: track.clientWidth * 0.75, behavior: 'smooth' }));
+    }
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // 2. MOVIES PAGE CONTROLLER
+  // ═══════════════════════════════════════════════════════════════════════════
+  async function initMoviesPage() {
+    Components.renderNavbar('movies');
+    Components.renderCategory3BarNav('category3BarNav', 'movies');
+    Components.renderFooter();
+
+    const grid = document.getElementById('moviesGrid');
+    const filterPills = document.querySelectorAll('.filter-pill[data-genre]');
+    const sortSelect = document.getElementById('movieSortSelect');
+    let currentGenre = 'all';
+    let currentSort = 'popularity.desc';
+    let currentPage = 1;
+
+    async function loadMovies() {
+      Components.createSkeletonGrid('moviesGrid', 18);
+      try {
+        let movies = [];
+        if (currentGenre === 'all') {
+          if (currentSort === 'vote_average.desc') {
+            movies = await TMDB_API.getTopRatedMovies(currentPage);
+          } else if (currentSort === 'primary_release_date.desc') {
+            movies = await TMDB_API.getNowPlayingMovies(currentPage);
+          } else {
+            movies = await TMDB_API.getPopularMovies(currentPage);
+          }
+        } else {
+          movies = await TMDB_API.getGenreContent('movie', currentGenre, currentPage, currentSort);
+        }
+
+        if (grid) {
+          if (movies && movies.length > 0) {
+            grid.innerHTML = movies.map(m => Components.createMovieCard(m)).join('');
+          } else {
+            grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 4rem; color: #9CA3AF;">No movies found for this filter.</div>`;
+          }
+        }
+      } catch (err) {
+        console.error('Movies load error:', err);
+      }
+    }
+
+    filterPills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        filterPills.forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        currentGenre = pill.getAttribute('data-genre');
+        currentPage = 1;
+        loadMovies();
+      });
+    });
+
+    if (sortSelect) {
+      sortSelect.addEventListener('change', () => {
+        currentSort = sortSelect.value;
+        currentPage = 1;
+        loadMovies();
+      });
+    }
+
+    loadMovies();
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // 3. TV SHOWS PAGE CONTROLLER
+  // ═══════════════════════════════════════════════════════════════════════════
+  async function initTVShowsPage() {
+    Components.renderNavbar('tv');
+    Components.renderCategory3BarNav('category3BarNav', 'tv');
+    Components.renderFooter();
+
+    const grid = document.getElementById('tvGrid');
+    const filterPills = document.querySelectorAll('.filter-pill[data-genre]');
+    const sortSelect = document.getElementById('tvSortSelect');
+    let currentGenre = 'all';
+    let currentSort = 'popularity.desc';
+    let currentPage = 1;
+
+    async function loadTV() {
+      Components.createSkeletonGrid('tvGrid', 18);
+      try {
+        let shows = [];
+        if (currentGenre === 'all') {
+          if (currentSort === 'vote_average.desc') {
+            shows = await TMDB_API.getTopRatedTV(currentPage);
+          } else {
+            shows = await TMDB_API.getPopularTV(currentPage);
+          }
+        } else {
+          shows = await TMDB_API.getGenreContent('tv', currentGenre, currentPage, currentSort);
+        }
+
+        if (grid) {
+          if (shows && shows.length > 0) {
+            grid.innerHTML = shows.map(s => Components.createMovieCard(s)).join('');
+          } else {
+            grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 4rem; color: #9CA3AF;">No shows found for this filter.</div>`;
+          }
+        }
+      } catch (err) {
+        console.error('TV load error:', err);
+      }
+    }
+
+    filterPills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        filterPills.forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        currentGenre = pill.getAttribute('data-genre');
+        currentPage = 1;
+        loadTV();
+      });
+    });
+
+    if (sortSelect) {
+      sortSelect.addEventListener('change', () => {
+        currentSort = sortSelect.value;
+        currentPage = 1;
+        loadTV();
+      });
+    }
+
+    loadTV();
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // 4. ANIME PAGE CONTROLLER
+  // ═══════════════════════════════════════════════════════════════════════════
+  async function initAnimePage() {
+    Components.renderNavbar('anime');
+    Components.renderCategory3BarNav('category3BarNav', 'anime');
+    Components.renderFooter();
+
+    Components.createSkeletonCarousel('carouselAnimeTrending', 6);
+    Components.createSkeletonCarousel('carouselAnimeAction', 6);
+    Components.createSkeletonCarousel('carouselAnimeFantasy', 6);
+    Components.createSkeletonCarousel('carouselAnimeTopRated', 6);
+
+    try {
+      const [trending, action, fantasy, topRated] = await Promise.all([
+        TMDB_API.getAnime('popular', 1),
+        TMDB_API.getAnime('action', 1),
+        TMDB_API.getAnime('fantasy', 1),
+        TMDB_API.getAnime('top_rated', 1)
+      ]);
+
+      Components.createCarousel('carouselAnimeTrending', 'Trending Anime Series', trending, false);
+      Components.createCarousel('carouselAnimeAction', 'Shonen & Action Anime', action, false);
+      Components.createCarousel('carouselAnimeFantasy', 'Fantasy & Supernatural Anime', fantasy, false);
+      Components.createCarousel('carouselAnimeTopRated', 'Masterpiece Anime (Top Rated)', topRated, false);
+
+      const heroEl = document.getElementById('animeHero');
+      if (heroEl && trending.length > 0) {
+        setupHeroBanner(trending[0]);
+      }
+    } catch (err) {
+      console.error('Anime load error:', err);
+    }
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // 5. SEARCH PAGE CONTROLLER
+  // ═══════════════════════════════════════════════════════════════════════════
+  async function initSearchPage() {
+    Components.renderNavbar('search');
+    Components.renderFooter();
+
+    const searchInput = document.getElementById('pageSearchInput');
+    const searchGrid = document.getElementById('searchResultsGrid');
+    const filterTabs = document.querySelectorAll('.search-filter-tab');
+    const statusEl = document.getElementById('searchStatusText');
+
+    let currentQuery = '';
+    let currentFilter = 'all'; // all, movie, tv, anime
+    let rawResults = [];
+    let debounceTimer = null;
+
+    // Parse initial URL query parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialQuery = urlParams.get('q') || '';
+
+    if (searchInput && initialQuery) {
+      searchInput.value = initialQuery;
+      currentQuery = initialQuery;
+      performSearch(initialQuery);
+    }
+
+    if (searchInput) {
+      searchInput.addEventListener('input', () => {
+        const q = searchInput.value.trim();
+        currentQuery = q;
+        if (debounceTimer) clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+          performSearch(q);
+        }, 300);
+      });
+    }
+
+    filterTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        filterTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentFilter = tab.getAttribute('data-type');
+        renderFilteredResults();
+      });
+    });
+
+    async function performSearch(query) {
+      if (!query) {
+        if (statusEl) statusEl.textContent = 'Explore thousands of movies, TV shows, and anime';
+        if (searchGrid) searchGrid.innerHTML = '';
+        return;
+      }
+
+      if (statusEl) statusEl.textContent = `Searching for "${query}"…`;
+      Components.createSkeletonGrid('searchResultsGrid', 12);
+
+      try {
+        const results = await TMDB_API.searchMulti(query);
+        rawResults = results.filter(item => item.poster_path || item.backdrop_path);
+        renderFilteredResults();
+      } catch (err) {
+        console.error('Search error:', err);
+        if (statusEl) statusEl.textContent = 'Unable to fetch search results.';
+      }
+    }
+
+    function renderFilteredResults() {
+      if (!searchGrid) return;
+
+      let filtered = rawResults;
+      if (currentFilter === 'movie') {
+        filtered = rawResults.filter(r => r.media_type === 'movie');
+      } else if (currentFilter === 'tv') {
+        filtered = rawResults.filter(r => r.media_type === 'tv' && !(r.genre_ids && r.genre_ids.includes(16)));
+      } else if (currentFilter === 'anime') {
+        filtered = rawResults.filter(r => r.genre_ids && r.genre_ids.includes(16));
+      }
+
+      if (filtered.length === 0) {
+        if (statusEl) statusEl.textContent = `No results found for "${currentQuery}"`;
+        searchGrid.innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 4rem 1rem;">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🔍</div>
+            <h3 style="font-size: 1.3rem; font-weight: 700; color: #fff; margin-bottom: 0.5rem;">No titles found</h3>
+            <p style="color: #9CA3AF;">Try searching for movie names, actors, directors, or TV series.</p>
+          </div>
+        `;
+        return;
+      }
+
+      if (statusEl) statusEl.textContent = `Showing ${filtered.length} results for "${currentQuery}"`;
+      searchGrid.innerHTML = filtered.map(item => Components.createMovieCard(item)).join('');
+    }
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // 6. DETAILS PAGE CONTROLLER
+  // ═══════════════════════════════════════════════════════════════════════════
+  async function initDetailsPage() {
+    Components.renderNavbar();
+    Components.renderFooter();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
+    const type = urlParams.get('type') || 'movie';
+
+    if (!id) {
+      window.location.href = 'index.html';
+      return;
+    }
+
+    try {
+      const details = type === 'tv' ? await TMDB_API.getTVDetails(id) : await TMDB_API.getMovieDetails(id);
+      if (!details) {
+        window.location.href = 'index.html';
+        return;
+      }
+
+      // Add to recently viewed history
+      saveToRecentlyViewed(details, type);
+
+      renderDetailsHeader(details, type);
+      renderCastSection(details);
+
+      if (type === 'tv') {
+        renderSeasonsAndEpisodes(details);
+      }
+
+      // Similar content carousel
+      const similar = (details.similar && details.similar.results) ? details.similar.results : await TMDB_API.getSimilar(type, id);
+      const recs = (details.recommendations && details.recommendations.results) ? details.recommendations.results : await TMDB_API.getRecommendations(type, id);
+
+      Components.createCarousel('carouselSimilar', 'More Like This', similar.slice(0, 12));
+      Components.createCarousel('carouselRecommendations', 'Recommended For You', recs.slice(0, 12));
+
+    } catch (err) {
+      console.error('Details load error:', err);
+    }
+  }
+
+  function renderDetailsHeader(item, type) {
+    const container = document.getElementById('detailsHero');
+    if (!container) return;
+
+    const id = item.id;
+    const title = item.title || item.name || 'Untitled';
+    const overview = item.overview || 'No synopsis available.';
+    const rating = TMDB_API.formatRating(item.vote_average);
+    const year = TMDB_API.formatYear(item.release_date || item.first_air_date);
+    const runtime = type === 'movie' ? TMDB_API.formatRuntime(item.runtime) : `${item.number_of_seasons || 1} Seasons`;
+    const backdrop = TMDB_API.getBackdropUrl(item.backdrop_path, 'original');
+    const poster = TMDB_API.getImageUrl(item.poster_path, 'w500');
+    const genres = (item.genres || []).map(g => g.name).join(' • ');
+    const isSaved = Components.isInWatchlist(id, type);
+
+    container.innerHTML = `
+      <div class="hero-backdrop-wrapper">
+        <img src="${backdrop}" alt="${escapeHTML(title)}" class="hero-backdrop-img">
+        <div class="hero-gradient-overlay"></div>
+      </div>
+      <div class="details-content-inner" style="position: relative; z-index: 5; max-width: 1400px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 2.5rem; align-items: flex-end;">
+        <div class="details-poster-box" style="flex: 0 0 clamp(200px, 20vw, 300px); aspect-ratio: 2/3; border-radius: 12px; overflow: hidden; box-shadow: 0 16px 40px rgba(0,0,0,0.85); background: #161622;">
+          <img src="${poster}" alt="${escapeHTML(title)}" style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
+        <div style="flex: 1; min-width: min(100%, 400px);">
+          <div class="hero-pill-tag">${type === 'tv' ? 'TV Series' : 'Feature Film'}</div>
+          <h1 class="hero-title" style="margin-bottom: 0.75rem;">${escapeHTML(title)}</h1>
+          <div class="hero-meta-row">
+            <span class="hero-rating-badge">★ ${rating}</span>
+            <span class="hero-quality-badge">4K ULTRA HD</span>
+            <span>${year}</span>
+            <span>•</span>
+            <span>${runtime}</span>
+            <span>•</span>
+            <span>${genres}</span>
+          </div>
+          <p class="hero-overview" style="-webkit-line-clamp: 5; margin-bottom: 1.5rem;">${escapeHTML(overview)}</p>
+          <div class="hero-actions">
+            <button 
+              type="button" 
+              class="btn-netflix btn-netflix-primary"
+              onclick="Components.openTrailerModal('${type}', ${id}, '${escapeQuotes(title)}')"
+            >
+              ▶ Watch Trailer
+            </button>
+            <button 
+              type="button" 
+              class="btn-netflix btn-netflix-secondary" 
+              id="detailsListBtn"
+            >
+              ${isSaved ? '✓ In My List' : '+ My List'}
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    const listBtn = document.getElementById('detailsListBtn');
+    if (listBtn) {
+      listBtn.addEventListener('click', () => {
+        Components.toggleWatchlistButton(null, item);
+        const nowSaved = Components.isInWatchlist(id, type);
+        listBtn.textContent = nowSaved ? '✓ In My List' : '+ My List';
+      });
+    }
+  }
+
+  function renderCastSection(item) {
+    const castContainer = document.getElementById('detailsCastTrack');
+    if (!castContainer) return;
+
+    const cast = (item.credits && item.credits.cast) ? item.credits.cast.slice(0, 12) : [];
+    if (cast.length === 0) {
+      const section = document.getElementById('detailsCastSection');
+      if (section) section.style.display = 'none';
+      return;
+    }
+
+    castContainer.innerHTML = cast.map(person => {
+      const photo = person.profile_path ? TMDB_API.getImageUrl(person.profile_path, 'w185') : 'https://via.placeholder.com/185x275/1e1e2d/6B7280?text=No+Photo';
+      return `
+        <div style="flex: 0 0 130px; text-align: center;">
+          <div style="width: 100px; height: 100px; border-radius: 50%; overflow: hidden; margin: 0 auto 0.6rem; border: 2px solid rgba(255,255,255,0.15);">
+            <img src="${photo}" alt="${escapeHTML(person.name)}" style="width: 100%; height: 100%; object-fit: cover;">
+          </div>
+          <div style="font-weight: 700; font-size: 0.85rem; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHTML(person.name)}</div>
+          <div style="font-size: 0.75rem; color: #9CA3AF; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHTML(person.character || '')}</div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  async function renderSeasonsAndEpisodes(tvDetails) {
+    const container = document.getElementById('tvEpisodesSection');
+    if (!container || !tvDetails.seasons || tvDetails.seasons.length === 0) return;
+
+    container.style.display = 'block';
+    const validSeasons = tvDetails.seasons.filter(s => s.season_number > 0);
+
+    const selectorHtml = `
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
+        <h2 class="section-title">Episodes</h2>
+        <select class="sort-select" id="seasonSelector">
+          ${validSeasons.map(s => `<option value="${s.season_number}">${escapeHTML(s.name || `Season ${s.season_number}`)} (${s.episode_count} Episodes)</option>`).join('')}
+        </select>
+      </div>
+      <div class="episodes-list-grid" id="episodesListGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem;">
+        <!-- Episodes dynamically populated -->
+      </div>
+    `;
+    container.innerHTML = selectorHtml;
+
+    const selector = document.getElementById('seasonSelector');
+    const episodesGrid = document.getElementById('episodesListGrid');
+
+    async function loadEpisodes(seasonNum) {
+      if (!episodesGrid) return;
+      episodesGrid.innerHTML = '<div class="skeleton-shimmer" style="height: 140px; border-radius: 8px;"></div>';
+
+      try {
+        const seasonData = await TMDB_API.getTVSeasonEpisodes(tvDetails.id, seasonNum);
+        const eps = (seasonData && seasonData.episodes) ? seasonData.episodes : [];
+
+        if (eps.length === 0) {
+          episodesGrid.innerHTML = '<div style="color: #9CA3AF; padding: 2rem;">No episodes available for this season.</div>';
+          return;
+        }
+
+        episodesGrid.innerHTML = eps.map(ep => {
+          const thumb = ep.still_path ? TMDB_API.getBackdropUrl(ep.still_path, 'w500') : TMDB_API.getBackdropUrl(tvDetails.backdrop_path, 'w500');
+          return `
+            <div style="background: var(--bg-card); border-radius: 10px; overflow: hidden; border: 1px solid var(--border-subtle); display: flex; flex-direction: column;">
+              <div style="position: relative; aspect-ratio: 16/9; background: #000;">
+                <img src="${thumb}" alt="${escapeHTML(ep.name)}" style="width: 100%; height: 100%; object-fit: cover;">
+                <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;">
+                  <button type="button" class="card-action-btn play" style="width: 40px; height: 40px; font-size: 1.1rem;" onclick="Components.openTrailerModal('tv', ${tvDetails.id}, '${escapeQuotes(ep.name)}')">▶</button>
+                </div>
+                <span style="position: absolute; bottom: 0.5rem; right: 0.5rem; background: rgba(0,0,0,0.8); color: #fff; font-size: 0.72rem; font-weight: 700; padding: 0.15rem 0.4rem; border-radius: 4px;">${ep.runtime ? `${ep.runtime}m` : '45m'}</span>
+              </div>
+              <div style="padding: 1rem; flex: 1; display: flex; flex-direction: column;">
+                <div style="font-weight: 800; font-size: 0.95rem; color: #fff; margin-bottom: 0.25rem;">${ep.episode_number}. ${escapeHTML(ep.name)}</div>
+                <p style="font-size: 0.82rem; color: #9CA3AF; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${escapeHTML(ep.overview || 'Enjoy this episode in 4K on UniVault.')}</p>
+              </div>
+            </div>
+          `;
+        }).join('');
+      } catch (err) {
+        console.error('Failed to load episodes:', err);
+      }
+    }
+
+    if (selector) {
+      selector.addEventListener('change', () => loadEpisodes(selector.value));
+      loadEpisodes(selector.value || 1);
+    }
+  }
+
+  function saveToRecentlyViewed(item, type) {
+    try {
+      let recent = [];
+      const raw = localStorage.getItem('univault_recent_history');
+      recent = raw ? JSON.parse(raw) : [];
+      const id = String(item.id);
+
+      recent = recent.filter(r => String(r.id) !== id);
+      recent.unshift({
+        id: item.id,
+        tmdb_id: item.id,
+        media_type: type,
+        title: item.title || item.name,
+        backdrop_path: item.backdrop_path,
+        poster_path: item.poster_path,
+        viewed_at: Date.now()
+      });
+
+      if (recent.length > 20) recent.pop();
+      localStorage.setItem('univault_recent_history', JSON.stringify(recent));
+
+      // Sync with MongoDB backend if logged in
+      if (global.UniVaultAuth && global.UniVaultAuth.isAuthenticated()) {
+        const token = global.UniVaultAuth.getToken();
+        const endpoint = global.getUniVaultApiUrl ? global.getUniVaultApiUrl('/api/user/recently-viewed') : '/api/user/recently-viewed';
+        fetch(endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            tmdb_id: item.id,
+            media_type: type,
+            title: item.title || item.name,
+            poster: item.poster_path,
+            backdrop: item.backdrop_path
+          })
+        }).catch(() => {});
+      }
+    } catch (e) {
+      console.warn('Recently viewed save error:', e);
+    }
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // 7. WATCHLIST / MY LIST PAGE CONTROLLER
+  // ═══════════════════════════════════════════════════════════════════════════
+  async function initWatchlistPage() {
+    Components.renderNavbar('watchlist');
+    Components.renderFooter();
+
+    const grid = document.getElementById('watchlistGrid');
+    const emptyState = document.getElementById('watchlistEmptyState');
+    const filterTabs = document.querySelectorAll('.watchlist-filter-tab');
+    let currentFilter = 'all';
+
+    function renderList() {
+      const list = Components.getWatchlist();
+      let filtered = list;
+
+      if (currentFilter === 'movie') {
+        filtered = list.filter(i => i.media_type === 'movie');
+      } else if (currentFilter === 'tv') {
+        filtered = list.filter(i => i.media_type === 'tv');
+      }
+
+      if (filtered.length === 0) {
+        if (grid) grid.innerHTML = '';
+        if (emptyState) emptyState.style.display = 'block';
+        return;
+      }
+
+      if (emptyState) emptyState.style.display = 'none';
+      if (grid) {
+        grid.innerHTML = filtered.map(item => Components.createMovieCard(item)).join('');
+      }
+    }
+
+    filterTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        filterTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentFilter = tab.getAttribute('data-filter');
+        renderList();
+      });
+    });
+
+    window.addEventListener('watchlistUpdated', renderList);
+    renderList();
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // 8. TRENDING PAGE CONTROLLER
+  // ═══════════════════════════════════════════════════════════════════════════
+  async function initTrendingPage() {
+    const isTrailerPage = window.location.pathname.includes('trailers.html');
+    Components.renderNavbar(isTrailerPage ? 'trailers' : 'trending');
+    Components.renderCategory3BarNav('category3BarNav', isTrailerPage ? 'trailers' : 'trending');
+    Components.renderFooter();
+
+    Components.createSkeletonCarousel('carouselTrendingDay', 6);
+    Components.createSkeletonCarousel('carouselTrendingWeek', 6);
+    Components.createSkeletonCarousel('carouselTrendingMovies', 6);
+    Components.createSkeletonCarousel('carouselTrendingTV', 6);
+
+    try {
+      const [day, week, movies, tv] = await Promise.all([
+        TMDB_API.getTrending('all', 'day'),
+        TMDB_API.getTrending('all', 'week'),
+        TMDB_API.getPopularMovies(1),
+        TMDB_API.getPopularTV(1)
+      ]);
+
+      Components.createCarousel('carouselTrendingDay', 'Trending Today (Top 10)', day.slice(0, 10), true);
+      Components.createCarousel('carouselTrendingWeek', 'Trending This Week', week.slice(0, 12), false);
+      Components.createCarousel('carouselTrendingMovies', 'Popular Movies Right Now', movies.slice(0, 12), false);
+      Components.createCarousel('carouselTrendingTV', 'Top Television Shows', tv.slice(0, 12), false);
+
+    } catch (err) {
+      console.error('Trending page error:', err);
+    }
+  }
+
+  function escapeHTML(str) {
+    return String(str || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  function escapeQuotes(str) {
+    return String(str || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+  }
+
+})(typeof window !== 'undefined' ? window : this);

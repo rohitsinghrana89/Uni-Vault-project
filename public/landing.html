@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UniVault — Watch Movies, TV Shows & Anime in 4K</title>
+  <meta name="description" content="Unlimited movies, TV shows, and anime in 4K Ultra HD. Join UniVault today. Watch anywhere. Cancel anytime.">
+  
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
+  <link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+
+  <div class="auth-page-wrapper">
+
+    <!-- ══════════════════════════════════════════════════════ BACKDROP ══ -->
+    <div class="auth-backdrop" aria-hidden="true">
+      <div class="auth-poster-grid">
+        <!-- Curated Cinematic Backdrop Posters -->
+        <div class="auth-poster-item" style="background-image: url('https://image.tmdb.org/t/p/w500/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg');"></div>
+        <div class="auth-poster-item" style="background-image: url('https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg');"></div>
+        <div class="auth-poster-item" style="background-image: url('https://image.tmdb.org/t/p/w500/74xTEgt7R36Fpooo50r9T25onhq.jpg');"></div>
+        <div class="auth-poster-item" style="background-image: url('https://image.tmdb.org/t/p/w500/1E5baAaEse26fej7uHcjOgEE2t2.jpg');"></div>
+        <div class="auth-poster-item" style="background-image: url('https://image.tmdb.org/t/p/w500/b33nnKl1vBbi4bITVjh5ne3Nz0h.jpg');"></div>
+        <div class="auth-poster-item" style="background-image: url('https://image.tmdb.org/t/p/w500/oBIQDKcqNxKckjug0749V2c1zbt.jpg');"></div>
+        <div class="auth-poster-item" style="background-image: url('https://image.tmdb.org/t/p/w500/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg');"></div>
+        <div class="auth-poster-item" style="background-image: url('https://image.tmdb.org/t/p/w500/kDp1vUBnMpe8ak4rjgl3cLELqjU.jpg');"></div>
+        <div class="auth-poster-item" style="background-image: url('https://image.tmdb.org/t/p/w500/wWba3TaojhK7NdycRhoQpsG0FaH.jpg');"></div>
+        <div class="auth-poster-item" style="background-image: url('https://image.tmdb.org/t/p/w500/fiVW06jE7z9YnO4trhaMEdclSiC.jpg');"></div>
+        <div class="auth-poster-item" style="background-image: url('https://image.tmdb.org/t/p/w500/4m1Au3YkjMxF8ddQ9jQ9uvk8Jio.jpg');"></div>
+        <div class="auth-poster-item" style="background-image: url('https://image.tmdb.org/t/p/w500/8UlWqwUnbSJ2J6GbtMfvcyUjEw.jpg');"></div>
+        <div class="auth-poster-item" style="background-image: url('https://image.tmdb.org/t/p/w500/aos0kMv2AkyQn8h4wS0y1RzBswJ.jpg');"></div>
+        <div class="auth-poster-item" style="background-image: url('https://image.tmdb.org/t/p/w500/pHkBNVPIRgK19Tm9alzgkWvsA3Z.jpg');"></div>
+        <div class="auth-poster-item" style="background-image: url('https://image.tmdb.org/t/p/w500/vpnVM9B6NMmQpWeZvzLvDESb2QY.jpg');"></div>
+        <div class="auth-poster-item" style="background-image: url('https://image.tmdb.org/t/p/w500/2RVcJbWFmICRDsEjRI8oqBTYChQ.jpg');"></div>
+      </div>
+      <div class="auth-overlay-gradient"></div>
+    </div>
+
+    <!-- Brand only at top-left header -->
+    <header class="auth-header" role="banner">
+      <a href="landing.html" class="auth-brand" aria-label="UniVault Home">
+        <img src="images/logo.png" alt="UniVault" class="auth-logo-img">
+        <span class="auth-logo-text">UNIVAULT</span>
+      </a>
+    </header>
+
+    <!-- ══════════════════════════════════════════════════ MAIN HERO ══ -->
+    <main class="auth-main" role="main">
+      <div class="auth-hero-content" id="landingHeroView">
+        <h1 class="auth-hero-title">Unlimited movies, shows, and more</h1>
+        <p class="auth-hero-subtitle">Starts at ₹99. Cancel anytime.</p>
+        <p class="auth-hero-prompt">Ready to watch? Enter your email to create or restart your membership.</p>
+
+        <!-- Get Started Email Input Form -->
+        <form class="auth-get-started-form" id="getStartedForm" novalidate>
+          <div class="auth-input-wrapper">
+            <input 
+              type="email" 
+              class="auth-input-hero" 
+              id="heroEmailInput" 
+              placeholder=" " 
+              autocomplete="email" 
+              required
+            >
+            <label for="heroEmailInput" class="auth-input-label-floating">Email address</label>
+          </div>
+          <button type="submit" class="auth-btn-get-started" id="btnGetStarted">
+            <span>Get Started</span>
+            <span class="auth-btn-chevron" aria-hidden="true">›</span>
+          </button>
+        </form>
+
+        <!-- Quick Access Switch Links -->
+        <div class="auth-quick-links">
+          <span>Already have an account?</span>
+          <button type="button" class="auth-quick-link-btn" id="openSignInBtn">Sign In</button>
+          <span>•</span>
+          <button type="button" class="auth-quick-link-btn" id="openSignUpBtn">Create Account</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- ════════════════════════════════════════════════ MODAL FORMS ══ -->
+    <div class="auth-card-modal-backdrop" id="authModalBackdrop" role="dialog" aria-modal="true" aria-hidden="true">
+      
+      <!-- SIGN IN CARD -->
+      <div class="auth-card" id="signInCard" style="display: none;">
+        <button type="button" class="auth-card-close-btn" id="closeSignInBtn" aria-label="Close form">✕</button>
+        
+        <h2 class="auth-card-title">Sign In</h2>
+        <p class="auth-card-subtitle">Access your 4K movies, watchlist, and personalized vault</p>
+
+        <div class="auth-error-banner" id="signInErrorBox" role="alert"></div>
+
+        <form class="auth-form" id="signInForm" novalidate>
+          <div class="auth-field-group">
+            <input 
+              type="email" 
+              class="auth-input-card" 
+              id="signInEmail" 
+              placeholder=" " 
+              autocomplete="email" 
+              required
+            >
+            <label for="signInEmail" class="auth-label-card">Email address</label>
+          </div>
+
+          <div class="auth-field-group">
+            <input 
+              type="password" 
+              class="auth-input-card" 
+              id="signInPassword" 
+              placeholder=" " 
+              autocomplete="current-password" 
+              required
+            >
+            <label for="signInPassword" class="auth-label-card">Password</label>
+            <button type="button" class="auth-toggle-pass-btn" id="toggleSignInPass" aria-label="Toggle password visibility">👁️</button>
+          </div>
+
+          <button type="submit" class="auth-btn-submit" id="signInSubmitBtn">
+            Sign In
+          </button>
+
+          <div class="auth-divider"><span>OR</span></div>
+
+          <button type="button" class="auth-btn-google" id="googleSignInBtn">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+            </svg>
+            Continue with Google
+          </button>
+        </form>
+
+        <div class="auth-card-footer">
+          <span class="auth-card-footer-text">New to UniVault?</span>
+          <button type="button" class="auth-card-switch-link" id="switchToSignUpBtn">Sign up now.</button>
+        </div>
+      </div>
+
+      <!-- SIGN UP CARD -->
+      <div class="auth-card" id="signUpCard" style="display: none;">
+        <button type="button" class="auth-card-close-btn" id="closeSignUpBtn" aria-label="Close form">✕</button>
+        
+        <h2 class="auth-card-title">Create Account</h2>
+        <p class="auth-card-subtitle">Unlimited movies, TV shows, and 4K streams ready for you</p>
+
+        <div class="auth-error-banner" id="signUpErrorBox" role="alert"></div>
+
+        <form class="auth-form" id="signUpForm" novalidate>
+          <div class="auth-field-group">
+            <input 
+              type="text" 
+              class="auth-input-card" 
+              id="signUpName" 
+              placeholder=" " 
+              autocomplete="name" 
+              required
+            >
+            <label for="signUpName" class="auth-label-card">Full Name</label>
+          </div>
+
+          <div class="auth-field-group">
+            <input 
+              type="email" 
+              class="auth-input-card" 
+              id="signUpEmail" 
+              placeholder=" " 
+              autocomplete="email" 
+              required
+            >
+            <label for="signUpEmail" class="auth-label-card">Email address</label>
+          </div>
+
+          <div class="auth-field-group">
+            <input 
+              type="password" 
+              class="auth-input-card" 
+              id="signUpPassword" 
+              placeholder=" " 
+              autocomplete="new-password" 
+              required
+            >
+            <label for="signUpPassword" class="auth-label-card">Password (min 6 characters)</label>
+            <button type="button" class="auth-toggle-pass-btn" id="toggleSignUpPass" aria-label="Toggle password visibility">👁️</button>
+          </div>
+
+          <div class="auth-field-group">
+            <input 
+              type="password" 
+              class="auth-input-card" 
+              id="signUpConfirmPassword" 
+              placeholder=" " 
+              autocomplete="new-password" 
+              required
+            >
+            <label for="signUpConfirmPassword" class="auth-label-card">Confirm Password</label>
+          </div>
+
+          <button type="submit" class="auth-btn-submit" id="signUpSubmitBtn">
+            Create Account
+          </button>
+        </form>
+
+        <div class="auth-card-footer">
+          <span class="auth-card-footer-text">Already have an account?</span>
+          <button type="button" class="auth-card-switch-link" id="switchToSignInBtn">Sign in.</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════ FOOTER ══ -->
+    <footer class="auth-footer" role="contentinfo">
+      <div class="auth-footer-inner">
+        <p class="auth-footer-contact">Questions? Call <a href="tel:0008009191694">000-800-919-1694</a></p>
+        
+        <ul class="auth-footer-links">
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Help Centre</a></li>
+          <li><a href="#">Terms of Use</a></li>
+          <li><a href="#">Privacy</a></li>
+          <li><a href="#">Cookie Preferences</a></li>
+          <li><a href="#">Corporate Information</a></li>
+        </ul>
+
+        <p class="auth-footer-copyright">UniVault India • 4K Ultra HD Streaming Hub</p>
+      </div>
+    </footer>
+
+  </div>
+
+  <script src="js/auth.js"></script>
+</body>
+</html>
