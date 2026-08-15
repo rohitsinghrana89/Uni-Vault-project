@@ -201,28 +201,40 @@ if (emptyPicked === null) {
 // 1. Test Production getApiUrl resolver
 function testGetApiUrl(endpoint, mockLocation) {
   const clean = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
-  const { protocol, hostname, port } = mockLocation;
-  const isLocalHost = hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '::1';
+  const BACKEND_URL = 'https://uni-vault-antc.onrender.com';
+  const { hostname, origin } = mockLocation;
   
-  if (protocol === 'file:') {
-    return `http://localhost:5000${clean}`;
+  if (origin === BACKEND_URL || hostname === 'uni-vault-antc.onrender.com') {
+    return clean;
   }
-  if (isLocalHost && port && port !== '5000') {
-    return `http://localhost:5000${clean}`;
-  }
-  return clean;
+  return `${BACKEND_URL}${clean}`;
 }
 
 const prodApiUrl = testGetApiUrl('/api/tmdb/movie/550/videos', {
   protocol: 'https:',
-  hostname: 'univault-stream.vercel.app',
+  hostname: 'uni-vault-antc.onrender.com',
+  origin: 'https://uni-vault-antc.onrender.com',
   port: ''
 });
 if (prodApiUrl === '/api/tmdb/movie/550/videos' && !prodApiUrl.includes('localhost') && !prodApiUrl.includes('127.0.0.1')) {
-  console.log(`✅ [PASS] Production API URL resolves cleanly as relative path without localhost: ${prodApiUrl}`);
+  console.log(`✅ [PASS] Production API URL resolves cleanly on Render backend: ${prodApiUrl}`);
   passed++;
 } else {
-  console.error(`❌ [FAIL] Production API URL resolved with localhost:`, prodApiUrl);
+  console.error(`❌ [FAIL] Production API URL resolution issue:`, prodApiUrl);
+  failed++;
+}
+
+const remoteStandaloneUrl = testGetApiUrl('/api/tmdb/movie/550/videos', {
+  protocol: 'https:',
+  hostname: 'univault-frontend.vercel.app',
+  origin: 'https://univault-frontend.vercel.app',
+  port: ''
+});
+if (remoteStandaloneUrl === 'https://uni-vault-antc.onrender.com/api/tmdb/movie/550/videos') {
+  console.log(`✅ [PASS] Standalone frontend resolves cleanly to Render backend: ${remoteStandaloneUrl}`);
+  passed++;
+} else {
+  console.error(`❌ [FAIL] Standalone frontend resolution issue:`, remoteStandaloneUrl);
   failed++;
 }
 

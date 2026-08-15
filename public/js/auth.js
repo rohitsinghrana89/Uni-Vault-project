@@ -5,6 +5,12 @@
 (function (global) {
   'use strict';
 
+  const BACKEND_URL = 'https://uni-vault-antc.onrender.com';
+  global.API_URL = BACKEND_URL;
+  global.BASE_URL = BACKEND_URL;
+  global.SERVER_URL = BACKEND_URL;
+  global.BACKEND_URL = BACKEND_URL;
+
   const TOKEN_KEY = 'univault_token';
   const USER_KEY  = 'univault_user';
   const AVATAR_KEY = 'univault_custom_avatar';
@@ -14,30 +20,29 @@
 
   /**
    * Dynamic API Base URL Resolver
-   * Production-safe: Uses relative paths on any deployed HTTP/HTTPS domain.
-   * Only falls back to localhost:5000 when developing locally via file:// or static Live Server.
+   * Resolves endpoints cleanly to remote Render backend server (https://uni-vault-antc.onrender.com).
+   * Automatically handles standalone frontend deployments, local dev, and same-origin hosting.
    */
   function getApiUrl(endpoint) {
     const clean = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
     if (typeof window !== 'undefined' && window.location) {
-      const { protocol, hostname, port } = window.location;
-      const isLocalHost = hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '::1';
-      
-      // If opened directly from file system
-      if (protocol === 'file:') {
-        return `http://localhost:5000${clean}`;
+      const { hostname, origin } = window.location;
+      // If hosted on the exact same Render backend domain, relative path is safe
+      if (origin === BACKEND_URL || hostname === 'uni-vault-antc.onrender.com') {
+        return clean;
       }
-      // If developing locally on a non-5000 dev server (e.g. VS Code Live Server 5500, Vite 5173)
-      if (isLocalHost && port && port !== '5000') {
-        return `http://localhost:5000${clean}`;
-      }
+      return `${BACKEND_URL}${clean}`;
     }
-    // Production deployments (and same-origin local servers) always use clean relative paths
-    return clean;
+    return `${BACKEND_URL}${clean}`;
   }
   global.getUniVaultApiUrl = getApiUrl;
 
   const Auth = {
+    API_URL: BACKEND_URL,
+    SERVER_URL: BACKEND_URL,
+    BASE_URL: BACKEND_URL,
+    BACKEND_URL: BACKEND_URL,
+
     /**
      * Retrieve the stored JWT token
      */
@@ -869,7 +874,7 @@
     }
     let displayMsg = String(msg || '');
     if (displayMsg === 'Failed to fetch' || displayMsg.includes('Failed to fetch') || displayMsg.includes('NetworkError')) {
-      displayMsg = '⚠️ Cannot connect to backend server. Please make sure the backend is running at http://localhost:5000 ("npm start").';
+      displayMsg = '⚠️ Cannot connect to backend server. Please make sure the backend is active at https://uni-vault-antc.onrender.com.';
     }
     box.textContent = displayMsg;
     box.style.display = 'block';

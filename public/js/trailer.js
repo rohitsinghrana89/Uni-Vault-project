@@ -368,7 +368,7 @@
     embedPlayer(youtubeKey, typeName = 'Official Trailer') {
       if (!this.playerBoxEl || !youtubeKey) return;
 
-      const origin = window.location.origin || 'http://localhost:5000';
+      const origin = window.location.origin || 'https://uni-vault-antc.onrender.com';
       const embedUrl = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(youtubeKey)}?autoplay=1&rel=0&modestbranding=1&enablejsapi=1&origin=${encodeURIComponent(origin)}`;
 
       // Update direct YouTube link
