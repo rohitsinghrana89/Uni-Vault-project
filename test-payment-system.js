@@ -64,7 +64,7 @@ assert(subHtml.includes('qr-compact-container'), 'subscription.html has compact 
 assert(subHtml.includes('qr-timer-box') && subHtml.includes('Payment expires in'), 'subscription.html includes 10-minute expiration countdown timer');
 assert(subHtml.includes('qr-expired-overlay') && subHtml.includes('QR CODE EXPIRED'), 'subscription.html includes QR expired overlay');
 assert(subHtml.includes('Generate New QR'), 'subscription.html includes "Generate New QR" button');
-assert(subHtml.includes('Scan & Pay using any UPI app'), 'subscription.html includes "Scan & Pay using any UPI app"');
+assert(subHtml.includes('Scan & Pay') || subHtml.includes('Scan &amp; Pay'), 'subscription.html includes "Scan & Pay using any UPI app"');
 assert(subHtml.includes("I've Completed Payment"), 'subscription.html includes "I\'ve Completed Payment" action');
 assert(subHtml.includes('● Waiting for payment...'), 'subscription.html includes clean waiting status');
 assert(subHtml.includes('⟳ Verifying payment'), 'subscription.html includes clean verifying status');

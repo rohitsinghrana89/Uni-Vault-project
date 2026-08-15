@@ -50,7 +50,8 @@
       // 1. Fetch Trending Items & Hero
       const trending = await TMDB_API.getTrending('all', 'day');
       if (trending && trending.length > 0) {
-        setupHeroBanner(trending[0]);
+        // Pass top featured trending titles to dynamic hero carousel
+        setupHeroBanner(trending.slice(0, 8), 'netflixHero');
         // Trending Top 10 Ranked Row
         Components.createCarousel('carouselTrending', 'Trending Now', trending.slice(0, 10), true);
       }
@@ -76,7 +77,7 @@
       Components.createCarousel('carouselAnime', 'Anime Spotlight', anime, false, 'anime.html');
       Components.createCarousel('carouselTopRated', 'Top Rated on UniVault', topRated, false);
       Components.createCarousel('carouselNewReleases', 'New Releases', nowPlaying, false);
-      Components.createCarousel('carouselAction', 'High-Octane Action', actionMovies, false);
+      Components.createCarousel('carouselAction', 'Action & Adventure', actionMovies, false);
       Components.createCarousel('carouselComedy', 'Comedy & Laughs', comedyMovies, false);
       Components.createCarousel('carouselHorror', 'Thrills & Chills', horrorMovies, false);
       Components.createCarousel('carouselSciFi', 'Sci-Fi & Cyberpunk', scifiMovies, false);
@@ -86,68 +87,16 @@
     }
   }
 
-  function setupHeroBanner(item) {
-    const heroEl = document.getElementById('netflixHero');
-    if (!heroEl || !item) return;
-
-    const id = item.id;
-    const mediaType = item.media_type || 'movie';
-    const title = item.title || item.name || 'Featured Title';
-    const overview = item.overview || 'Stream this title in 4K Ultra HD on UniVault.';
-    const rating = TMDB_API.formatRating(item.vote_average);
-    const year = TMDB_API.formatYear(item.release_date || item.first_air_date);
-    const backdrop = TMDB_API.getBackdropUrl(item.backdrop_path, 'original');
-    const genres = TMDB_API.getGenreNames(item.genre_ids, mediaType).slice(0, 3).join(' • ') || 'Action • 4K';
-    const isSaved = Components.isInWatchlist(id, mediaType);
-
-    heroEl.innerHTML = `
-      <div class="hero-backdrop-wrapper">
-        <img src="${backdrop}" alt="${escapeHTML(title)}" class="hero-backdrop-img" id="heroBackdropImg">
-        <div class="hero-gradient-overlay"></div>
-      </div>
-      <div class="hero-content">
-        <div class="hero-pill-tag">🔥 Featured on UniVault</div>
-        <h1 class="hero-title">${escapeHTML(title)}</h1>
-        <div class="hero-meta-row">
-          <span class="hero-rating-badge">★ ${rating}</span>
-          <span class="hero-quality-badge">4K ULTRA HD</span>
-          <span class="hero-quality-badge">HDR10+</span>
-          <span>${year}</span>
-          <span>•</span>
-          <span>${genres}</span>
-        </div>
-        <p class="hero-overview">${escapeHTML(overview)}</p>
-        <div class="hero-actions">
-          <button 
-            type="button" 
-            class="btn-netflix btn-netflix-primary" 
-            id="heroWatchBtn"
-            onclick="Components.openTrailerModal('${mediaType}', ${id}, '${escapeQuotes(title)}')"
-          >
-            ▶ Watch Trailer
-          </button>
-          <button 
-            type="button" 
-            class="btn-netflix btn-netflix-secondary" 
-            id="heroListBtn"
-          >
-            ${isSaved ? '✓ In My List' : '+ My List'}
-          </button>
-          <a href="details.html?type=${mediaType}&id=${id}" class="btn-netflix btn-netflix-secondary">
-            ℹ More Info
-          </a>
-        </div>
-      </div>
-    `;
-
-    const heroListBtn = document.getElementById('heroListBtn');
-    if (heroListBtn) {
-      heroListBtn.addEventListener('click', () => {
-        Components.toggleWatchlistButton(null, item);
-        const nowSaved = Components.isInWatchlist(id, mediaType);
-        heroListBtn.textContent = nowSaved ? '✓ In My List' : '+ My List';
-      });
+  function setupHeroBanner(itemOrItems, targetElementId = null) {
+    let heroEl = targetElementId ? document.getElementById(targetElementId) : null;
+    if (!heroEl) {
+      heroEl = document.getElementById('netflixHero') || document.getElementById('animeHero') || document.querySelector('.netflix-hero');
     }
+    if (!heroEl || !itemOrItems) return;
+
+    return Components.createHeroCarousel(heroEl, itemOrItems, {
+      isAnime: heroEl.id === 'animeHero'
+    });
   }
 
   function setupContinueWatchingRow() {
@@ -588,10 +537,8 @@
       loadAnimeCatalog(false);
     });
 
-    // Load initial catalog
     loadAnimeCatalog(false);
 
-    // Concurrently load featured carousels & hero
     Components.createSkeletonCarousel('carouselAnimeTrending', 6);
     Components.createSkeletonCarousel('carouselAnimeAction', 6);
     Components.createSkeletonCarousel('carouselAnimeFantasy', 6);
@@ -605,14 +552,14 @@
         TMDB_API.getAnime('top_rated', 1)
       ]);
 
-      Components.createCarousel('carouselAnimeTrending', '🔥 Trending Anime Series', trending, false);
-      Components.createCarousel('carouselAnimeAction', '⚡ Shonen & Action Anime', action, false);
-      Components.createCarousel('carouselAnimeFantasy', '🔮 Fantasy & Supernatural Anime', fantasy, false);
-      Components.createCarousel('carouselAnimeTopRated', '⭐ Masterpiece Anime (Top Rated)', topRated, false);
+      Components.createCarousel('carouselAnimeTrending', 'Trending Anime Series', trending, false);
+      Components.createCarousel('carouselAnimeAction', 'Action & Shonen Anime', action, false);
+      Components.createCarousel('carouselAnimeFantasy', 'Fantasy & Supernatural Anime', fantasy, false);
+      Components.createCarousel('carouselAnimeTopRated', 'Top Rated Masterpieces', topRated, false);
 
       const heroEl = document.getElementById('animeHero');
       if (heroEl && trending.length > 0) {
-        setupHeroBanner(trending[0]);
+        setupHeroBanner(trending.slice(0, 8), 'animeHero');
       }
     } catch (err) {
       console.error('Anime carousels load error:', err);
@@ -632,11 +579,10 @@
     const statusEl = document.getElementById('searchStatusText');
 
     let currentQuery = '';
-    let currentFilter = 'all'; // all, movie, tv, anime
+    let currentFilter = 'all'; 
     let rawResults = [];
     let debounceTimer = null;
 
-    // Parse initial URL query parameter
     const urlParams = new URLSearchParams(window.location.search);
     const initialQuery = urlParams.get('q') || '';
 
@@ -648,11 +594,19 @@
 
     if (searchInput) {
       searchInput.addEventListener('input', () => {
-        const q = searchInput.value.trim();
-        currentQuery = q;
-        if (debounceTimer) clearTimeout(debounceTimer);
+        const val = searchInput.value.trim();
+        clearTimeout(debounceTimer);
         debounceTimer = setTimeout(() => {
-          performSearch(q);
+          currentQuery = val;
+          if (val) {
+            const url = new URL(window.location);
+            url.searchParams.set('q', val);
+            window.history.replaceState({}, '', url);
+            performSearch(val);
+          } else {
+            if (searchGrid) searchGrid.innerHTML = '';
+            if (statusEl) statusEl.textContent = 'Search across 10,000+ movies, TV series, and anime.';
+          }
         }, 300);
       });
     }
@@ -661,56 +615,54 @@
       tab.addEventListener('click', () => {
         filterTabs.forEach(t => t.classList.remove('active'));
         tab.classList.add('active');
-        currentFilter = tab.getAttribute('data-type');
-        renderFilteredResults();
+        currentFilter = tab.getAttribute('data-filter');
+        applySearchFilter();
       });
     });
 
     async function performSearch(query) {
-      if (!query) {
-        if (statusEl) statusEl.textContent = 'Explore thousands of movies, TV shows, and anime';
-        if (searchGrid) searchGrid.innerHTML = '';
-        return;
-      }
-
-      if (statusEl) statusEl.textContent = `Searching for "${query}"…`;
-      Components.createSkeletonGrid('searchResultsGrid', 12);
+      if (!searchGrid) return;
+      searchGrid.innerHTML = Array(8).fill(0).map(() => `<div class="netflix-card skeleton-shimmer skeleton-card"></div>`).join('');
+      if (statusEl) statusEl.textContent = `Searching UniVault catalog for "${escapeHTML(query)}"...`;
 
       try {
-        const results = await TMDB_API.searchMulti(query);
-        rawResults = results.filter(item => item.poster_path || item.backdrop_path);
-        renderFilteredResults();
+        const results = await TMDB_API.searchMulti(query, 1);
+        rawResults = results.filter(r => r.media_type === 'movie' || r.media_type === 'tv');
+        applySearchFilter();
       } catch (err) {
         console.error('Search error:', err);
-        if (statusEl) statusEl.textContent = 'Unable to fetch search results.';
+        if (statusEl) statusEl.textContent = 'Failed to fetch search results. Please try again.';
       }
     }
 
-    function renderFilteredResults() {
+    function applySearchFilter() {
       if (!searchGrid) return;
+      let filtered = [...rawResults];
 
-      let filtered = rawResults;
       if (currentFilter === 'movie') {
         filtered = rawResults.filter(r => r.media_type === 'movie');
       } else if (currentFilter === 'tv') {
-        filtered = rawResults.filter(r => r.media_type === 'tv' && !(r.genre_ids && r.genre_ids.includes(16)));
+        filtered = rawResults.filter(r => r.media_type === 'tv');
       } else if (currentFilter === 'anime') {
         filtered = rawResults.filter(r => r.genre_ids && r.genre_ids.includes(16));
       }
 
+      if (statusEl) {
+        statusEl.textContent = filtered.length > 0 
+          ? `Found ${filtered.length} titles matching "${escapeHTML(currentQuery)}"`
+          : `No titles found matching "${escapeHTML(currentQuery)}"`;
+      }
+
       if (filtered.length === 0) {
-        if (statusEl) statusEl.textContent = `No results found for "${currentQuery}"`;
         searchGrid.innerHTML = `
-          <div style="grid-column: 1/-1; text-align: center; padding: 4rem 1rem;">
-            <div style="font-size: 3rem; margin-bottom: 1rem;">🔍</div>
-            <h3 style="font-size: 1.3rem; font-weight: 700; color: #fff; margin-bottom: 0.5rem;">No titles found</h3>
-            <p style="color: #9CA3AF;">Try searching for movie names, actors, directors, or TV series.</p>
+          <div style="grid-column: 1 / -1; text-align: center; padding: 4rem 1rem; color: #9CA3AF;">
+            <div style="font-size: 1.2rem; font-weight: 700; color: #fff; margin-bottom: 0.5rem;">No results found</div>
+            <p>Try searching for different keywords, actor names, or genres.</p>
           </div>
         `;
         return;
       }
 
-      if (statusEl) statusEl.textContent = `Showing ${filtered.length} results for "${currentQuery}"`;
       searchGrid.innerHTML = filtered.map(item => Components.createMovieCard(item)).join('');
     }
   }
@@ -723,8 +675,8 @@
     Components.renderFooter();
 
     const urlParams = new URLSearchParams(window.location.search);
-    const id = urlParams.get('id');
     const type = urlParams.get('type') || 'movie';
+    const id = parseInt(urlParams.get('id'), 10);
 
     if (!id) {
       window.location.href = 'index.html';
@@ -738,7 +690,6 @@
         return;
       }
 
-      // Add to recently viewed history
       saveToRecentlyViewed(details, type);
 
       renderDetailsHeader(details, type);
@@ -748,7 +699,6 @@
         renderSeasonsAndEpisodes(details);
       }
 
-      // Similar content carousel
       const similar = (details.similar && details.similar.results) ? details.similar.results : await TMDB_API.getSimilar(type, id);
       const recs = (details.recommendations && details.recommendations.results) ? details.recommendations.results : await TMDB_API.getRecommendations(type, id);
 
@@ -777,18 +727,18 @@
 
     container.innerHTML = `
       <div class="hero-backdrop-wrapper">
-        <img src="${backdrop}" alt="${escapeHTML(title)}" class="hero-backdrop-img">
+        <img src="${backdrop}" alt="${escapeHTML(title)}" class="hero-backdrop-img" onerror="this.src='https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=1920&q=80'">
         <div class="hero-gradient-overlay"></div>
       </div>
       <div class="details-content-inner" style="position: relative; z-index: 5; max-width: 1400px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 2.5rem; align-items: flex-end;">
         <div class="details-poster-box" style="flex: 0 0 clamp(200px, 20vw, 300px); aspect-ratio: 2/3; border-radius: 12px; overflow: hidden; box-shadow: 0 16px 40px rgba(0,0,0,0.85); background: #161622;">
-          <img src="${poster}" alt="${escapeHTML(title)}" style="width: 100%; height: 100%; object-fit: cover;">
+          <img src="${poster}" alt="${escapeHTML(title)}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='https://via.placeholder.com/500x750/161622/4B5563?text=No+Poster'">
         </div>
         <div style="flex: 1; min-width: min(100%, 400px);">
           <div class="hero-pill-tag">${type === 'tv' ? 'TV Series' : 'Feature Film'}</div>
           <h1 class="hero-title" style="margin-bottom: 0.75rem;">${escapeHTML(title)}</h1>
           <div class="hero-meta-row">
-            <span class="hero-rating-badge">★ ${rating}</span>
+            <span class="hero-rating-badge">${Components.icons.star} ${rating}</span>
             <span class="hero-quality-badge">4K ULTRA HD</span>
             <span>${year}</span>
             <span>•</span>
@@ -803,14 +753,14 @@
               class="btn-netflix btn-netflix-primary"
               onclick="Components.openTrailerModal('${type}', ${id}, '${escapeQuotes(title)}')"
             >
-              ▶ Watch Trailer
+              ${Components.icons.play} <span>Watch Trailer</span>
             </button>
             <button 
               type="button" 
               class="btn-netflix btn-netflix-secondary" 
               id="detailsListBtn"
             >
-              ${isSaved ? '✓ In My List' : '+ My List'}
+              ${isSaved ? Components.icons.check : Components.icons.plus} <span>${isSaved ? 'In My List' : 'My List'}</span>
             </button>
           </div>
         </div>
@@ -822,7 +772,7 @@
       listBtn.addEventListener('click', () => {
         Components.toggleWatchlistButton(null, item);
         const nowSaved = Components.isInWatchlist(id, type);
-        listBtn.textContent = nowSaved ? '✓ In My List' : '+ My List';
+        listBtn.innerHTML = `${nowSaved ? Components.icons.check : Components.icons.plus} <span>${nowSaved ? 'In My List' : 'My List'}</span>`;
       });
     }
   }
@@ -893,9 +843,9 @@
           return `
             <div style="background: var(--bg-card); border-radius: 10px; overflow: hidden; border: 1px solid var(--border-subtle); display: flex; flex-direction: column;">
               <div style="position: relative; aspect-ratio: 16/9; background: #000;">
-                <img src="${thumb}" alt="${escapeHTML(ep.name)}" style="width: 100%; height: 100%; object-fit: cover;">
+                <img src="${thumb}" alt="${escapeHTML(ep.name)}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=800&q=80'">
                 <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;">
-                  <button type="button" class="card-action-btn play" style="width: 40px; height: 40px; font-size: 1.1rem;" onclick="Components.openTrailerModal('tv', ${tvDetails.id}, '${escapeQuotes(ep.name)}')">▶</button>
+                  <button type="button" class="card-action-btn play" style="width: 40px; height: 40px;" onclick="Components.openTrailerModal('tv', ${tvDetails.id}, '${escapeQuotes(ep.name)}')" aria-label="Play Episode Trailer">${Components.icons.play}</button>
                 </div>
                 <span style="position: absolute; bottom: 0.5rem; right: 0.5rem; background: rgba(0,0,0,0.8); color: #fff; font-size: 0.72rem; font-weight: 700; padding: 0.15rem 0.4rem; border-radius: 4px;">${ep.runtime ? `${ep.runtime}m` : '45m'}</span>
               </div>

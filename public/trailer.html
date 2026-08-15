@@ -8,7 +8,7 @@
   <meta name="theme-color" content="#07090e">
 
   <!-- Favicon -->
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
+  <link rel="icon" href="images/logo.png" type="image/png">
 
   <!-- Google Fonts: Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -46,10 +46,10 @@
 
       <div class="topbar-right">
         <button class="cinema-btn-icon" id="cinemaWatchlistBtn" aria-label="Toggle watchlist">
-          <span>🔖</span> Watchlist
+          <span style="font-weight: 800;">+</span> Watchlist
         </button>
         <a href="details.html" class="cinema-btn-icon" id="cinemaDetailsLink" aria-label="View movie details">
-          <span>📑</span> Details
+          Details
         </a>
         <button class="cinema-btn-close" id="cinemaCloseBtn" title="Close Trailer (Esc)" aria-label="Close trailer">
           ✕
@@ -70,14 +70,16 @@
 
           <!-- Error / Fallback Overlay -->
           <div class="cinema-error-overlay" id="cinemaError" style="display: none;">
-            <div class="cinema-error-icon" aria-hidden="true">🎬</div>
+            <div class="cinema-error-icon" aria-hidden="true" style="color: var(--accent-red);">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            </div>
             <h2 class="cinema-error-title" id="cinemaErrorTitle">Trailer Unavailable</h2>
             <p class="cinema-error-desc" id="cinemaErrorDesc">
               We couldn't find an official streamed trailer for this title. You can search directly on YouTube.
             </p>
             <div class="cinema-error-actions">
               <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" class="cinema-btn-primary" id="cinemaErrorYtSearchBtn">
-                <span>▶</span> Search on YouTube
+                Search on YouTube
               </a>
               <a href="index.html" class="cinema-btn-secondary">
                 Return Home
@@ -101,7 +103,7 @@
 
       <div class="meta-actions-right">
         <a href="#" target="_blank" rel="noopener noreferrer" class="cinema-link-yt" id="cinemaDirectYtLink" style="display: none;">
-          <span>▶</span> Watch on YouTube
+          Watch on YouTube
         </a>
         <div class="cinema-keyboard-tip" aria-hidden="true">
           <kbd class="cinema-kbd">Esc</kbd> Exit

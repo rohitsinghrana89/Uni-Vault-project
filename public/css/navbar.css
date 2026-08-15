@@ -340,24 +340,53 @@
   height: 44px;
   min-width: 44px;
   min-height: 44px;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 1.45rem;
-  color: #fff;
+  gap: 5px;
+  padding: 0;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: var(--radius-md, 8px);
   cursor: pointer;
   touch-action: manipulation;
   user-select: none;
-  transition: all 0.2s ease;
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
 }
 
-.nav-hamburger-btn:hover,
+.hamburger-bar {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background-color: #fff;
+  border-radius: 2px;
+  transform-origin: center;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease, background-color 0.2s ease;
+}
+
+.nav-hamburger-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
 .nav-hamburger-btn[aria-expanded="true"] {
   background: rgba(229, 9, 20, 0.2);
   border-color: var(--accent-red, #E50914);
-  color: #fff;
+}
+
+.nav-hamburger-btn[aria-expanded="true"] .hamburger-bar:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+  background-color: #fff;
+}
+
+.nav-hamburger-btn[aria-expanded="true"] .hamburger-bar:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.nav-hamburger-btn[aria-expanded="true"] .hamburger-bar:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+  background-color: #fff;
 }
 
 .mobile-drawer-overlay {

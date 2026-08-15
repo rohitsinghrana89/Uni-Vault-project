@@ -34,26 +34,25 @@ assert(navbarCss.includes('.mobile-drawer-overlay') && navbarCss.includes('visib
 assert(navbarCss.includes('.mobile-drawer-overlay.active') && navbarCss.includes('visibility: visible'), 'navbar.css reveals mobile drawer when active');
 assert(navbarCss.includes('.drawer-link-icon'), 'navbar.css styles dedicated .drawer-link-icon badge');
 
-// ── 2. Check Drawer Content & Icon Buttons in components.js ──
+// ── 2. Check Drawer Content & SVG Icon Buttons in components.js ──
 const componentsJs = fs.readFileSync(path.join(__dirname, 'public/js/components.js'), 'utf8');
 
 assert(componentsJs.includes('class="drawer-section-label">Navigation</div>'), 'components.js includes Navigation label in 3-bar drawer');
-assert(componentsJs.includes('drawer-link-icon">🏠</span>') && componentsJs.includes('Home</span>'), 'drawer contains 🏠 Home button');
-assert(componentsJs.includes('drawer-link-icon">🎬</span>') && componentsJs.includes('Movies</span>'), 'drawer contains 🎬 Movies button');
-assert(componentsJs.includes('drawer-link-icon">📺</span>') && componentsJs.includes('TV Shows</span>'), 'drawer contains 📺 TV Shows button');
-assert(componentsJs.includes('drawer-link-icon">⛩️</span>') && componentsJs.includes('Anime</span>'), 'drawer contains ⛩️ Anime button');
-assert(componentsJs.includes('drawer-link-icon">🎞️</span>') && (componentsJs.includes('Trailer') || componentsJs.includes('Trailers')), 'drawer contains 🎞️ Trailer & Trending button');
-assert(componentsJs.includes('drawer-link-icon">🔥</span>') && componentsJs.includes('Trending</span>'), 'drawer contains 🔥 Trending button');
-assert(componentsJs.includes('drawer-link-icon">❤️</span>') && componentsJs.includes('My List</span>'), 'drawer contains ❤️ My List button');
-assert(componentsJs.includes('drawer-link-icon">🔍</span>') && componentsJs.includes('Search</span>'), 'drawer contains 🔍 Search button');
-assert(componentsJs.includes('drawer-link-icon">👤</span>') && componentsJs.includes('Profile</span>'), 'drawer contains 👤 Profile button');
-assert(componentsJs.includes('drawer-link-icon">⏱️</span>') && componentsJs.includes('Watch History</span>'), 'drawer contains ⏱️ Watch History button');
-assert(componentsJs.includes('drawer-link-icon">⭐</span>') && componentsJs.includes('VIP Subscription</span>'), 'drawer contains ⭐ VIP Subscription button');
-assert(componentsJs.includes('id="drawerLogoutBtn"') && componentsJs.includes('🚪'), 'drawer contains 🚪 Sign Out button');
+assert(componentsJs.includes('href="index.html"') && componentsJs.includes('Home</span>') && componentsJs.includes('icons.home'), 'drawer contains SVG Home button');
+assert(componentsJs.includes('href="movies.html"') && componentsJs.includes('Movies</span>') && componentsJs.includes('icons.film'), 'drawer contains SVG Movies button');
+assert(componentsJs.includes('href="tv-shows.html"') && componentsJs.includes('TV Shows</span>') && componentsJs.includes('icons.tv'), 'drawer contains SVG TV Shows button');
+assert(componentsJs.includes('href="anime.html"') && componentsJs.includes('Anime</span>') && componentsJs.includes('icons.sparkles'), 'drawer contains SVG Anime button');
+assert(componentsJs.includes('href="trailers.html"') && componentsJs.includes('icons.trailer'), 'drawer contains SVG Trailers button');
+assert(componentsJs.includes('href="trending.html"') && componentsJs.includes('icons.trending'), 'drawer contains SVG Trending button');
+assert(componentsJs.includes('href="watchlist.html"') && componentsJs.includes('icons.heart'), 'drawer contains SVG My List button');
+assert(componentsJs.includes('href="search.html"') && componentsJs.includes('icons.search'), 'drawer contains SVG Search button');
+assert(componentsJs.includes('href="profile.html"') && componentsJs.includes('icons.user'), 'drawer contains SVG Profile button');
+assert(componentsJs.includes('href="subscription.html"') && componentsJs.includes('icons.vip'), 'drawer contains SVG VIP Subscription button');
+assert(componentsJs.includes('id="drawerLogoutBtn"') && componentsJs.includes('icons.logout'), 'drawer contains SVG Sign Out button');
 
-// ── 3. Check Drawer Interactions ──
+// ── 3. Check Drawer Interactions & 3-Bar Morphing ──
 assert(componentsJs.includes("openMobileDrawer") && componentsJs.includes("closeMobileDrawer"), 'components.js implements drawer open/close controller');
-assert(componentsJs.includes("icon.textContent = '✕'") && componentsJs.includes("icon.textContent = '☰'"), 'components.js toggles hamburger between ☰ and ✕');
+assert(componentsJs.includes('aria-expanded') && componentsJs.includes('hamburger-bar'), 'components.js controls 3-bar morphing hamburger without emoji');
 assert(componentsJs.includes("e.key === 'Escape'"), 'components.js closes drawer on Escape key');
 assert(componentsJs.includes("document.querySelectorAll('.drawer-links a')"), 'components.js auto-closes drawer on link tap');
 

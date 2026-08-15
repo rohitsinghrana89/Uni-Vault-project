@@ -423,7 +423,7 @@
 
       <div class="profile-header-content">
         <div class="profile-user-info-group">
-          <div class="profile-avatar-large" id="headerAvatar">👤</div>
+          <div class="profile-avatar-large" id="headerAvatar">U</div>
           <div>
             <h1 class="profile-name-title" id="headerName">Streamer</h1>
             <div class="profile-email-text" id="headerEmail">user@univault.com</div>
@@ -433,10 +433,10 @@
 
         <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
           <button type="button" class="btn-netflix btn-netflix-secondary" id="openEditProfileBtn">
-            ✏️ Edit Profile
+            Edit Profile
           </button>
           <a href="subscription.html" class="btn-netflix btn-netflix-red" id="headerUpgradeBtn">
-            ⭐ Upgrade Plan
+            Upgrade Plan
           </a>
         </div>
       </div>
@@ -445,13 +445,13 @@
     <!-- ═══════════════════════════════════════ 2. PROFILE NAVIGATION ══ -->
     <div class="profile-nav-bar-wrapper">
       <nav class="profile-nav-tabs" role="tablist" aria-label="Profile section tabs">
-        <button type="button" class="profile-nav-tab active" data-tab="overview">📊 Overview</button>
-        <button type="button" class="profile-nav-tab" data-tab="mylist">🎬 My List</button>
-        <button type="button" class="profile-nav-tab" data-tab="continue">⏳ Continue Watching</button>
-        <button type="button" class="profile-nav-tab" data-tab="recent">👁️ Recently Viewed</button>
-        <button type="button" class="profile-nav-tab" data-tab="history">📜 Watch History</button>
-        <button type="button" class="profile-nav-tab" data-tab="subscription">👑 Subscription</button>
-        <button type="button" class="profile-nav-tab" data-tab="settings">⚙️ Settings</button>
+        <button type="button" class="profile-nav-tab active" data-tab="overview">Overview</button>
+        <button type="button" class="profile-nav-tab" data-tab="mylist">My List</button>
+        <button type="button" class="profile-nav-tab" data-tab="continue">Continue Watching</button>
+        <button type="button" class="profile-nav-tab" data-tab="recent">Recently Viewed</button>
+        <button type="button" class="profile-nav-tab" data-tab="history">Watch History</button>
+        <button type="button" class="profile-nav-tab" data-tab="subscription">Subscription</button>
+        <button type="button" class="profile-nav-tab" data-tab="settings">Settings</button>
       </nav>
     </div>
 
@@ -464,7 +464,9 @@
         <!-- Stats Grid -->
         <div class="overview-stats-grid">
           <div class="stat-card" onclick="switchTab('mylist')" style="cursor: pointer;">
-            <div class="stat-icon-box">🎬</div>
+            <div class="stat-icon-box">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
+            </div>
             <div>
               <div class="stat-val-text" id="statMyListCount">0</div>
               <div class="stat-label-text">My List Titles</div>
@@ -472,7 +474,9 @@
           </div>
 
           <div class="stat-card" onclick="switchTab('continue')" style="cursor: pointer;">
-            <div class="stat-icon-box">⏳</div>
+            <div class="stat-icon-box">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            </div>
             <div>
               <div class="stat-val-text" id="statContinueCount">0</div>
               <div class="stat-label-text">Continue Watching</div>
@@ -480,7 +484,9 @@
           </div>
 
           <div class="stat-card" onclick="switchTab('recent')" style="cursor: pointer;">
-            <div class="stat-icon-box">👁️</div>
+            <div class="stat-icon-box">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            </div>
             <div>
               <div class="stat-val-text" id="statRecentCount">0</div>
               <div class="stat-label-text">Recently Viewed</div>
@@ -488,7 +494,9 @@
           </div>
 
           <div class="stat-card" onclick="switchTab('subscription')" style="cursor: pointer;">
-            <div class="stat-icon-box">👑</div>
+            <div class="stat-icon-box">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m2 4 3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14"></path></svg>
+            </div>
             <div>
               <div class="stat-val-text" id="statSubPlan" style="font-size: 1.25rem;">Free</div>
               <div class="stat-label-text">Current Tier</div>
@@ -513,7 +521,6 @@
         </div>
         <div class="netflix-grid" id="profileMyListGrid"></div>
         <div id="emptyMyList" style="display: none; text-align: center; padding: 4rem 1rem;">
-          <div style="font-size: 3.5rem; margin-bottom: 1rem;">🎬</div>
           <h3 style="font-size: 1.4rem; font-weight: 800; color: #fff; margin-bottom: 0.5rem;">Your List Is Empty</h3>
           <p style="color: #9CA3AF; margin-bottom: 1.5rem;">Save movies and TV shows you want to watch later.</p>
           <a href="movies.html" class="btn-netflix btn-netflix-red">Browse Movies</a>
@@ -527,7 +534,6 @@
         </div>
         <div class="continue-grid" id="fullContinueGrid"></div>
         <div id="emptyContinue" style="display: none; text-align: center; padding: 4rem 1rem;">
-          <div style="font-size: 3.5rem; margin-bottom: 1rem;">⏳</div>
           <h3 style="font-size: 1.4rem; font-weight: 800; color: #fff; margin-bottom: 0.5rem;">No Active Playback</h3>
           <p style="color: #9CA3AF; margin-bottom: 1.5rem;">Start watching movies or shows and your progress will sync here.</p>
           <a href="index.html" class="btn-netflix btn-netflix-red">Explore Trending</a>
@@ -539,12 +545,11 @@
         <div class="section-header" style="justify-content: space-between;">
           <h2 class="section-title">Recently Viewed</h2>
           <button type="button" class="btn-netflix btn-netflix-secondary" style="padding: 0.4rem 0.9rem; font-size: 0.82rem;" id="clearRecentBtn">
-            🗑️ Clear History
+            Clear History
           </button>
         </div>
         <div class="netflix-grid" id="profileRecentGrid"></div>
         <div id="emptyRecent" style="display: none; text-align: center; padding: 4rem 1rem;">
-          <div style="font-size: 3.5rem; margin-bottom: 1rem;">👁️</div>
           <h3 style="font-size: 1.4rem; font-weight: 800; color: #fff; margin-bottom: 0.5rem;">Nothing Here Yet</h3>
           <p style="color: #9CA3AF; margin-bottom: 1.5rem;">Browse and explore titles to build your recently viewed catalog.</p>
           <a href="index.html" class="btn-netflix btn-netflix-red">Explore Now</a>
@@ -556,7 +561,7 @@
         <div class="section-header" style="justify-content: space-between;">
           <h2 class="section-title">Playback History Timeline</h2>
           <button type="button" class="btn-netflix btn-netflix-secondary" style="padding: 0.4rem 0.9rem; font-size: 0.82rem;" id="clearHistoryBtn">
-            🗑️ Clear All
+            Clear All
           </button>
         </div>
         <div class="continue-grid" id="profileHistoryGrid"></div>
@@ -575,9 +580,9 @@
 
           <div style="border-top: 1px solid rgba(255,255,255,0.08); border-bottom: 1px solid rgba(255,255,255,0.08); padding: 1.25rem 0; margin-bottom: 1.5rem;">
             <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.65rem; color: #D1D5DB; font-size: 0.92rem;">
-              <li><span style="color: #10B981; font-weight: 800;">✓</span> Full HD 1080p & 4K Ultra HD Streaming</li>
+              <li><span style="color: #10B981; font-weight: 800;">✓</span> Full HD 1080p &amp; 4K Ultra HD Streaming</li>
               <li><span style="color: #10B981; font-weight: 800;">✓</span> 100% Ad-Free Entertainment</li>
-              <li><span style="color: #10B981; font-weight: 800;">✓</span> Unlimited Movies, TV Series & Anime</li>
+              <li><span style="color: #10B981; font-weight: 800;">✓</span> Unlimited Movies, TV Series &amp; Anime</li>
               <li><span style="color: #10B981; font-weight: 800;">✓</span> Multi-Device Synchronized Progress</li>
             </ul>
           </div>
@@ -600,7 +605,7 @@
           
           <!-- Account Settings -->
           <div class="settings-group-card">
-            <h3 class="settings-group-title">👤 Account Information</h3>
+            <h3 class="settings-group-title">Account Information</h3>
             <div class="settings-row">
               <div>
                 <div style="font-weight: 700; color: #fff;">Display Name</div>
@@ -618,7 +623,7 @@
 
           <!-- Playback Settings -->
           <div class="settings-group-card">
-            <h3 class="settings-group-title">▶️ Playback Preferences</h3>
+            <h3 class="settings-group-title">Playback Preferences</h3>
             <div class="settings-row">
               <div>
                 <div style="font-weight: 700; color: #fff;">Autoplay Next Episode</div>
@@ -641,7 +646,7 @@
 
           <!-- Notifications -->
           <div class="settings-group-card">
-            <h3 class="settings-group-title">🔔 Notifications</h3>
+            <h3 class="settings-group-title">Notifications</h3>
             <div class="settings-row">
               <div>
                 <div style="font-weight: 700; color: #fff;">New Release Alerts</div>
@@ -655,7 +660,7 @@
 
           <!-- Danger Zone: Logout -->
           <div class="settings-group-card" style="border-color: rgba(239, 68, 68, 0.3);">
-            <h3 class="settings-group-title" style="color: #EF4444;">🚪 Account Session</h3>
+            <h3 class="settings-group-title" style="color: #EF4444;">Account Session</h3>
             <p style="color: #9CA3AF; font-size: 0.88rem; margin-bottom: 1rem;">Sign out of your active UniVault session across this device.</p>
             <button type="button" class="btn-netflix btn-netflix-secondary" style="border-color: rgba(239, 68, 68, 0.4); color: #FCA5A5;" id="openLogoutModalBtn">
               Sign Out of UniVault
@@ -673,20 +678,16 @@
   <div class="qr-modal-backdrop" id="editModalBackdrop" role="dialog" aria-modal="true" aria-hidden="true" style="position: fixed; inset: 0; z-index: 10000; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); display: none; align-items: center; justify-content: center; padding: 1rem;">
     <div style="width: 100%; max-width: 440px; background: #14141f; border: 1px solid rgba(255,255,255,0.15); border-radius: var(--radius-lg); padding: 2rem; box-shadow: 0 24px 60px rgba(0,0,0,0.9);">
       <h3 style="font-size: 1.4rem; font-weight: 800; color: #fff; margin-bottom: 0.25rem;">Edit Profile</h3>
-      <p style="color: #9CA3AF; font-size: 0.85rem; margin-bottom: 1.25rem;">Customize your profile avatar and name</p>
+      <p style="color: #9CA3AF; font-size: 0.85rem; margin-bottom: 1.25rem;">Customize your profile details</p>
 
-      <label style="font-size: 0.85rem; font-weight: 700; color: #D1D5DB; display: block; margin-bottom: 0.35rem;">Choose Avatar</label>
-      <div class="avatar-grid" id="avatarPickerGrid">
-        <button type="button" class="avatar-btn selected" data-avatar="👤">👤</button>
-        <button type="button" class="avatar-btn" data-avatar="👑">👑</button>
-        <button type="button" class="avatar-btn" data-avatar="🎬">🎬</button>
-        <button type="button" class="avatar-btn" data-avatar="🚀">🚀</button>
-        <button type="button" class="avatar-btn" data-avatar="🍿">🍿</button>
-        <button type="button" class="avatar-btn" data-avatar="🔥">🔥</button>
-        <button type="button" class="avatar-btn" data-avatar="⚡">⚡</button>
-        <button type="button" class="avatar-btn" data-avatar="⭐">⭐</button>
-        <button type="button" class="avatar-btn" data-avatar="🦊">🦊</button>
-        <button type="button" class="avatar-btn" data-avatar="🐯">🐯</button>
+      <label style="font-size: 0.85rem; font-weight: 700; color: #D1D5DB; display: block; margin-bottom: 0.4rem;">Choose Avatar Badge</label>
+      <div class="avatar-grid" id="avatarPickerGrid" style="margin-bottom: 1.25rem;">
+        <button type="button" class="avatar-btn selected" data-avatar="U">U</button>
+        <button type="button" class="avatar-btn" data-avatar="V">V</button>
+        <button type="button" class="avatar-btn" data-avatar="4K">4K</button>
+        <button type="button" class="avatar-btn" data-avatar="VIP">VIP</button>
+        <button type="button" class="avatar-btn" data-avatar="MAX">MAX</button>
+        <button type="button" class="avatar-btn" data-avatar="PRO">PRO</button>
       </div>
 
       <div style="margin-bottom: 1.5rem;">
@@ -704,7 +705,6 @@
   <!-- ═══════════════════════════════════════ 5. LOGOUT MODAL ══ -->
   <div class="qr-modal-backdrop" id="logoutModalBackdrop" role="dialog" aria-modal="true" aria-hidden="true" style="position: fixed; inset: 0; z-index: 10000; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); display: none; align-items: center; justify-content: center; padding: 1rem;">
     <div style="width: 100%; max-width: 400px; background: #14141f; border: 1px solid rgba(255,255,255,0.15); border-radius: var(--radius-lg); padding: 2rem; text-align: center; box-shadow: 0 24px 60px rgba(0,0,0,0.9);">
-      <div style="font-size: 2.8rem; margin-bottom: 0.75rem;">🚪</div>
       <h3 style="font-size: 1.3rem; font-weight: 800; color: #fff; margin-bottom: 0.5rem;">Sign Out</h3>
       <p style="color: #9CA3AF; font-size: 0.9rem; margin-bottom: 1.75rem;">Are you sure you want to log out of UniVault?</p>
       <div style="display: flex; gap: 0.75rem;">
