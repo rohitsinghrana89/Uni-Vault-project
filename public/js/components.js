@@ -37,7 +37,8 @@
               <li class="nav-link-item"><a href="movies.html" class="${activePage === 'movies' ? 'active' : ''}">Movies</a></li>
               <li class="nav-link-item"><a href="tv-shows.html" class="${activePage === 'tv' ? 'active' : ''}">TV Shows</a></li>
               <li class="nav-link-item"><a href="anime.html" class="${activePage === 'anime' ? 'active' : ''}">Anime</a></li>
-              <li class="nav-link-item"><a href="trailers.html" class="${activePage === 'trailers' || activePage === 'trending' ? 'active' : ''}">Trending &amp; Trailers</a></li>
+              <li class="nav-link-item"><a href="trailers.html" class="${activePage === 'trailers' ? 'active' : ''}">Trailers</a></li>
+              <li class="nav-link-item"><a href="trending.html" class="${activePage === 'trending' ? 'active' : ''}">Trending</a></li>
               <li class="nav-link-item"><a href="watchlist.html" class="${activePage === 'watchlist' ? 'active' : ''}">My List</a></li>
             </ul>
           </div>
@@ -129,17 +130,17 @@
               <li>
                 <a href="anime.html" class="${activePage === 'anime' ? 'active' : ''}">
                   <span class="drawer-link-left">
-                    <span class="drawer-link-icon">⚡</span>
+                    <span class="drawer-link-icon">⛩️</span>
                     <span class="drawer-link-text">Anime</span>
                   </span>
                   <span class="drawer-link-arrow">›</span>
                 </a>
               </li>
               <li>
-                <a href="trailers.html" class="${activePage === 'trailers' ? 'active' : ''}">
+                <a href="trailers.html" class="${activePage === 'trailers' || activePage === 'trending' ? 'active' : ''}">
                   <span class="drawer-link-left">
-                    <span class="drawer-link-icon">🎥</span>
-                    <span class="drawer-link-text">Trailers</span>
+                    <span class="drawer-link-icon">🎞️</span>
+                    <span class="drawer-link-text">Trailer &amp; Trending</span>
                   </span>
                   <span class="drawer-link-arrow">›</span>
                 </a>
@@ -213,6 +214,12 @@
           </div>
         </div>
       `;
+
+      // Ensure mobile drawer is attached directly to document.body so navbar containing block does not constrain it
+      const drawerOverlay = document.getElementById('mobileDrawerOverlay');
+      if (drawerOverlay && drawerOverlay.parentElement !== document.body) {
+        document.body.appendChild(drawerOverlay);
+      }
 
       // ── Attach Navbar Interactions ──
       this.initNavbarListeners();
@@ -828,11 +835,11 @@
           </a>
           <a href="anime.html" class="category-3bar-tab ${activeTab === 'anime' ? 'active' : ''}">
             <span class="section-3bar" style="margin-right: 4px;"><span></span><span></span><span></span></span>
-            ⚡ Anime
+            ⛩️ Anime
           </a>
           <a href="trailers.html" class="category-3bar-tab ${activeTab === 'trailers' ? 'active' : ''}">
             <span class="section-3bar" style="margin-right: 4px;"><span></span><span></span><span></span></span>
-            🎥 Trailers
+            🎞️ Trailers
           </a>
           <a href="trending.html" class="category-3bar-tab ${activeTab === 'trending' ? 'active' : ''}">
             <span class="section-3bar" style="margin-right: 4px;"><span></span><span></span><span></span></span>
@@ -840,6 +847,100 @@
           </a>
         </div>
       `;
+    },
+
+    // ═════════════════════════════════════════════════════════════════════════
+    // 12. RESPONSIVE SMART STREAMING PAGINATION BUILDER
+    // ═════════════════════════════════════════════════════════════════════════
+    renderPagination: function (containerId, options = {}) {
+      const container = typeof containerId === 'string' ? document.getElementById(containerId) : containerId;
+      if (!container) return;
+
+      const currentPage = Math.max(1, parseInt(options.currentPage || 1, 10));
+      const totalPages = Math.max(1, Math.min(parseInt(options.totalPages || 1, 10), 500));
+      const onPageChange = typeof options.onPageChange === 'function' ? options.onPageChange : () => {};
+
+      if (totalPages <= 1) {
+        container.innerHTML = '';
+        container.style.display = 'none';
+        return;
+      }
+      container.style.display = 'flex';
+
+      const delta = 2; // around current page
+      const range = [];
+      const rangeWithDots = [];
+      let l;
+
+      for (let i = 1; i <= totalPages; i++) {
+        if (i === 1 || i === totalPages || (i >= currentPage - delta && i <= currentPage + delta)) {
+          range.push(i);
+        }
+      }
+
+      for (let i of range) {
+        if (l) {
+          if (i - l === 2) {
+            rangeWithDots.push(l + 1);
+          } else if (i - l !== 1) {
+            rangeWithDots.push('...');
+          }
+        }
+        rangeWithDots.push(i);
+        l = i;
+      }
+
+      let html = '<div class="pagination-container" role="navigation" aria-label="Pagination">';
+
+      // Previous Button
+      const prevDisabled = currentPage <= 1 ? 'disabled' : '';
+      html += `
+        <button type="button" class="pagination-btn pagination-nav-btn prev-btn" data-page="${currentPage - 1}" ${prevDisabled} aria-label="Previous Page">
+          <span class="nav-arrow">←</span> <span class="nav-text">Previous</span>
+        </button>
+      `;
+
+      // Page Numbers
+      for (const item of rangeWithDots) {
+        if (item === '...') {
+          html += `<span class="pagination-ellipsis" aria-hidden="true">…</span>`;
+        } else {
+          const isActive = item === currentPage;
+          const activeClass = isActive ? 'active' : '';
+          const ariaCurrent = isActive ? 'aria-current="page"' : '';
+          const isOuter = (item !== 1 && item !== totalPages && Math.abs(item - currentPage) > 1);
+          const outerClass = isOuter ? 'pagination-desktop-only' : '';
+          html += `
+            <button type="button" class="pagination-btn ${activeClass} ${outerClass}" data-page="${item}" ${ariaCurrent} aria-label="Page ${item}">
+              ${item}
+            </button>
+          `;
+        }
+      }
+
+      // Next Button
+      const nextDisabled = currentPage >= totalPages ? 'disabled' : '';
+      html += `
+        <button type="button" class="pagination-btn pagination-nav-btn next-btn" data-page="${currentPage + 1}" ${nextDisabled} aria-label="Next Page">
+          <span class="nav-text">Next</span> <span class="nav-arrow">→</span>
+        </button>
+      `;
+
+      html += '</div>';
+      container.innerHTML = html;
+
+      // Attach click events
+      const buttons = container.querySelectorAll('.pagination-btn[data-page]');
+      buttons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (btn.disabled || btn.classList.contains('active')) return;
+          const targetPage = parseInt(btn.getAttribute('data-page'), 10);
+          if (!isNaN(targetPage) && targetPage >= 1 && targetPage <= totalPages && targetPage !== currentPage) {
+            onPageChange(targetPage);
+          }
+        });
+      });
     }
   };
 

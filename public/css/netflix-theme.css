@@ -825,31 +825,52 @@ button {
 /* ═══════════════════════════════════════════════════════════════════════════
    9. RESPONSIVE GRID LAYOUTS (For Movies, TV, Anime, Search, Watchlist)
    ═══════════════════════════════════════════════════════════════════════════ */
-.netflix-grid {
-  display: grid;
+.netflix-grid,
+.movie-grid,
+.tv-grid,
+.anime-grid {
+  display: grid !important;
   grid-template-columns: repeat(6, 1fr);
   gap: clamp(0.75rem, 1.5vw, 1.25rem);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 @media (max-width: 1440px) {
-  .netflix-grid { grid-template-columns: repeat(5, 1fr); }
+  .netflix-grid,
+  .movie-grid,
+  .tv-grid,
+  .anime-grid { grid-template-columns: repeat(5, 1fr); }
 }
 @media (max-width: 1024px) {
-  .netflix-grid { grid-template-columns: repeat(4, 1fr); }
+  .netflix-grid,
+  .movie-grid,
+  .tv-grid,
+  .anime-grid { grid-template-columns: repeat(4, 1fr); }
 }
 @media (max-width: 768px) {
-  .netflix-grid { grid-template-columns: repeat(3, 1fr); }
+  .netflix-grid,
+  .movie-grid,
+  .tv-grid,
+  .anime-grid { grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
 }
-@media (max-width: 480px) {
-  .netflix-grid { grid-template-columns: repeat(2, 1fr); gap: 0.65rem; }
-}
-@media (max-width: 340px) {
-  .netflix-grid { grid-template-columns: 1fr; }
+@media (max-width: 540px) {
+  .netflix-grid,
+  .movie-grid,
+  .tv-grid,
+  .anime-grid { grid-template-columns: repeat(2, 1fr) !important; gap: clamp(0.45rem, 2vw, 0.65rem); }
 }
 
-.netflix-grid .netflix-card {
+.netflix-grid .netflix-card,
+.movie-grid .netflix-card,
+.tv-grid .netflix-card,
+.anime-grid .netflix-card {
   flex: unset;
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 /* Touch Card UI: Ensure cards and actions are fully visible on touch screens */
@@ -878,6 +899,9 @@ button {
   gap: 1rem;
   margin-bottom: 2rem;
   padding: 0.5rem 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .filter-pills {
@@ -885,6 +909,8 @@ button {
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 @media (max-width: 768px) {
@@ -896,13 +922,17 @@ button {
   .filter-pills {
     flex-wrap: nowrap;
     overflow-x: auto;
-    padding-bottom: 0.4rem;
+    width: 100%;
+    max-width: 100%;
+    padding-bottom: 0.5rem;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
   }
   .filter-pills::-webkit-scrollbar { display: none; }
   .filter-pill {
     flex-shrink: 0;
+    white-space: nowrap;
     padding: 0.45rem 0.95rem;
     font-size: 0.82rem;
   }
@@ -924,7 +954,9 @@ button {
   font-size: 0.88rem;
   font-weight: 600;
   cursor: pointer;
+  touch-action: manipulation;
   transition: all var(--transition-fast);
+  box-sizing: border-box;
 }
 
 .filter-pill:hover {
@@ -946,6 +978,144 @@ button {
   gap: 0.6rem;
   color: var(--text-secondary);
   font-size: 0.88rem;
+  box-sizing: border-box;
+}
+
+.sort-select {
+  background: #161622;
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm, 6px);
+  padding: 0.45rem 0.85rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  outline: none;
+  cursor: pointer;
+  transition: border-color var(--transition-fast);
+  box-sizing: border-box;
+}
+
+.sort-select:focus {
+  border-color: var(--accent-red);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   11. RESPONSIVE STREAMING PAGINATION SYSTEM
+   ═══════════════════════════════════════════════════════════════════════════ */
+.pagination-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: clamp(0.3rem, 1vw, 0.6rem);
+  margin-top: 3rem;
+  margin-bottom: 2.5rem;
+  padding: 1rem 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.pagination-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  height: 44px;
+  padding: 0 0.85rem;
+  border-radius: var(--radius-md, 8px);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary, #9CA3AF);
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+.pagination-btn:hover:not(:disabled):not(.active) {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+}
+
+.pagination-btn.active {
+  background: var(--accent-gradient, linear-gradient(135deg, #E50914 0%, #B81D24 100%)) !important;
+  color: #fff !important;
+  border-color: var(--accent-red, #E50914) !important;
+  box-shadow: 0 4px 16px rgba(229, 9, 20, 0.45);
+  cursor: default;
+  pointer-events: none;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
+  transform: none !important;
+}
+
+.pagination-ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 44px;
+  color: var(--text-muted, #6B7280);
+  font-weight: 800;
+  font-size: 1rem;
+  user-select: none;
+}
+
+.pagination-nav-btn {
+  padding: 0 1.1rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+@media (max-width: 640px) {
+  .pagination-desktop-only {
+    display: none !important;
+  }
+  .pagination-container {
+    gap: 0.25rem;
+    margin-top: 2rem;
+  }
+  .pagination-btn {
+    min-width: 38px;
+    height: 40px;
+    padding: 0 0.55rem;
+    font-size: 0.84rem;
+  }
+  .pagination-nav-btn {
+    padding: 0 0.65rem;
+    font-size: 0.8rem;
+  }
+  .pagination-ellipsis {
+    min-width: 18px;
+    height: 40px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .pagination-btn {
+    min-width: 34px;
+    height: 38px;
+    padding: 0 0.4rem;
+    font-size: 0.78rem;
+  }
+  .pagination-nav-btn {
+    padding: 0 0.5rem;
+  }
 }
 
 .sort-select {

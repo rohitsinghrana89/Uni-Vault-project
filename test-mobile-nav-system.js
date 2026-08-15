@@ -41,8 +41,8 @@ assert(componentsJs.includes('class="drawer-section-label">Navigation</div>'), '
 assert(componentsJs.includes('drawer-link-icon">🏠</span>') && componentsJs.includes('Home</span>'), 'drawer contains 🏠 Home button');
 assert(componentsJs.includes('drawer-link-icon">🎬</span>') && componentsJs.includes('Movies</span>'), 'drawer contains 🎬 Movies button');
 assert(componentsJs.includes('drawer-link-icon">📺</span>') && componentsJs.includes('TV Shows</span>'), 'drawer contains 📺 TV Shows button');
-assert(componentsJs.includes('drawer-link-icon">⚡</span>') && componentsJs.includes('Anime</span>'), 'drawer contains ⚡ Anime button');
-assert(componentsJs.includes('drawer-link-icon">🎥</span>') && componentsJs.includes('Trailers</span>'), 'drawer contains 🎥 Trailers button');
+assert(componentsJs.includes('drawer-link-icon">⛩️</span>') && componentsJs.includes('Anime</span>'), 'drawer contains ⛩️ Anime button');
+assert(componentsJs.includes('drawer-link-icon">🎞️</span>') && (componentsJs.includes('Trailer') || componentsJs.includes('Trailers')), 'drawer contains 🎞️ Trailer & Trending button');
 assert(componentsJs.includes('drawer-link-icon">🔥</span>') && componentsJs.includes('Trending</span>'), 'drawer contains 🔥 Trending button');
 assert(componentsJs.includes('drawer-link-icon">❤️</span>') && componentsJs.includes('My List</span>'), 'drawer contains ❤️ My List button');
 assert(componentsJs.includes('drawer-link-icon">🔍</span>') && componentsJs.includes('Search</span>'), 'drawer contains 🔍 Search button');

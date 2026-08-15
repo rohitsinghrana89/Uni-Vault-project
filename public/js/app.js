@@ -37,7 +37,6 @@
   // ═══════════════════════════════════════════════════════════════════════════
   async function initHomePage() {
     Components.renderNavbar('home');
-    Components.renderCategory3BarNav('category3BarNav', 'home');
     Components.renderFooter();
 
     // Show initial skeleton loaders
@@ -193,22 +192,55 @@
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // 2. MOVIES PAGE CONTROLLER
+  // 2. MOVIES PAGE CONTROLLER (With Full TMDB Pagination & URL Sync)
   // ═══════════════════════════════════════════════════════════════════════════
   async function initMoviesPage() {
     Components.renderNavbar('movies');
-    Components.renderCategory3BarNav('category3BarNav', 'movies');
     Components.renderFooter();
 
     const grid = document.getElementById('moviesGrid');
+    const paginationEl = document.getElementById('moviesPagination');
     const filterPills = document.querySelectorAll('.filter-pill[data-genre]');
     const sortSelect = document.getElementById('movieSortSelect');
-    let currentGenre = 'all';
-    let currentSort = 'popularity.desc';
-    let currentPage = 1;
 
-    async function loadMovies() {
+    // Read initial state from URL query parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    let currentPage = Math.max(1, parseInt(urlParams.get('page') || '1', 10));
+    let currentGenre = urlParams.get('genre') || 'all';
+    let currentSort = urlParams.get('sort') || 'popularity.desc';
+
+    // Synchronize UI elements with URL state
+    if (sortSelect) sortSelect.value = currentSort;
+    filterPills.forEach(pill => {
+      pill.classList.toggle('active', pill.getAttribute('data-genre') === currentGenre);
+    });
+
+    let isLoading = false;
+    let requestSeq = 0;
+
+    function syncUrl(push = true) {
+      const params = new URLSearchParams();
+      if (currentPage > 1) params.set('page', String(currentPage));
+      if (currentGenre !== 'all') params.set('genre', currentGenre);
+      if (currentSort !== 'popularity.desc') params.set('sort', currentSort);
+
+      const qs = params.toString();
+      const newUrl = `${window.location.pathname}${qs ? '?' + qs : ''}`;
+      if (push) {
+        window.history.pushState({ page: currentPage, genre: currentGenre, sort: currentSort }, '', newUrl);
+      } else {
+        window.history.replaceState({ page: currentPage, genre: currentGenre, sort: currentSort }, '', newUrl);
+      }
+    }
+
+    async function loadMovies(shouldScroll = false) {
+      if (isLoading) return;
+      isLoading = true;
+      const currentReq = ++requestSeq;
+
       Components.createSkeletonGrid('moviesGrid', 18);
+      if (paginationEl) paginationEl.style.display = 'none';
+
       try {
         let movies = [];
         if (currentGenre === 'all') {
@@ -223,6 +255,9 @@
           movies = await TMDB_API.getGenreContent('movie', currentGenre, currentPage, currentSort);
         }
 
+        // Prevent stale responses if a newer request was dispatched
+        if (currentReq !== requestSeq) return;
+
         if (grid) {
           if (movies && movies.length > 0) {
             grid.innerHTML = movies.map(m => Components.createMovieCard(m)).join('');
@@ -230,49 +265,121 @@
             grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 4rem; color: #9CA3AF;">No movies found for this filter.</div>`;
           }
         }
+
+        // Render Smart Pagination
+        const totalPages = movies.total_pages || (movies.length >= 18 ? 500 : 1);
+        if (paginationEl) {
+          Components.renderPagination('moviesPagination', {
+            currentPage,
+            totalPages,
+            onPageChange: (newPage) => {
+              if (newPage === currentPage || isLoading) return;
+              currentPage = newPage;
+              syncUrl(true);
+              loadMovies(true);
+            }
+          });
+        }
+
+        if (shouldScroll && grid) {
+          const topOffset = grid.getBoundingClientRect().top + window.scrollY - 100;
+          window.scrollTo({ top: Math.max(0, topOffset), behavior: 'smooth' });
+        }
       } catch (err) {
         console.error('Movies load error:', err);
+        if (grid) grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #EF4444;">Unable to load movies. Please check your connection.</div>`;
+      } finally {
+        if (currentReq === requestSeq) isLoading = false;
       }
     }
 
     filterPills.forEach(pill => {
       pill.addEventListener('click', () => {
+        if (isLoading) return;
         filterPills.forEach(p => p.classList.remove('active'));
         pill.classList.add('active');
         currentGenre = pill.getAttribute('data-genre');
         currentPage = 1;
-        loadMovies();
+        syncUrl(true);
+        loadMovies(true);
       });
     });
 
     if (sortSelect) {
       sortSelect.addEventListener('change', () => {
+        if (isLoading) return;
         currentSort = sortSelect.value;
         currentPage = 1;
-        loadMovies();
+        syncUrl(true);
+        loadMovies(true);
       });
     }
 
-    loadMovies();
+    // Handle browser Back/Forward navigation
+    window.addEventListener('popstate', () => {
+      const p = new URLSearchParams(window.location.search);
+      currentPage = Math.max(1, parseInt(p.get('page') || '1', 10));
+      currentGenre = p.get('genre') || 'all';
+      currentSort = p.get('sort') || 'popularity.desc';
+
+      if (sortSelect) sortSelect.value = currentSort;
+      filterPills.forEach(pill => {
+        pill.classList.toggle('active', pill.getAttribute('data-genre') === currentGenre);
+      });
+      loadMovies(false);
+    });
+
+    loadMovies(false);
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // 3. TV SHOWS PAGE CONTROLLER
+  // 3. TV SHOWS PAGE CONTROLLER (With Full TMDB Pagination & URL Sync)
   // ═══════════════════════════════════════════════════════════════════════════
   async function initTVShowsPage() {
     Components.renderNavbar('tv');
-    Components.renderCategory3BarNav('category3BarNav', 'tv');
     Components.renderFooter();
 
     const grid = document.getElementById('tvGrid');
+    const paginationEl = document.getElementById('tvPagination');
     const filterPills = document.querySelectorAll('.filter-pill[data-genre]');
     const sortSelect = document.getElementById('tvSortSelect');
-    let currentGenre = 'all';
-    let currentSort = 'popularity.desc';
-    let currentPage = 1;
 
-    async function loadTV() {
+    const urlParams = new URLSearchParams(window.location.search);
+    let currentPage = Math.max(1, parseInt(urlParams.get('page') || '1', 10));
+    let currentGenre = urlParams.get('genre') || 'all';
+    let currentSort = urlParams.get('sort') || 'popularity.desc';
+
+    if (sortSelect) sortSelect.value = currentSort;
+    filterPills.forEach(pill => {
+      pill.classList.toggle('active', pill.getAttribute('data-genre') === currentGenre);
+    });
+
+    let isLoading = false;
+    let requestSeq = 0;
+
+    function syncUrl(push = true) {
+      const params = new URLSearchParams();
+      if (currentPage > 1) params.set('page', String(currentPage));
+      if (currentGenre !== 'all') params.set('genre', currentGenre);
+      if (currentSort !== 'popularity.desc') params.set('sort', currentSort);
+
+      const qs = params.toString();
+      const newUrl = `${window.location.pathname}${qs ? '?' + qs : ''}`;
+      if (push) {
+        window.history.pushState({ page: currentPage, genre: currentGenre, sort: currentSort }, '', newUrl);
+      } else {
+        window.history.replaceState({ page: currentPage, genre: currentGenre, sort: currentSort }, '', newUrl);
+      }
+    }
+
+    async function loadTV(shouldScroll = false) {
+      if (isLoading) return;
+      isLoading = true;
+      const currentReq = ++requestSeq;
+
       Components.createSkeletonGrid('tvGrid', 18);
+      if (paginationEl) paginationEl.style.display = 'none';
+
       try {
         let shows = [];
         if (currentGenre === 'all') {
@@ -285,6 +392,8 @@
           shows = await TMDB_API.getGenreContent('tv', currentGenre, currentPage, currentSort);
         }
 
+        if (currentReq !== requestSeq) return;
+
         if (grid) {
           if (shows && shows.length > 0) {
             grid.innerHTML = shows.map(s => Components.createMovieCard(s)).join('');
@@ -292,40 +401,197 @@
             grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 4rem; color: #9CA3AF;">No shows found for this filter.</div>`;
           }
         }
+
+        const totalPages = shows.total_pages || (shows.length >= 18 ? 500 : 1);
+        if (paginationEl) {
+          Components.renderPagination('tvPagination', {
+            currentPage,
+            totalPages,
+            onPageChange: (newPage) => {
+              if (newPage === currentPage || isLoading) return;
+              currentPage = newPage;
+              syncUrl(true);
+              loadTV(true);
+            }
+          });
+        }
+
+        if (shouldScroll && grid) {
+          const topOffset = grid.getBoundingClientRect().top + window.scrollY - 100;
+          window.scrollTo({ top: Math.max(0, topOffset), behavior: 'smooth' });
+        }
       } catch (err) {
         console.error('TV load error:', err);
+        if (grid) grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #EF4444;">Unable to load TV shows. Please check your connection.</div>`;
+      } finally {
+        if (currentReq === requestSeq) isLoading = false;
       }
     }
 
     filterPills.forEach(pill => {
       pill.addEventListener('click', () => {
+        if (isLoading) return;
         filterPills.forEach(p => p.classList.remove('active'));
         pill.classList.add('active');
         currentGenre = pill.getAttribute('data-genre');
         currentPage = 1;
-        loadTV();
+        syncUrl(true);
+        loadTV(true);
       });
     });
 
     if (sortSelect) {
       sortSelect.addEventListener('change', () => {
+        if (isLoading) return;
         currentSort = sortSelect.value;
         currentPage = 1;
-        loadTV();
+        syncUrl(true);
+        loadTV(true);
       });
     }
 
-    loadTV();
+    window.addEventListener('popstate', () => {
+      const p = new URLSearchParams(window.location.search);
+      currentPage = Math.max(1, parseInt(p.get('page') || '1', 10));
+      currentGenre = p.get('genre') || 'all';
+      currentSort = p.get('sort') || 'popularity.desc';
+
+      if (sortSelect) sortSelect.value = currentSort;
+      filterPills.forEach(pill => {
+        pill.classList.toggle('active', pill.getAttribute('data-genre') === currentGenre);
+      });
+      loadTV(false);
+    });
+
+    loadTV(false);
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // 4. ANIME PAGE CONTROLLER
+  // 4. ANIME PAGE CONTROLLER (With Full TMDB Pagination & URL Sync)
   // ═══════════════════════════════════════════════════════════════════════════
   async function initAnimePage() {
     Components.renderNavbar('anime');
-    Components.renderCategory3BarNav('category3BarNav', 'anime');
     Components.renderFooter();
 
+    const grid = document.getElementById('animeGrid');
+    const paginationEl = document.getElementById('animePagination');
+    const filterPills = document.querySelectorAll('.filter-pill[data-category]');
+    const sortSelect = document.getElementById('animeSortSelect');
+
+    const urlParams = new URLSearchParams(window.location.search);
+    let currentPage = Math.max(1, parseInt(urlParams.get('page') || '1', 10));
+    let currentCategory = urlParams.get('category') || 'popular';
+    let currentSort = urlParams.get('sort') || 'popularity.desc';
+
+    if (sortSelect) sortSelect.value = currentSort;
+    filterPills.forEach(pill => {
+      pill.classList.toggle('active', pill.getAttribute('data-category') === currentCategory);
+    });
+
+    let isLoading = false;
+    let requestSeq = 0;
+
+    function syncUrl(push = true) {
+      const params = new URLSearchParams();
+      if (currentPage > 1) params.set('page', String(currentPage));
+      if (currentCategory !== 'popular') params.set('category', currentCategory);
+      if (currentSort !== 'popularity.desc') params.set('sort', currentSort);
+
+      const qs = params.toString();
+      const newUrl = `${window.location.pathname}${qs ? '?' + qs : ''}`;
+      if (push) {
+        window.history.pushState({ page: currentPage, category: currentCategory, sort: currentSort }, '', newUrl);
+      } else {
+        window.history.replaceState({ page: currentPage, category: currentCategory, sort: currentSort }, '', newUrl);
+      }
+    }
+
+    async function loadAnimeCatalog(shouldScroll = false) {
+      if (isLoading) return;
+      isLoading = true;
+      const currentReq = ++requestSeq;
+
+      if (grid) Components.createSkeletonGrid('animeGrid', 18);
+      if (paginationEl) paginationEl.style.display = 'none';
+
+      try {
+        const animeList = await TMDB_API.getAnime(currentCategory, currentPage, currentSort);
+
+        if (currentReq !== requestSeq) return;
+
+        if (grid) {
+          if (animeList && animeList.length > 0) {
+            grid.innerHTML = animeList.map(a => Components.createMovieCard(a)).join('');
+          } else {
+            grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 4rem; color: #9CA3AF;">No anime found for this category.</div>`;
+          }
+        }
+
+        const totalPages = animeList.total_pages || (animeList.length >= 18 ? 500 : 1);
+        if (paginationEl) {
+          Components.renderPagination('animePagination', {
+            currentPage,
+            totalPages,
+            onPageChange: (newPage) => {
+              if (newPage === currentPage || isLoading) return;
+              currentPage = newPage;
+              syncUrl(true);
+              loadAnimeCatalog(true);
+            }
+          });
+        }
+
+        if (shouldScroll && grid) {
+          const topOffset = grid.getBoundingClientRect().top + window.scrollY - 100;
+          window.scrollTo({ top: Math.max(0, topOffset), behavior: 'smooth' });
+        }
+      } catch (err) {
+        console.error('Anime catalog load error:', err);
+        if (grid) grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #EF4444;">Unable to load anime catalog.</div>`;
+      } finally {
+        if (currentReq === requestSeq) isLoading = false;
+      }
+    }
+
+    filterPills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        if (isLoading) return;
+        filterPills.forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        currentCategory = pill.getAttribute('data-category');
+        currentPage = 1;
+        syncUrl(true);
+        loadAnimeCatalog(true);
+      });
+    });
+
+    if (sortSelect) {
+      sortSelect.addEventListener('change', () => {
+        if (isLoading) return;
+        currentSort = sortSelect.value;
+        currentPage = 1;
+        syncUrl(true);
+        loadAnimeCatalog(true);
+      });
+    }
+
+    window.addEventListener('popstate', () => {
+      const p = new URLSearchParams(window.location.search);
+      currentPage = Math.max(1, parseInt(p.get('page') || '1', 10));
+      currentCategory = p.get('category') || 'popular';
+      currentSort = p.get('sort') || 'popularity.desc';
+
+      if (sortSelect) sortSelect.value = currentSort;
+      filterPills.forEach(pill => {
+        pill.classList.toggle('active', pill.getAttribute('data-category') === currentCategory);
+      });
+      loadAnimeCatalog(false);
+    });
+
+    // Load initial catalog
+    loadAnimeCatalog(false);
+
+    // Concurrently load featured carousels & hero
     Components.createSkeletonCarousel('carouselAnimeTrending', 6);
     Components.createSkeletonCarousel('carouselAnimeAction', 6);
     Components.createSkeletonCarousel('carouselAnimeFantasy', 6);
@@ -339,17 +605,17 @@
         TMDB_API.getAnime('top_rated', 1)
       ]);
 
-      Components.createCarousel('carouselAnimeTrending', 'Trending Anime Series', trending, false);
-      Components.createCarousel('carouselAnimeAction', 'Shonen & Action Anime', action, false);
-      Components.createCarousel('carouselAnimeFantasy', 'Fantasy & Supernatural Anime', fantasy, false);
-      Components.createCarousel('carouselAnimeTopRated', 'Masterpiece Anime (Top Rated)', topRated, false);
+      Components.createCarousel('carouselAnimeTrending', '🔥 Trending Anime Series', trending, false);
+      Components.createCarousel('carouselAnimeAction', '⚡ Shonen & Action Anime', action, false);
+      Components.createCarousel('carouselAnimeFantasy', '🔮 Fantasy & Supernatural Anime', fantasy, false);
+      Components.createCarousel('carouselAnimeTopRated', '⭐ Masterpiece Anime (Top Rated)', topRated, false);
 
       const heroEl = document.getElementById('animeHero');
       if (heroEl && trending.length > 0) {
         setupHeroBanner(trending[0]);
       }
     } catch (err) {
-      console.error('Anime load error:', err);
+      console.error('Anime carousels load error:', err);
     }
   }
 
@@ -749,7 +1015,6 @@
   async function initTrendingPage() {
     const isTrailerPage = window.location.pathname.includes('trailers.html');
     Components.renderNavbar(isTrailerPage ? 'trailers' : 'trending');
-    Components.renderCategory3BarNav('category3BarNav', isTrailerPage ? 'trailers' : 'trending');
     Components.renderFooter();
 
     Components.createSkeletonCarousel('carouselTrendingDay', 6);

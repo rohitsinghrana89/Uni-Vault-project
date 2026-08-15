@@ -37,7 +37,7 @@ assert(componentsJs.includes('section-3bar'), 'components.js renders .section-3b
 assert(componentsJs.includes('renderCategory3BarNav:'), 'components.js implements renderCategory3BarNav helper');
 assert(componentsJs.includes('trailers.html') && componentsJs.includes('trending.html'), 'components.js drawer includes Trailers and Trending routes');
 
-// ── 3. Check Section HTML Pages for 3-Bar Integration ──
+// ── 3. Verify Clean Removal of Horizontal Category Bar from Templates ──
 const pages = [
   { file: 'public/index.html', name: 'Homepage' },
   { file: 'public/movies.html', name: 'Movies' },
@@ -49,17 +49,17 @@ const pages = [
 
 for (const p of pages) {
   const content = fs.readFileSync(path.join(__dirname, p.file), 'utf8');
-  assert(content.includes('category3BarNav'), `${p.name} (${p.file}) includes #category3BarNav container`);
+  assert(!content.includes('id="category3BarNav"'), `${p.name} (${p.file}) correctly removed horizontal #category3BarNav bar`);
 }
 
-// ── 4. Check app.js Invocation ──
+// ── 4. Check app.js Controllers (Direct Navbar Integration) ──
 const appJs = fs.readFileSync(path.join(__dirname, 'public/js/app.js'), 'utf8');
 
-assert(appJs.includes("Components.renderCategory3BarNav('category3BarNav', 'home')"), 'app.js renders 3-bar nav in initHomePage');
-assert(appJs.includes("Components.renderCategory3BarNav('category3BarNav', 'movies')"), 'app.js renders 3-bar nav in initMoviesPage');
-assert(appJs.includes("Components.renderCategory3BarNav('category3BarNav', 'tv')"), 'app.js renders 3-bar nav in initTVShowsPage');
-assert(appJs.includes("Components.renderCategory3BarNav('category3BarNav', 'anime')"), 'app.js renders 3-bar nav in initAnimePage');
-assert(appJs.includes("Components.renderCategory3BarNav('category3BarNav'"), 'app.js renders 3-bar nav in initTrendingPage');
+assert(!appJs.includes("Components.renderCategory3BarNav('category3BarNav', 'home')"), 'app.js no longer pushes horizontal nav in initHomePage');
+assert(!appJs.includes("Components.renderCategory3BarNav('category3BarNav', 'movies')"), 'app.js no longer pushes horizontal nav in initMoviesPage');
+assert(!appJs.includes("Components.renderCategory3BarNav('category3BarNav', 'tv')"), 'app.js no longer pushes horizontal nav in initTVShowsPage');
+assert(!appJs.includes("Components.renderCategory3BarNav('category3BarNav', 'anime')"), 'app.js no longer pushes horizontal nav in initAnimePage');
+assert(!appJs.includes("Components.renderCategory3BarNav('category3BarNav'"), 'app.js no longer pushes horizontal nav in initTrendingPage');
 
 console.log('\n══════════════════════════════════════════════════════════');
 console.log(`📊 Test Summary: ${passed} Passed, ${failed} Failed out of ${passed + failed} Total`);

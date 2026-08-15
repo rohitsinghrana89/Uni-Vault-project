@@ -22,13 +22,43 @@
       <div class="skeleton-shimmer skeleton-hero"></div>
     </section>
 
-    <!-- 3-Bar Category Navigation Bar -->
-    <div class="section-container" style="padding-top: 1rem; padding-bottom: 0;">
-      <div id="category3BarNav"></div>
-    </div>
-
-    <!-- Anime Carousels -->
+    <!-- Main Anime Catalog & Explore Section -->
     <div class="content-wrapper">
+      <div class="section-container" style="padding-top: 1rem;">
+        
+        <!-- Filter Pills & Sorting -->
+        <div class="filter-bar">
+          <div class="filter-pills" role="tablist" aria-label="Anime genre filters">
+            <button type="button" class="filter-pill active" data-category="popular">All Popular</button>
+            <button type="button" class="filter-pill" data-category="action">Action &amp; Shonen</button>
+            <button type="button" class="filter-pill" data-category="fantasy">Fantasy &amp; Isekai</button>
+            <button type="button" class="filter-pill" data-category="comedy">Comedy &amp; Slice of Life</button>
+            <button type="button" class="filter-pill" data-category="romance">Romance &amp; Drama</button>
+            <button type="button" class="filter-pill" data-category="top_rated">Top Rated</button>
+          </div>
+
+          <div class="sort-select-wrapper">
+            <label for="animeSortSelect">Sort by:</label>
+            <select id="animeSortSelect" class="sort-select" aria-label="Sort anime">
+              <option value="popularity.desc">Most Popular</option>
+              <option value="vote_average.desc">Top Rated</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Anime Grid -->
+        <div class="netflix-grid" id="animeGrid">
+          <!-- Anime dynamically injected -->
+        </div>
+
+        <!-- Responsive Anime Pagination -->
+        <div class="pagination-container" id="animePagination">
+          <!-- Pagination dynamically injected -->
+        </div>
+
+      </div>
+
+      <!-- Curated Anime Carousels -->
       <section id="carouselAnimeTrending" aria-label="Trending Anime"></section>
       <section id="carouselAnimeAction" aria-label="Action Anime"></section>
       <section id="carouselAnimeFantasy" aria-label="Fantasy Anime"></section>

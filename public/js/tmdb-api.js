@@ -185,53 +185,63 @@
       return h > 0 ? `${h}h ${m}m` : `${m}m`;
     },
 
+    // Helper to wrap results with pagination metadata on the Array instance
+    _wrapResults: (data) => {
+      if (!data) return [];
+      const list = Array.isArray(data.results) ? [...data.results] : (Array.isArray(data) ? [...data] : []);
+      list.page = data.page || 1;
+      list.total_pages = Math.min(data.total_pages || (list.length > 0 ? 500 : 1), 500);
+      list.total_results = data.total_results || list.length;
+      return list;
+    },
+
     // ── Homepage & Browse Feeds ──────────────────────────────────────────────
-    getTrending: async (type = 'all', time = 'day', page = 1) => {
+    getTrending: async function (type = 'all', time = 'day', page = 1) {
       const data = await tmdbFetch(`/trending/${type}/${time}`, { page });
-      return (data && data.results) ? data.results : FALLBACK_ITEMS;
+      return this._wrapResults(data || { results: FALLBACK_ITEMS });
     },
 
-    getPopularMovies: async (page = 1) => {
+    getPopularMovies: async function (page = 1) {
       const data = await tmdbFetch('/movie/popular', { page });
-      return (data && data.results) ? data.results : FALLBACK_ITEMS;
+      return this._wrapResults(data || { results: FALLBACK_ITEMS });
     },
 
-    getPopularTV: async (page = 1) => {
+    getPopularTV: async function (page = 1) {
       const data = await tmdbFetch('/tv/popular', { page });
-      return (data && data.results) ? data.results : FALLBACK_ITEMS;
+      return this._wrapResults(data || { results: FALLBACK_ITEMS });
     },
 
-    getTopRatedMovies: async (page = 1) => {
+    getTopRatedMovies: async function (page = 1) {
       const data = await tmdbFetch('/movie/top_rated', { page });
-      return (data && data.results) ? data.results : FALLBACK_ITEMS;
+      return this._wrapResults(data || { results: FALLBACK_ITEMS });
     },
 
-    getTopRatedTV: async (page = 1) => {
+    getTopRatedTV: async function (page = 1) {
       const data = await tmdbFetch('/tv/top_rated', { page });
-      return (data && data.results) ? data.results : FALLBACK_ITEMS;
+      return this._wrapResults(data || { results: FALLBACK_ITEMS });
     },
 
-    getNowPlayingMovies: async (page = 1) => {
+    getNowPlayingMovies: async function (page = 1) {
       const data = await tmdbFetch('/movie/now_playing', { page });
-      return (data && data.results) ? data.results : FALLBACK_ITEMS;
+      return this._wrapResults(data || { results: FALLBACK_ITEMS });
     },
 
-    getUpcomingMovies: async (page = 1) => {
+    getUpcomingMovies: async function (page = 1) {
       const data = await tmdbFetch('/movie/upcoming', { page });
-      return (data && data.results) ? data.results : FALLBACK_ITEMS;
+      return this._wrapResults(data || { results: FALLBACK_ITEMS });
     },
 
     // ── Anime Category (Animation + JP origin or keyword) ───────────────────
-    getAnime: async (category = 'popular', page = 1) => {
+    getAnime: async function (category = 'popular', page = 1, sortBy = 'popularity.desc') {
       let endpoint = '/discover/tv';
       let params = {
         with_genres: '16',
         with_original_language: 'ja',
         page,
-        sort_by: 'popularity.desc'
+        sort_by: sortBy
       };
 
-      if (category === 'top_rated') {
+      if (category === 'top_rated' || sortBy === 'vote_average.desc') {
         params.sort_by = 'vote_average.desc';
         params['vote_count.gte'] = '200';
       } else if (category === 'action') {
@@ -240,22 +250,26 @@
         params.with_genres = '16,18';
       } else if (category === 'fantasy') {
         params.with_genres = '16,10765';
+      } else if (category === 'comedy') {
+        params.with_genres = '16,35';
       }
 
       const data = await tmdbFetch(endpoint, params);
-      return (data && data.results) ? data.results : FALLBACK_ITEMS;
+      return this._wrapResults(data || { results: FALLBACK_ITEMS });
     },
 
     // ── Genre Exploration ───────────────────────────────────────────────────
-    getGenreContent: async (mediaType = 'movie', genreId, page = 1, sortBy = 'popularity.desc') => {
+    getGenreContent: async function (mediaType = 'movie', genreId, page = 1, sortBy = 'popularity.desc') {
       const endpoint = mediaType === 'tv' ? '/discover/tv' : '/discover/movie';
       const params = {
-        with_genres: String(genreId),
         sort_by: sortBy,
         page
       };
+      if (genreId && genreId !== 'all') {
+        params.with_genres = String(genreId);
+      }
       const data = await tmdbFetch(endpoint, params);
-      return (data && data.results) ? data.results : FALLBACK_ITEMS;
+      return this._wrapResults(data || { results: FALLBACK_ITEMS });
     },
 
     // ── Search Multi (Movies, Shows, Anime, Cast) ───────────────────────────
